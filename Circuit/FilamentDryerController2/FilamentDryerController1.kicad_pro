@@ -513,7 +513,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Signal",
-        "pcb_color": "rgb(0, 253, 255)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgb(82, 100, 255)",
         "track_width": 0.5,
         "via_diameter": 0.6,
@@ -533,10 +533,19 @@
       "GNDS": "rgb(0, 2, 120)"
     },
     "netclass_assignments": {
+      "+AC": "Current",
+      "-AC": "Current",
+      "Heater": "Current",
       "Net-(D1-A)": "Power",
       "Net-(D1-K)": "Power",
       "Net-(D2-K)": "Power",
-      "Net-(J4-Pin_2)": "Current"
+      "Net-(J1-Pin_1)": "Current",
+      "Net-(J4-Pin_2)": "Current",
+      "Net-(NT4-Pad1)": "Signal",
+      "Net-(NT5-Pad1)": "Signal",
+      "Net-(Q2-G)": "Signal",
+      "Net-(R4-Pad2)": "Signal",
+      "Net-(R6-Pad1)": "Signal"
     },
     "netclass_patterns": [
       {
@@ -545,7 +554,7 @@
       },
       {
         "netclass": "Current",
-        "pattern": "+12V"
+        "pattern": "*AC"
       },
       {
         "netclass": "Signal",
@@ -568,8 +577,8 @@
         "pattern": "+5VS"
       },
       {
-        "netclass": "Signal",
-        "pattern": "*P*"
+        "netclass": "Current",
+        "pattern": "/Mains"
       }
     ]
   },
