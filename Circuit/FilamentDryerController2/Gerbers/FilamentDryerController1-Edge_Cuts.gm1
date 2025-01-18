@@ -1,0 +1,23 @@
+%TF.GenerationSoftware,KiCad,Pcbnew,8.0.6*%
+%TF.CreationDate,2025-01-14T16:33:27+13:00*%
+%TF.ProjectId,FilamentDryerController1,46696c61-6d65-46e7-9444-72796572436f,rev?*%
+%TF.SameCoordinates,Original*%
+%TF.FileFunction,Profile,NP*%
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW 8.0.6) date 2025-01-14 16:33:27*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+%TA.AperFunction,Profile*%
+%ADD10C,0.050000*%
+%TD*%
+G04 APERTURE END LIST*
+D10*
+X18542000Y-23622000D02*
+X72644000Y-23622000D01*
+X72644000Y-105918000D01*
+X18542000Y-105918000D01*
+X18542000Y-23622000D01*
+M02*

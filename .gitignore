@@ -1,3 +1,4 @@
 *.zip
 *.gcode
 fp-info-cache
+.vscode
