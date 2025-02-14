@@ -212,6 +212,7 @@
 		(path "/5b0cc05c-f11a-4a84-8664-330136858ed4")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -309,6 +310,7 @@
 		(path "/a51d716b-93f3-4db3-a6d6-2ee75f591e07")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -406,6 +408,7 @@
 		(path "/4967292b-ff18-4067-8df1-25e6e2eaf929")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -503,6 +506,7 @@
 		(path "/c3a1d564-0d2b-4e72-9b55-8cfb2b2ed4dd")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -1929,6 +1933,7 @@
 		(path "/7a272a34-189b-4196-b6b7-0ed659ceb583")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -2026,6 +2031,7 @@
 		(path "/7cb29ba8-7c9e-4a26-ac9b-afe8e56a2d59")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -2123,6 +2129,7 @@
 		(path "/edb283ab-293a-4387-93ed-6a8d490db29d")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -2220,6 +2227,7 @@
 		(path "/89930f40-d6d6-4d9c-a8af-ce49c8f78bdf")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -3588,6 +3596,7 @@
 		(path "/e0935e50-4fb6-4865-8577-9e3b86e79d4f")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -4699,6 +4708,7 @@
 		(path "/149b6edd-e2ab-439c-95e9-9bac9f6934fa")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -5045,6 +5055,7 @@
 		(path "/1844e1a6-e0c7-43ba-a141-e7117f807c96")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -7086,6 +7097,7 @@
 		(path "/eb75ff3c-8b24-4f0b-b122-b64be8ceb0f7")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
@@ -7183,6 +7195,7 @@
 		(path "/afe6bf9b-8210-425c-b09a-febaa39e657b")
 		(sheetname "Root")
 		(sheetfile "FilamentDryerController1.kicad_sch")
+		(attr exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end -0.6 0.4)
