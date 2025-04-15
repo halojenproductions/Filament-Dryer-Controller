@@ -2,3 +2,4 @@
 *.gcode
 fp-info-cache
 .vscode
+.lck
