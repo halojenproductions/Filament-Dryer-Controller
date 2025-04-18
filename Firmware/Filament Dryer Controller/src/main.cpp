@@ -82,8 +82,8 @@ void loop() {
 		UI::drawFilamentType(u8g2, ops.filament.name);
 
 		UI::drawBorderBottom(u8g2);	   // Draw the top border
-		UI::drawFilamentTemp(u8g2, ops.filament.temperature);
-
+		UI::drawFilamentTemperature(u8g2, ops.filament.temperature);
+		UI::drawFilamentHumidity(u8g2, ops.filament.humidity);
 
 	} while (u8g2.nextPage());
 

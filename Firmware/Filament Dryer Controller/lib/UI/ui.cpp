@@ -43,22 +43,35 @@ namespace UI {
 	}
 
 	void drawFilamentType(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, String text) {
+		screen.setDrawColor(2);
 		screen.setFont(filNameFont);
 		screen.setFontPosTop();
-		screen.setCursor(filNameX, filNameY);
-		screen.setDrawColor(2);
+		screen.setCursor(0, 0);
 		screen.print(text);
 	}
 
-	void drawFilamentTemp(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int temperature) {
-		screen.setFont(filTempFont);
-		screen.setFontPosBottom();
-		screen.setCursor(filTempX, filTempY);
+	void drawFilamentTemperature(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int temp) {
 		screen.setDrawColor(2);
+		screen.setFont(filTempFont);
+		screen.setFontPosBaseline();
+		screen.setCursor(0, screen.getDisplayHeight() - 1);
 
-		String text = String(temperature, 10);
-		// screen.print("°");
+		String text = String(temp, 10);
 		screen.print(String(text + "\xB0"));
+	}
+
+	void drawFilamentHumidity(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int hum) {
+		screen.setDrawColor(2);
+		screen.setFont(filHumidityFont);
+		screen.setFontPosBaseline();
+
+		String text = String(hum, 10);
+		text		= String(text + "%");
+
+		int wid = screen.getStrWidth(text.c_str());
+		screen.setCursor(screen.getDisplayWidth() - wid, screen.getDisplayHeight() - 1);
+
+		screen.print(text);
 	}
 
 }

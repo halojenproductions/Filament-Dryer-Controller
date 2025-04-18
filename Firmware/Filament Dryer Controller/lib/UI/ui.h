@@ -31,7 +31,8 @@ namespace UI {
 	extern void drawBorderTop(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen);
 	extern void drawBorderBottom(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen);
 	extern void drawFilamentType(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, String text);
-	extern void drawFilamentTemp(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int temperature);
+	extern void drawFilamentTemperature(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int temp);
+	extern void drawFilamentHumidity(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int hum);
 
 }
 #endif
