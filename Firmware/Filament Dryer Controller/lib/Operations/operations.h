@@ -1,8 +1,9 @@
+#include "filament.h"
+#include "temperature.h"
+#include <stdint.h>
+
 #ifndef OPERATIONS_H
 #define OPERATIONS_H
-
-#include <stdint.h>
-#include "temperature.h"
 
 class Ops {
 	public:
@@ -24,7 +25,8 @@ class Ops {
 		Fan		= (1 << 4),
 	};
 
-	OutTemp outTemp = 0;	// Temperature in centigrade.
+	OutTemp outTemp	  = 0;							// Temperature in centigrade.
+	Filament filament = Filaments::filaments[0];	// Default to PLA
 	int Humidity;
 	int FanSpeed;
 
@@ -42,28 +44,12 @@ class Ops {
 	unsigned char getCommandsRaw() const;
 
 	// Other functions.
-	void setInTemp(int temp) {
-		inTemperature = temp;
-	}
-
-	int getInTemp() const {
-		return inTemperature;
-	}
-
-	void setOutTemp(int temp) {
-		outTemperature = temp;
-	}
-
-	int getOutTemp() const {
-		return outTemperature;
-	}
 
 	private:
 
 	unsigned char statuses = 0;
 	unsigned char commands = 0;
 	int inTemperature	   = 0;
-	int outTemperature	   = 0;
 	int humidity		   = 0;
 };
 

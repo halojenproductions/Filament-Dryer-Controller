@@ -2,7 +2,9 @@
 #include <Arduino.h>
 #include <u8g2lib.h>
 
+#include "filament.h"
 #include "operations.h"
+#include "ui.h"
 #include "utilities.h"
 
 // Pins
@@ -16,9 +18,6 @@ const int pSda	   = SDA;	 // PC4
 const int pScl	   = SCL;	 // PC5
 
 // Screen
-#define SCREEN_WIDTH 128		   // OLED display width, in pixels.
-#define SCREEN_HEIGHT 64		   // OLED display height, in pixels.
-const int screenAddress = 0x78;	   //
 U8G2_SH1106_128X64_NONAME_2_SW_I2C u8g2(U8G2_R0, pScl, pSda);
 
 Ops ops;
@@ -44,15 +43,19 @@ void setup() {
 	pinMode(pHeater, OUTPUT);
 	pinMode(pFan, OUTPUT);
 
-	u8g2.setI2CAddress(screenAddress);	  // Set the I2C address of the display
+	u8g2.setI2CAddress(UI::screenAddress);	  // Set the I2C address of the display
 	u8g2.begin();
 
 	attachInterrupt(digitalPinToInterrupt(pButt), handleButtonInterrupt, FALLING);
+
+	ops.setStatus(Ops::Status::Ok);	   // Set the initial status to OK
 }
 
 void loop() {
+	digitalWrite(pLedOk, ops.getStatus(Ops::Status::Ok));
+
 	// Read inputs.
-	ops.outTemp = (int)753;	 
+	ops.outTemp = (int)753;
 	// ops.outTemp = analogRead(pTemp);	// Read the temperature sensor value
 
 	// Set statuses.
@@ -70,13 +73,19 @@ void loop() {
 
 	// Execute commands.
 
-	int val = ops.outTemp;	// Read the temperature sensor value
+	int val = ops.outTemp;	  // Read the temperature sensor value
 	u8g2.firstPage();
 	do {
-		u8g2.setFont(u8g2_font_luBS12_tr);
-		u8g2.setFontPosBottom();
-		u8g2.setCursor(0, 28);
-		u8g2.print(val);
-		u8g2.drawStr(0, 63, "( .Y. )");	   // Draw the string at (0, 20)
+		u8g2.setFontMode(1);
+
+		UI::drawBorderTop(u8g2);	// Draw the top border
+		UI::drawFilamentType(u8g2, ops.filament.name);
+
+		UI::drawBorderBottom(u8g2);	   // Draw the top border
+		UI::drawFilamentTemp(u8g2, ops.filament.temperature);
+
+
 	} while (u8g2.nextPage());
+
+	delay(1000);	// Delay for 1 second
 }
