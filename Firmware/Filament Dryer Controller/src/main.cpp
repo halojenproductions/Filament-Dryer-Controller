@@ -2,7 +2,8 @@
 #include <Arduino.h>
 #include <u8g2lib.h>
 
-#include "status.h"
+#include "operations.h"
+#include "utilities.h"
 
 // Pins
 const int pButt	   = 2;		 // PD2
@@ -20,9 +21,7 @@ const int pScl	   = SCL;	 // PC5
 const int screenAddress = 0x78;	   //
 U8G2_SH1106_128X64_NONAME_2_SW_I2C u8g2(U8G2_R0, pScl, pSda);
 
-Status status;
-
-volatile bool buttonPressed = false;
+Ops ops;
 
 // TODO.
 void handleButtonInterrupt() {
@@ -31,7 +30,7 @@ void handleButtonInterrupt() {
 
 	// Debounce - ignore interrupts for 50ms after the last one
 	if (currentTime - lastDebounceTime > 50) {
-		buttonPressed	 = true;
+		ops.setStatus(Ops::ButtonDown);
 		lastDebounceTime = currentTime;
 	}
 }
@@ -52,19 +51,29 @@ void setup() {
 }
 
 void loop() {
+	// Read inputs.
+	ops.outTemp = (int)753;	 
+	// ops.outTemp = analogRead(pTemp);	// Read the temperature sensor value
+
+	// Set statuses.
 	// TODO.
-	if (status.isSet(Status::Error)) {
+	if (ops.getStatus(Ops::Status::Error)) {
+	};
+
+	if (ops.getStatus(Ops::Status::Heating)) {
 	};
 
 	// TODO.
-	if (buttonPressed) {
-		buttonPressed = false;
+	if (ops.getStatus(Ops::ButtonDown)) {
+		// TODO: Handle button press.
 	};
 
-	int val = analogRead(pTemp);	// Read the temperature sensor value
+	// Execute commands.
+
+	int val = ops.outTemp;	// Read the temperature sensor value
 	u8g2.firstPage();
 	do {
-		u8g2.setFont(u8g2_font_luBS24_tr);
+		u8g2.setFont(u8g2_font_luBS12_tr);
 		u8g2.setFontPosBottom();
 		u8g2.setCursor(0, 28);
 		u8g2.print(val);

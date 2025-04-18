@@ -9,8 +9,13 @@ AllowShortBlocksOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortLambdasOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: False
+NamespaceIndentation: All
+FixNamespaceComments: false
 ContinuationIndentWidth: 4
 IndentWrappedFunctionNames: False
+IndentAccessModifiers: false
+AccessModifierOffset: 0
+EmptyLineAfterAccessModifier: Always
 InsertBraces: True
 InsertTrailingCommas: Wrapped
 KeepEmptyLines: 
