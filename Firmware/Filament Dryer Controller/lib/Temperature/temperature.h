@@ -4,6 +4,7 @@
 class OutTemp {
 	public:
 
+	OutTemp();
 	OutTemp(int value);
 	operator int() const;
 	OutTemp &operator=(int value);
