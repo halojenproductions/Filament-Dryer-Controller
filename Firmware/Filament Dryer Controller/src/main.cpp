@@ -55,8 +55,10 @@ void loop() {
 	digitalWrite(pLedOk, ops.getStatus(Ops::Status::Ok));
 
 	// Read inputs.
-	ops.outTemp = (int)753;
+	ops.outTemp		  = (int)753;
 	// ops.outTemp = analogRead(pTemp);	// Read the temperature sensor value
+	ops.InTemperature = 20;	   // TODO: Read the temperature sensor value
+	ops.Humidity	  = 50;	   // TODO: Read the humidity sensor value
 
 	// Set statuses.
 	// TODO.
@@ -73,17 +75,19 @@ void loop() {
 
 	// Execute commands.
 
-	int val = ops.outTemp;	  // Read the temperature sensor value
 	u8g2.firstPage();
 	do {
 		u8g2.setFontMode(1);
 
-		UI::drawBorderTop(u8g2);	// Draw the top border
-		UI::drawFilamentType(u8g2, ops.filament.name);
-
+		UI::drawBorderTop(u8g2);	   // Draw the top border
 		UI::drawBorderBottom(u8g2);	   // Draw the top border
+
+		UI::drawFilamentType(u8g2, ops.filament.name);
 		UI::drawFilamentTemperature(u8g2, ops.filament.temperature);
 		UI::drawFilamentHumidity(u8g2, ops.filament.humidity);
+
+		UI::drawTemperature(u8g2, ops.InTemperature);
+		UI::drawHumidity(u8g2, ops.Humidity);
 
 	} while (u8g2.nextPage());
 

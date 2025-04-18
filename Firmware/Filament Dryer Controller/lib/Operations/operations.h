@@ -27,6 +27,7 @@ class Ops {
 
 	OutTemp outTemp	  = 0;							// Temperature in centigrade.
 	Filament filament = Filaments::filaments[0];	// Default to PLA
+	int InTemperature = 20;							// Temperature in centigrade.
 	int Humidity;
 	int FanSpeed;
 
@@ -49,8 +50,6 @@ class Ops {
 
 	unsigned char statuses = 0;
 	unsigned char commands = 0;
-	int inTemperature	   = 0;
-	int humidity		   = 0;
 };
 
 #endif
