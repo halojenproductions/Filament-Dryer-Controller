@@ -10,50 +10,12 @@ namespace test_Statuses {
 
 	void test_Statuses() {
 		RUN_TEST(test_Status_New);
-		RUN_TEST(test_Status_First);
-		RUN_TEST(test_Status_Last);
 		RUN_TEST(test_Status_Each);
 	}
 
 	void test_Status_New(void) {
 		Ops ops;
 		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getStatusesRaw(ops));
-	}
-
-	void test_Status_First(void) {
-		Ops::Status status	   = Ops::Status::Ok;
-		unsigned char expected = 0b00000001;
-		Ops ops;
-
-		ops.setStatus(status);
-		TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getStatusesRaw(ops));
-		TEST_ASSERT_TRUE(ops.getStatus(status));
-
-		ops.clearStatus(status);
-		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getStatusesRaw(ops));
-		TEST_ASSERT_FALSE(ops.getStatus(status));
-
-		ops.toggleStatus(status);
-		TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getStatusesRaw(ops));
-		TEST_ASSERT_TRUE(ops.getStatus(status));
-	}
-
-	void test_Status_Last(void) {
-		Ops::Status status	   = Ops::Status::Select;
-		unsigned char expected = 0b01000000;
-		Ops ops;
-
-		ops.setStatus(status);
-		TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getStatusesRaw(ops));
-		TEST_ASSERT_TRUE(ops.getStatus(status));
-
-		ops.clearStatus(status);
-		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getStatusesRaw(ops));
-		TEST_ASSERT_FALSE(ops.getStatus(status));
-
-		ops.toggleStatus(status);
-		TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getStatusesRaw(ops));
-		TEST_ASSERT_TRUE(ops.getStatus(status));
 	}
 
 	void test_Status_Each(void) {

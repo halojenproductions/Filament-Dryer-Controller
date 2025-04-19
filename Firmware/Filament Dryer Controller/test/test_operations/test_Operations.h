@@ -4,11 +4,10 @@
 
 #ifndef TEST_OPERATIONS_H
 #define TEST_OPERATIONS_H
+
 namespace test_Statuses {
 	void test_Statuses();
 	void test_Status_New();
-	void test_Status_First();
-	void test_Status_Last();
 	void test_Status_Each();
 }
 

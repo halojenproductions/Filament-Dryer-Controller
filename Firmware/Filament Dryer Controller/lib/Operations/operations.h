@@ -1,5 +1,7 @@
 #include "filaments.h"
 #include "temperature.h"
+#include "timer.h"
+#include <Arduino.h>
 #include <stdint.h>
 
 #ifndef OPERATIONS_H
@@ -27,9 +29,12 @@ class Ops {
 	};
 
 	enum class Command : uint8_t {
-		Display,
+		WakeUp,
 		Heat,
 		Fan,
+		ButtonClick,
+		ButtonHold,
+		ButtonHoldHandled,
 		_Last
 	};
 
@@ -48,11 +53,14 @@ class Ops {
 	int humidity	  = 99;
 	int FanSpeed;
 
-	unsigned long buttonDownTime = 0;	 // Time when the button was pressed down.
-	unsigned long buttonUpTime	 = 0;	 // Time when the button was released.
-	unsigned long lastPollTime	 = 0;	 // Time when the last poll was made.
-	unsigned long screenWakeTime = 0;	 // Time when the screen was last awake.
-	unsigned long heatTime		 = 0;	 // Time when the heater was turned on.
+	// Timers.
+	Timer inputPolling	   = Timer(1000UL * 1);
+	Timer screenTimeout	   = Timer(1000UL * 30);
+	Timer heaterTimeout	   = Timer(1000UL * 60 * 2);
+	Timer heaterCooldown   = Timer(1000UL * 60 * 2);
+	Timer selectionTimeout = Timer(1000UL * 5);
+	Timer buttonDebounce   = Timer(50);
+	Timer buttonHold	   = Timer(800);
 
 	// Single template function that works with all enum types.
 	template <typename T>

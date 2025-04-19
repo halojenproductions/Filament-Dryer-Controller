@@ -13,6 +13,10 @@ bool Timer::check(uint32_t presentTime) {
 	return false;
 }
 
+bool Timer::get(uint32_t presentTime) {
+	return (presentTime >= value + interval);
+}
+
 void Timer::reset() {
 	value = millis();
 }

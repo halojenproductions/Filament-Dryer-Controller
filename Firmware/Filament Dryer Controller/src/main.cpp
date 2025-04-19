@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <u8g2lib.h>
 
+#include "button.h"
 #include "filaments.h"
 #include "operations.h"
 #include "ui.h"
@@ -17,27 +18,11 @@ const int pFan	   = 5;		 // PD5 TODO: Move away from OS0.
 const int pSda	   = SDA;	 // PC4
 const int pScl	   = SCL;	 // PC5
 
-// Config.
-const unsigned long pollInterval  = 1000UL * 1;
-const unsigned long screenTimeout = 1000UL * 10;
-const unsigned long heatTimeout	  = 1000UL * 60 * 5;	// 5 minutes in milliseconds
-
 // Screen
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, pScl, pSda);
 
 Ops ops;
-
-// TODO.
-void handleButtonInterrupt() {
-	static unsigned long lastDebounceTime = 0;
-	unsigned long currentTime			  = millis();
-
-	// Debounce - ignore interrupts for 50ms after the last one
-	if (currentTime - lastDebounceTime > 50) {
-		ops.setStatus(Ops::Status::ButtonDown);
-		lastDebounceTime = currentTime;
-	}
-}
+uint32_t currentTime = millis();
 
 void setup() {
 
@@ -51,29 +36,44 @@ void setup() {
 	u8g2.setI2CAddress(UI::screenAddress);	  // Set the I2C address of the display
 	u8g2.setBusClock(400000);				  // Set the I2C bus clock speed to 400kHz
 	u8g2.begin();
-	// u8g2.setBufferPtr(buf);
-	// u8g2.initDisplay();
 
-	attachInterrupt(digitalPinToInterrupt(pButt), handleButtonInterrupt, FALLING);
+	attachInterrupt(digitalPinToInterrupt(pButt), handleButtonInterrupt, CHANGE);
 
-	ops.screenWakeTime = millis();
-	u8g2.setPowerSave(0);
 	ops.setStatus(Ops::Status::ScreenAwake);
-
-	ops.setStatus(Ops::Status::Ok);
-	// Set everything dirty to make it all
 	ops.setDirty(Ops::Dirty::All);	  // Set everything dirty to make it all dirty
+	ops.setStatus(Ops::Status::Ok);
+	digitalWrite(pLedOk, ops.getStatus(Ops::Status::Ok));
 }
 
+void wakeUp() {
+	ops.clearCommand(Ops::Command::WakeUp);
+	u8g2.setPowerSave(0);
+	ops.setDirty(Ops::Dirty::All);
+	ops.setStatus(Ops::Status::ScreenAwake);
+	ops.screenTimeout.reset();
+};
+
+void sleep() {
+	u8g2.setPowerSave(1);
+	ops.clearStatus(Ops::Status::ScreenAwake);
+	ops.clearStatus(Ops::Status::Select);
+};
+
 void loop() {
-	unsigned long currentTime = millis();
+	currentTime = millis();
 
-	digitalWrite(pLedOk, ops.getStatus(Ops::Status::Ok));
+	buttonInterruption();
 
+	if (ops.getCommand(Ops::Command::WakeUp)) {
+		wakeUp();
+	}
+
+	if (ops.getStatus(Ops::Status::ButtonDown) && ops.buttonHold.get(currentTime) &&
+		!ops.getCommand(Ops::Command::ButtonHoldHandled)) {
+		buttonHeld();
+	}
 	// Read sensors.
-	if (currentTime >= ops.lastPollTime + pollInterval) {
-		ops.lastPollTime = currentTime;
-
+	if (ops.inputPolling.check(currentTime)) {
 		OutTemp outTemp = analogRead(pTemp);
 		if (outTemp != ops.outTemp) {
 			ops.outTemp = outTemp;
@@ -109,19 +109,8 @@ void loop() {
 
 	// Update display.
 
-	if (ops.getStatus(Ops::Status::ScreenAwake) &&
-		currentTime >= ops.screenWakeTime + screenTimeout) {
-		// Turn off the display if it has been idle for too long
-		// ops.clearStatus(Ops::Status::ScreenAwake);
-		// u8g2.setPowerSave(1);	 // Set power save mode
-		// TODO: Delete and uncomment the previous line.
-		ops.setStatus(Ops::Status::Select);
-		ops.setDirty(Ops::Dirty::Top);
-		ops.setDirty(Ops::Dirty::Bottom);
-	}
-
 	if (ops.getStatus(Ops::Status::ScreenAwake)) {
-
+		// Load the display buffer.
 		u8g2.clearBuffer();
 		u8g2.setFontMode(1);
 
@@ -137,6 +126,7 @@ void loop() {
 		UI::drawTemperature(u8g2, ops.inTemperature);
 		UI::drawHumidity(u8g2, ops.humidity);
 
+		// Send the display buffer (or just bits of it).
 		if (ops.getDirty(Ops::Dirty::All)) {
 			// If everything is dirty, update the whole screen..
 			u8g2.sendBuffer();
@@ -164,5 +154,10 @@ void loop() {
 				ops.clearDirty(Ops::Dirty::Humidity);
 			}
 		}
+	}
+
+	if (ops.getStatus(Ops::Status::ScreenAwake) && !ops.getStatus(Ops::Status::ButtonDown) &&
+		ops.screenTimeout.check(currentTime)) {
+		sleep();
 	}
 }
