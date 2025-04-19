@@ -21,7 +21,9 @@ const int pScl	   = SCL;	 // PC5
 // Screen
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, pScl, pSda);
 
-Ops ops;
+Ops &ops			 = Ops::getInstance();
+Filaments &filaments = Filaments::getInstance();
+
 uint32_t currentTime = millis();
 
 void setup() {
@@ -29,7 +31,10 @@ void setup() {
 	pinMode(pButt, INPUT_PULLUP);
 	pinMode(pTemp, INPUT);
 	pinMode(pLedOk, OUTPUT);
+	
 	pinMode(pLedHeat, OUTPUT);
+	digitalWrite(pLedHeat, HIGH);
+
 	pinMode(pHeater, OUTPUT);
 	pinMode(pFan, OUTPUT);
 
@@ -39,8 +44,9 @@ void setup() {
 
 	attachInterrupt(digitalPinToInterrupt(pButt), handleButtonInterrupt, CHANGE);
 
-	ops.setStatus(Ops::Status::ScreenAwake);
-	ops.setDirty(Ops::Dirty::All);	  // Set everything dirty to make it all dirty
+	// TODO: Load saved settings from EEPROM.
+
+	ops.setCommand(Ops::Command::WakeUp);
 	ops.setStatus(Ops::Status::Ok);
 	digitalWrite(pLedOk, ops.getStatus(Ops::Status::Ok));
 }
@@ -61,17 +67,30 @@ void sleep() {
 
 void loop() {
 	currentTime = millis();
+	// TODO: tweak the order of operations later.
 
-	buttonInterruption();
+	// Wrangle interruption.
+	if (interrupted()) {
+		// Button changed state. Go and deal with that.
+		buttonInterruption();
+	}
 
+	// Wake up.
 	if (ops.getCommand(Ops::Command::WakeUp)) {
 		wakeUp();
 	}
 
+	// Button held.
 	if (ops.getStatus(Ops::Status::ButtonDown) && ops.buttonHold.get(currentTime) &&
 		!ops.getCommand(Ops::Command::ButtonHoldHandled)) {
 		buttonHeld();
 	}
+
+	// Button clicked.
+	if (ops.getCommand(Ops::Command::ButtonClick)) {
+		buttonClicked();
+	}
+
 	// Read sensors.
 	if (ops.inputPolling.check(currentTime)) {
 		OutTemp outTemp = analogRead(pTemp);
@@ -119,9 +138,9 @@ void loop() {
 			UI::drawBorderBottom(u8g2);	   // Draw the top border
 		}
 
-		UI::drawFilamentType(u8g2, ops.filament.name);
-		UI::drawFilamentTemperature(u8g2, ops.filament.temperature);
-		UI::drawFilamentHumidity(u8g2, ops.filament.humidity);
+		UI::drawFilamentType(u8g2, filaments.display.name);
+		UI::drawFilamentTemperature(u8g2, filaments.display.temperature);
+		UI::drawFilamentHumidity(u8g2, filaments.display.humidity);
 
 		UI::drawTemperature(u8g2, ops.inTemperature);
 		UI::drawHumidity(u8g2, ops.humidity);
@@ -156,6 +175,15 @@ void loop() {
 		}
 	}
 
+	// Selection timeout.
+	if (ops.getStatus(Ops::Status::Select) && ops.selectionTimeout.check(currentTime)) {
+		ops.clearStatus(Ops::Status::Select);
+		filaments.cancel();
+		ops.setDirty(Ops::Dirty::Top);
+		ops.setDirty(Ops::Dirty::Bottom);
+	}
+
+	// Screen timeout.
 	if (ops.getStatus(Ops::Status::ScreenAwake) && !ops.getStatus(Ops::Status::ButtonDown) &&
 		ops.screenTimeout.check(currentTime)) {
 		sleep();

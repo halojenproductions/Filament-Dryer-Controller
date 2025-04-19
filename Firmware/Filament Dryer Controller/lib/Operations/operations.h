@@ -17,6 +17,15 @@ class Ops {
 
 	public:
 
+	static Ops &getInstance() {
+		static Ops instance;
+		return instance;
+	}
+
+	// Delete copy constructor and assignment operator
+	Ops(const Ops &)			= delete;
+	void operator=(const Ops &) = delete;
+
 	enum class Status : uint8_t {
 		Ok,
 		Error,
@@ -47,9 +56,8 @@ class Ops {
 		_Last
 	};
 
-	OutTemp outTemp;								// Temperature in centigrade.
-	Filament filament = Filaments::filaments[0];	// Default to PLA
-	int inTemperature = 99;							// Temperature in centigrade.
+	OutTemp outTemp;		   // Temperature in centigrade.
+	int inTemperature = 99;	   // Temperature in centigrade.
 	int humidity	  = 99;
 	int FanSpeed;
 
@@ -88,6 +96,9 @@ class Ops {
 	// Other functions.
 
 	private:
+
+	// Private constructor
+	Ops() : statuses(0), commands(0), dirties(0) {}
 
 	uint8_t statuses = 0;
 	uint8_t commands = 0;

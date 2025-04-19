@@ -14,12 +14,12 @@ namespace test_Commands {
 	}
 
 	void test_Command_New(void) {
-		Ops ops;
+		Ops &ops = Ops::getInstance();
 		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getCommandsRaw(ops));
 	}
 
 	void test_Command_Each(void) {
-		Ops ops;
+		Ops &ops = Ops::getInstance();
 
 		for (uint8_t i = 0; i < lastValue(Ops::Command{}); i++) {
 			TEST_ASSERT_TRUE_MESSAGE(i < 8, "Too many enum values defined.");

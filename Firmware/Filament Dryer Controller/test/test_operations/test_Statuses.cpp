@@ -14,15 +14,15 @@ namespace test_Statuses {
 	}
 
 	void test_Status_New(void) {
-		Ops ops;
+		Ops &ops = Ops::getInstance();
 		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getStatusesRaw(ops));
 	}
 
 	void test_Status_Each(void) {
+		Ops &ops = Ops::getInstance();
 		for (uint8_t i = 0; i < lastValue(Ops::Status{}); i++) {
 			TEST_ASSERT_TRUE_MESSAGE(i < 8, "Too many enum values defined.");
 
-			Ops ops;
 			Ops::Status status = fromInt<Ops::Status>(i);
 			uint8_t expected   = (1 << i);
 
@@ -37,6 +37,9 @@ namespace test_Statuses {
 			ops.toggleStatus(status);
 			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getStatusesRaw(ops));
 			TEST_ASSERT_TRUE(ops.getStatus(status));
+
+			// Reset for next iteration
+			OpsTestAccess::setStatusesRaw(ops, 0);
 		}
 	}
 }
