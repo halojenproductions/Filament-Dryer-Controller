@@ -9,6 +9,7 @@ class Timer {
 
 	Timer(uint32_t interval);
 	bool check(uint32_t presentTime);
+	void reset();
 
 	private:
 

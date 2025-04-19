@@ -12,3 +12,7 @@ bool Timer::check(uint32_t presentTime) {
 	}
 	return false;
 }
+
+void Timer::reset() {
+	value = millis();
+}
