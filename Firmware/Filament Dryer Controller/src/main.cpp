@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <u8g2lib.h>
 
-#include "filament.h"
+#include "filaments.h"
 #include "operations.h"
 #include "ui.h"
 #include "utilities.h"
@@ -154,40 +154,15 @@ void loop() {
 				ops.clearDirty(Ops::Dirty::Bottom);
 			}
 			if (ops.getDirty(Ops::Dirty::Temp) && !ops.getStatus(Ops::Status::Select)) {
-				u8g2.updateDisplayArea(0, 3, u8g2.getBufferTileWidth() / 2, 4);
+				u8g2.updateDisplayArea(0, 2, u8g2.getBufferTileWidth() / 2, 4);
 				ops.clearDirty(Ops::Dirty::Temp);
 			}
 			if (ops.getDirty(Ops::Dirty::Humidity) && !ops.getStatus(Ops::Status::Select)) {
 				u8g2.updateDisplayArea(
-					u8g2.getBufferTileWidth() / 2 - 1, 3, u8g2.getBufferTileWidth() / 2, 4
+					u8g2.getBufferTileWidth() / 2 - 1, 2, u8g2.getBufferTileWidth() / 2, 4
 				);
 				ops.clearDirty(Ops::Dirty::Humidity);
 			}
 		}
-
-		/*
-		delay(5000);	// Delay for 1 second
-		ops.toggleStatus(Ops::Status::Select);
-
-		u8g2.clearBuffer();
-		u8g2.setFontMode(1);
-
-		if (ops.getStatus(Ops::Status::Select)) {
-			UI::drawBorderTop(u8g2);	   // Draw the top border
-			UI::drawBorderBottom(u8g2);	   // Draw the top border
-		}
-
-		UI::drawFilamentType(u8g2, "TPU");
-		UI::drawFilamentTemperature(u8g2, ops.filament.temperature + 10);
-		UI::drawFilamentHumidity(u8g2, ops.filament.humidity + 10);
-
-		UI::drawTemperature(u8g2, ops.inTemperature + 10);
-		UI::drawHumidity(u8g2, ops.humidity + 10);
-
-		u8g2.updateDisplayArea(0, 0, u8g2.getDisplayWidth() / 8, 2);
-		// u8g2.sendBuffer();
-
-		delay(5000);
-		*/
 	}
 }

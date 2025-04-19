@@ -1,7 +1,7 @@
 #include <WString.h>
 
-#ifndef FILAMENT_H
-#define FILAMENT_H
+#ifndef FILAMENTS_H
+#define FILAMENTS_H
 
 struct Filament {
 	String name;
