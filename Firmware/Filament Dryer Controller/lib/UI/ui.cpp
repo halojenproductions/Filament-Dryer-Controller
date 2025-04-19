@@ -13,18 +13,18 @@ namespace UI {
 	const uint8_t *filamentFont = u8g2_font_luBS08_tf;
 
 	// Current.
-	const uint8_t *currentFont = u8g2_font_luBS19_tf;
+	const uint8_t *currentFont = u8g2_font_luRS19_tf;
 
 	// Error
 	const int ERROR_X = 0;
 	const int ERROR_Y = 63;
 
-	void drawBorderTop(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen) {
+	void drawBorderTop(U8G2_SH1106_128X64_NONAME_F_HW_I2C &screen) {
 		screen.setDrawColor(1);
 		screen.drawBox(0, 0, screen.getDisplayWidth(), borderHeight);
 	}
 
-	void drawBorderBottom(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen) {
+	void drawBorderBottom(U8G2_SH1106_128X64_NONAME_F_HW_I2C &screen) {
 		screen.setDrawColor(1);
 		screen.drawBox(
 			0,
@@ -34,7 +34,7 @@ namespace UI {
 		);
 	}
 
-	void drawFilamentType(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, String text) {
+	void drawFilamentType(U8G2_SH1106_128X64_NONAME_F_HW_I2C &screen, String text) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosTop();
@@ -42,7 +42,7 @@ namespace UI {
 		screen.print(text);
 	}
 
-	void drawFilamentTemperature(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int temp) {
+	void drawFilamentTemperature(U8G2_SH1106_128X64_NONAME_F_HW_I2C &screen, int temp) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosBaseline();
@@ -52,7 +52,7 @@ namespace UI {
 		screen.print(String(text + "\xBA"));
 	}
 
-	void drawFilamentHumidity(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int hum) {
+	void drawFilamentHumidity(U8G2_SH1106_128X64_NONAME_F_HW_I2C &screen, int hum) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosBaseline();
@@ -68,17 +68,17 @@ namespace UI {
 		screen.print(text);
 	}
 
-	void drawTemperature(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int temp) {
+	void drawTemperature(U8G2_SH1106_128X64_NONAME_F_HW_I2C &screen, int temp) {
 		screen.setDrawColor(2);
 		screen.setFont(currentFont);
 		screen.setFontPosCenter();
-		screen.setCursor(padding, screen.getDisplayHeight() / 2 - screen.getDescent() / 2);
+		screen.setCursor(padding, screen.getDisplayHeight() / 2 - screen.getDescent() / 2 + 1);
 
 		String text = String(temp, 10);
 		screen.print(String(text + "\xBA"));
 	}
 
-	void drawHumidity(U8G2_SH1106_128X64_NONAME_2_SW_I2C &screen, int hum) {
+	void drawHumidity(U8G2_SH1106_128X64_NONAME_F_HW_I2C &screen, int hum) {
 		screen.setDrawColor(2);
 		screen.setFont(currentFont);
 		screen.setFontPosCenter();
@@ -89,7 +89,7 @@ namespace UI {
 		int textWid = screen.getStrWidth(text.c_str());
 		screen.setCursor(
 			screen.getDisplayWidth() - textWid - padding,
-			screen.getDisplayHeight() / 2 - screen.getDescent() / 2
+			screen.getDisplayHeight() / 2 - screen.getDescent() / 2 + 1
 		);
 
 		screen.print(text);

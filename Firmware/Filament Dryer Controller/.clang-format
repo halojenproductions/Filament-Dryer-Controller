@@ -9,6 +9,8 @@ AllowShortBlocksOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortLambdasOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: False
+AllowShortEnumsOnASingleLine: False
+BreakTemplateDeclarations: Yes
 NamespaceIndentation: All
 FixNamespaceComments: false
 ContinuationIndentWidth: 4
