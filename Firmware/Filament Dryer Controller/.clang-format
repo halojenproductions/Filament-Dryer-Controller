@@ -4,13 +4,15 @@ UseTab: Always
 IndentWidth: 4
 TabWidth: 4
 ColumnLimit: 100
+BreakBeforeBraces: Attach
+BreakTemplateDeclarations: Yes
+BreakArrays: true
 AllowShortIfStatementsOnASingleLine: false
 AllowShortBlocksOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortLambdasOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: False
 AllowShortEnumsOnASingleLine: False
-BreakTemplateDeclarations: Yes
 NamespaceIndentation: All
 FixNamespaceComments: false
 ContinuationIndentWidth: 4
@@ -18,8 +20,8 @@ IndentWrappedFunctionNames: False
 IndentAccessModifiers: false
 AccessModifierOffset: 0
 EmptyLineAfterAccessModifier: Always
-InsertBraces: True
-InsertTrailingCommas: Wrapped
+InsertBraces: true
+InsertTrailingCommas: None
 KeepEmptyLines: 
     AtEndOfFile: true
     AtStartOfBlock: true
@@ -42,6 +44,9 @@ SpacesInLineCommentPrefix:
   Maximum: 1
 SpacesBeforeTrailingComments: 4
 BinPackArguments: false
+BinPackLongBracedList: false
 BinPackParameters: OnePerLine
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: true
 PointerAlignment: Left
 ReferenceAlignment: Left
