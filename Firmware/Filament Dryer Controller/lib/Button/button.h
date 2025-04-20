@@ -8,7 +8,7 @@
 // Declare external dependencies
 extern Ops& ops;
 extern Filaments& filaments;
-extern const int pButt;
+extern const uint8_t pButt;
 extern uint32_t currentTime;
 
 extern volatile byte interrupt;

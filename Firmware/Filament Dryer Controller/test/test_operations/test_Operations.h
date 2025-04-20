@@ -20,8 +20,6 @@ namespace test_Commands {
 namespace test_Dirties {
 	void test_Dirties();
 	void test_Dirty_New();
-	void test_Dirty_First();
-	void test_Dirty_Last();
 	void test_Dirty_Each();
 }
 
@@ -47,27 +45,27 @@ namespace test_Operations_Helpers {
 	class OpsTestAccess {
 		public:
 
-		static uint8_t getStatusesRaw(const Ops &ops) {
+		static uint8_t getStatusesRaw(const Ops& ops) {
 			return ops.statuses;
 		}
 
-		static void setStatusesRaw(Ops &ops, uint8_t value) {
+		static void setStatusesRaw(Ops& ops, uint8_t value) {
 			ops.statuses = value;
 		}
 
-		static uint8_t getCommandsRaw(const Ops &ops) {
+		static uint8_t getCommandsRaw(const Ops& ops) {
 			return ops.commands;
 		}
 
-		static void setCommandsRaw(Ops &ops, uint8_t value) {
+		static void setCommandsRaw(Ops& ops, uint8_t value) {
 			ops.commands = value;
 		}
 
-		static uint8_t getDirtiesRaw(const Ops &ops) {
+		static uint8_t getDirtiesRaw(const Ops& ops) {
 			return ops.dirties;
 		}
 
-		static void setDirtiesRaw(Ops &ops, uint8_t value) {
+		static void setDirtiesRaw(Ops& ops, uint8_t value) {
 			ops.dirties = value;
 		}
 	};

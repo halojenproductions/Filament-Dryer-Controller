@@ -22,6 +22,7 @@ class Ops {
 		static Ops instance;
 		return instance;
 	}
+
 	Ops(const Ops&)			   = delete;
 	void operator=(const Ops&) = delete;
 
@@ -48,26 +49,38 @@ class Ops {
 
 	enum class Dirty : uint8_t {
 		All,
-		Top,
-		Bottom,
+		Filament,
 		Temp,
 		Humidity,
 		_Last
 	};
 
-	OutTemp outTemp;		   // Temperature in centigrade.
-	int inTemperature = 99;	   // Temperature in centigrade.
-	int humidity	  = 99;
-	int FanSpeed;
+	OutTemp outTemp;
+	int8_t inTemperature = 99;
+	int8_t humidity		 = 99;
+	int8_t FanSpeed		 = 0;
 
 	// Timers.
-	Timer inputPolling	   = Timer(1000UL * 1);
-	Timer screenTimeout	   = Timer(1000UL * 30);
-	Timer heaterTimeout	   = Timer(1000UL * 60 * 2);
-	Timer heaterCooldown   = Timer(1000UL * 60 * 2);
-	Timer selectionTimeout = Timer(1000UL * 5);
-	Timer buttonDebounce   = Timer(50);
-	Timer buttonHold	   = Timer(800);
+	static constexpr uint32_t INPUT_POLL_TIME = 1000UL;
+	Timer inputPolling{INPUT_POLL_TIME};
+
+	static constexpr uint32_t SCREEN_TIMEOUT = 1000UL * 30;
+	Timer screenTimeout{SCREEN_TIMEOUT};
+
+	static constexpr uint32_t HEATER_TIMEOUT = 1000UL * 60 * 2;
+	Timer heaterTimeout{HEATER_TIMEOUT};
+
+	static constexpr uint32_t HEATER_COOLDOWN_TIME = 1000UL * 60 * 2;
+	Timer heaterCooldown{HEATER_COOLDOWN_TIME};
+
+	static constexpr uint32_t SELECTION_TIMEOUT = 1000UL * 5;
+	Timer selectionTimeout{SELECTION_TIMEOUT};
+
+	static constexpr uint32_t BUTTON_DEBOUNCE_TIME = 50UL;
+	Timer buttonDebounce{BUTTON_DEBOUNCE_TIME};
+
+	static constexpr uint32_t BUTTON_HOLD_TIMEOUT = 800UL;
+	Timer buttonHold{BUTTON_HOLD_TIMEOUT};
 
 	// Single template function that works with all enum types.
 	template <typename T>

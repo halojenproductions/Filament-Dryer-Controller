@@ -4,7 +4,7 @@
 volatile byte interrupt			= 0;
 volatile uint32_t interruptTime = 0;
 
-static const int debounceDelay = 50;	// Debounce delay in milliseconds
+static const uint8_t debounceDelay = 50;	// Debounce delay in milliseconds
 
 bool interrupted() {
 	return interrupt & 1;
@@ -70,8 +70,7 @@ void buttonHeld() {
 		ops.selectionTimeout.reset();
 	}
 
-	ops.setDirty(Ops::Dirty::Top);
-	ops.setDirty(Ops::Dirty::Bottom);
+	ops.setDirty(Ops::Dirty::Filament);
 }
 
 void buttonClicked() {
@@ -81,8 +80,7 @@ void buttonClicked() {
 	// Check if we are in selection mode.
 	if (ops.getStatus(Ops::Status::Select)) {
 		filaments.next();
-		ops.setDirty(Ops::Dirty::Top);
-		ops.setDirty(Ops::Dirty::Bottom);
+		ops.setDirty(Ops::Dirty::Filament);
 		ops.selectionTimeout.reset();
 
 		// digitalWrite(13, filaments.display.name == "PLA" ? HIGH : LOW);

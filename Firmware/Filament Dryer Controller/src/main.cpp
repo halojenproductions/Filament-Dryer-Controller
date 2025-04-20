@@ -8,15 +8,17 @@
 #include "ui.h"
 #include "utilities.h"
 
+#define DEBUG_MODE 0
+
 // Pins
-const int pButt	   = 2;		 // PD2
-const int pTemp	   = A0;	 // PC0
-const int pLedOk   = 12;	 // PB4
-const int pLedHeat = 13;	 // PB5
-const int pHeater  = 9;		 // PB1
-const int pFan	   = 5;		 // PD5 TODO: Move away from OS0.
-const int pSda	   = SDA;	 // PC4
-const int pScl	   = SCL;	 // PC5
+constexpr uint8_t pButt	   = 2;		 // PD2
+constexpr uint8_t pTemp	   = A0;	 // PC0
+constexpr uint8_t pLedOk   = 12;	 // PB4
+constexpr uint8_t pLedHeat = 13;	 // PB5
+constexpr uint8_t pHeater  = 9;		 // PB1
+constexpr uint8_t pFan	   = 5;		 // PD5 TODO: Move away from OS0.
+constexpr uint8_t pSda	   = SDA;	 // PC4
+constexpr uint8_t pScl	   = SCL;	 // PC5
 
 // Screen
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, pScl, pSda);
@@ -98,7 +100,7 @@ void loop() {
 			ops.outTemp = outTemp;
 		}
 
-		int inTemperature = 20 + random(2);	   // TODO: get the temperature sensor value
+		int inTemperature = -20 + random(2);	// TODO: get the temperature sensor value
 		if (inTemperature != ops.inTemperature) {
 			ops.inTemperature = inTemperature;
 			ops.setDirty(Ops::Dirty::Temp);
@@ -133,9 +135,14 @@ void loop() {
 		u8g2.clearBuffer();
 		u8g2.setFontMode(1);
 
+#if DEBUG_MODE
+		UI::drawAreaBorders(u8g2);		  // Draw the area borders
+		ops.setDirty(Ops::Dirty::All);	  // Mark all areas as dirty
+#endif
+
 		if (ops.getStatus(Ops::Status::Select)) {
 			UI::drawBorderTop(u8g2);	   // Draw the top border
-			UI::drawBorderBottom(u8g2);	   // Draw the top border
+			UI::drawBorderBottom(u8g2);	   // Draw the bottom border
 		}
 
 		UI::drawFilamentType(u8g2, filaments.getDisplay().name);
@@ -152,25 +159,28 @@ void loop() {
 			ops.clearAllDirties();
 		} else {
 			// ..otherwise, just the bits that have changed.
-			if (ops.getDirty(Ops::Dirty::Top)) {
+			if (ops.getDirty(Ops::Dirty::Filament)) {
+				// Top.
 				u8g2.updateDisplayArea(0, 0, u8g2.getBufferTileWidth(), 2);
-				ops.clearDirty(Ops::Dirty::Top);
-			}
-			if (ops.getDirty(Ops::Dirty::Bottom)) {
+				// Bottom.
 				u8g2.updateDisplayArea(
 					0, u8g2.getDisplayHeight() / 8 - 2, u8g2.getBufferTileWidth(), 2
 				);
-				ops.clearDirty(Ops::Dirty::Bottom);
+				ops.clearDirty(Ops::Dirty::Filament);
 			}
-			if (ops.getDirty(Ops::Dirty::Temp) && !ops.getStatus(Ops::Status::Select)) {
-				u8g2.updateDisplayArea(0, 2, u8g2.getBufferTileWidth() / 2, 4);
-				ops.clearDirty(Ops::Dirty::Temp);
-			}
-			if (ops.getDirty(Ops::Dirty::Humidity) && !ops.getStatus(Ops::Status::Select)) {
-				u8g2.updateDisplayArea(
-					u8g2.getBufferTileWidth() / 2 - 1, 2, u8g2.getBufferTileWidth() / 2, 4
-				);
-				ops.clearDirty(Ops::Dirty::Humidity);
+			// Deliberately not updating the live readouts (temp and hum) while in selection
+			// mode.
+			if (!ops.getStatus(Ops::Status::Select)) {
+				if (ops.getDirty(Ops::Dirty::Temp)) {
+					u8g2.updateDisplayArea(0, 2, u8g2.getBufferTileWidth() / 2, 4);
+					ops.clearDirty(Ops::Dirty::Temp);
+				}
+				if (ops.getDirty(Ops::Dirty::Humidity)) {
+					u8g2.updateDisplayArea(
+						u8g2.getBufferTileWidth() / 2 - 1, 2, u8g2.getBufferTileWidth() / 2, 4
+					);
+					ops.clearDirty(Ops::Dirty::Humidity);
+				}
 			}
 		}
 	}
@@ -179,8 +189,7 @@ void loop() {
 	if (ops.getStatus(Ops::Status::Select) && ops.selectionTimeout.check(currentTime)) {
 		ops.clearStatus(Ops::Status::Select);
 		filaments.cancel();
-		ops.setDirty(Ops::Dirty::Top);
-		ops.setDirty(Ops::Dirty::Bottom);
+		ops.setDirty(Ops::Dirty::Filament);
 	}
 
 	// Screen timeout.
