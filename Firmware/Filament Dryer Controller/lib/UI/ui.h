@@ -12,7 +12,7 @@ namespace UI {
 		byte h;
 	};
 
-	static constexpr int screenAddress = 0x78;
+	extern U8G2_SH1106_128X64_NONAME_F_HW_I2C screen;
 
 	// Filament
 	extern const uint8_t* filamentFont;
@@ -31,14 +31,14 @@ namespace UI {
 	extern const Area areaHumidity;
 
 	// Functions.
-	extern void drawAreaBorders(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen);
-	extern void drawBorderTop(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen);
-	extern void drawBorderBottom(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen);
-	extern void drawFilamentType(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, String text);
-	extern void drawFilamentTemperature(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, int temp);
-	extern void drawFilamentHumidity(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, int hum);
-	extern void drawTemperature(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, int temp);
-	extern void drawHumidity(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, int hum);
+	extern void drawAreaBorders();
+	extern void drawBorderTop();
+	extern void drawBorderBottom();
+	extern void drawFilamentType(String text);
+	extern void drawFilamentTemperature(int temp);
+	extern void drawFilamentHumidity(int hum);
+	extern void drawTemperature(int temp);
+	extern void drawHumidity(int hum);
 
 }
 #endif

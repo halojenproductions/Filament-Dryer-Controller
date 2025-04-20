@@ -20,8 +20,9 @@ constexpr uint8_t pFan	   = 5;		 // PD5 TODO: Move away from OS0.
 constexpr uint8_t pSda	   = SDA;	 // PC4
 constexpr uint8_t pScl	   = SCL;	 // PC5
 
-// Screen
-U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, pScl, pSda);
+// // Screen
+// U8G2_SH1106_128X64_NONAME_F_HW_I2C screen(U8G2_R0, pScl, pSda);
+// extern U8G2_SH1106_128X64_NONAME_F_HW_I2C screen;
 
 Ops& ops			 = Ops::getInstance();
 Filaments& filaments = Filaments::getInstance();
@@ -40,9 +41,9 @@ void setup() {
 	pinMode(pHeater, OUTPUT);
 	pinMode(pFan, OUTPUT);
 
-	u8g2.setI2CAddress(UI::screenAddress);	  // Set the I2C address of the display
-	u8g2.setBusClock(400000);				  // Set the I2C bus clock speed to 400kHz
-	u8g2.begin();
+	UI::screen.setI2CAddress(0x78);	// Set the I2C address of the display
+	UI::screen.setBusClock(400000);					// Set the I2C bus clock speed to 400kHz
+	UI::screen.begin();
 
 	attachInterrupt(digitalPinToInterrupt(pButt), handleButtonInterrupt, CHANGE);
 
@@ -55,14 +56,14 @@ void setup() {
 
 void wakeUp() {
 	ops.clearCommand(Ops::Command::WakeUp);
-	u8g2.setPowerSave(0);
+	UI::screen.setPowerSave(0);
 	ops.setDirty(Ops::Dirty::All);
 	ops.setStatus(Ops::Status::ScreenAwake);
 	ops.screenTimeout.reset();
 };
 
 void sleep() {
-	u8g2.setPowerSave(1);
+	UI::screen.setPowerSave(1);
 	ops.clearStatus(Ops::Status::ScreenAwake);
 	ops.clearStatus(Ops::Status::Select);
 };
@@ -132,8 +133,8 @@ void loop() {
 
 	if (ops.getStatus(Ops::Status::ScreenAwake)) {
 		// Load the display buffer.
-		u8g2.clearBuffer();
-		u8g2.setFontMode(1);
+		UI::screen.clearBuffer();
+		UI::screen.setFontMode(1);
 
 #if DEBUG_MODE
 		UI::drawAreaBorders(u8g2);		  // Draw the area borders
@@ -141,30 +142,30 @@ void loop() {
 #endif
 
 		if (ops.getStatus(Ops::Status::Select)) {
-			UI::drawBorderTop(u8g2);	   // Draw the top border
-			UI::drawBorderBottom(u8g2);	   // Draw the bottom border
+			UI::drawBorderTop();		 // Draw the top border
+			UI::drawBorderBottom();	 // Draw the bottom border
 		}
 
-		UI::drawFilamentType(u8g2, filaments.getDisplay().name);
-		UI::drawFilamentTemperature(u8g2, filaments.getDisplay().temperature);
-		UI::drawFilamentHumidity(u8g2, filaments.getDisplay().humidity);
+		UI::drawFilamentType(filaments.getDisplay().name);
+		UI::drawFilamentTemperature(filaments.getDisplay().temperature);
+		UI::drawFilamentHumidity(filaments.getDisplay().humidity);
 
-		UI::drawTemperature(u8g2, ops.inTemperature);
-		UI::drawHumidity(u8g2, ops.humidity);
+		UI::drawTemperature(ops.inTemperature);
+		UI::drawHumidity(ops.humidity);
 
 		// Send the display buffer (or just bits of it).
 		if (ops.getDirty(Ops::Dirty::All)) {
 			// If everything is dirty, update the whole screen..
-			u8g2.sendBuffer();
+			UI::screen.sendBuffer();
 			ops.clearAllDirties();
 		} else {
 			// ..otherwise, just the bits that have changed.
 			if (ops.getDirty(Ops::Dirty::Filament)) {
 				// Top.
-				u8g2.updateDisplayArea(0, 0, u8g2.getBufferTileWidth(), 2);
+				UI::screen.updateDisplayArea(0, 0, UI::screen.getBufferTileWidth(), 2);
 				// Bottom.
-				u8g2.updateDisplayArea(
-					0, u8g2.getDisplayHeight() / 8 - 2, u8g2.getBufferTileWidth(), 2
+				UI::screen.updateDisplayArea(
+					0, UI::screen.getDisplayHeight() / 8 - 2, UI::screen.getBufferTileWidth(), 2
 				);
 				ops.clearDirty(Ops::Dirty::Filament);
 			}
@@ -172,12 +173,15 @@ void loop() {
 			// mode.
 			if (!ops.getStatus(Ops::Status::Select)) {
 				if (ops.getDirty(Ops::Dirty::Temp)) {
-					u8g2.updateDisplayArea(0, 2, u8g2.getBufferTileWidth() / 2, 4);
+					UI::screen.updateDisplayArea(0, 2, UI::screen.getBufferTileWidth() / 2, 4);
 					ops.clearDirty(Ops::Dirty::Temp);
 				}
 				if (ops.getDirty(Ops::Dirty::Humidity)) {
-					u8g2.updateDisplayArea(
-						u8g2.getBufferTileWidth() / 2 - 1, 2, u8g2.getBufferTileWidth() / 2, 4
+					UI::screen.updateDisplayArea(
+						UI::screen.getBufferTileWidth() / 2 - 1,
+						2,
+						UI::screen.getBufferTileWidth() / 2,
+						4
 					);
 					ops.clearDirty(Ops::Dirty::Humidity);
 				}

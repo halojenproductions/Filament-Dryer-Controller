@@ -1,6 +1,7 @@
 #include "ui.h"
 
 namespace UI {
+	U8G2_SH1106_128X64_NONAME_F_HW_I2C screen(U8G2_R0);
 
 	// Filament.
 	const uint8_t* filamentFont = u8g2_font_luBS08_tf;
@@ -23,12 +24,20 @@ namespace UI {
 	constexpr Area areaTemp		= {0, 2, tilesWidth / 2, 4};
 	constexpr Area areaHumidity = {tilesWidth / 2, 2, tilesWidth / 2, 4};
 
-	void drawBorderTop(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen) {
+	void updateAreaFil() {
+		screen.updateDisplayArea(0, 2, screen.getBufferTileWidth() / 2, 4);
+	}
+
+	void updateAreaTemp() {}
+
+	void updateAreaHumid() {}
+
+	void drawBorderTop() {
 		screen.setDrawColor(1);
 		screen.drawBox(0, 0, screen.getDisplayWidth(), borderHeight);
 	}
 
-	void drawBorderBottom(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen) {
+	void drawBorderBottom() {
 		screen.setDrawColor(1);
 		screen.drawBox(
 			0,
@@ -38,7 +47,7 @@ namespace UI {
 		);
 	}
 
-	void drawFilamentType(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, String text) {
+	void drawFilamentType(String text) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosTop();
@@ -46,7 +55,7 @@ namespace UI {
 		screen.print(text);
 	}
 
-	void drawFilamentTemperature(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, int temp) {
+	void drawFilamentTemperature(int temp) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosBaseline();
@@ -56,7 +65,7 @@ namespace UI {
 		screen.print(String(text + "\xBA"));
 	}
 
-	void drawFilamentHumidity(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, int hum) {
+	void drawFilamentHumidity(int hum) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosBaseline();
@@ -72,7 +81,7 @@ namespace UI {
 		screen.print(text);
 	}
 
-	void drawTemperature(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, int temp) {
+	void drawTemperature(int temp) {
 		screen.setDrawColor(2);
 		screen.setFont(currentFont);
 		screen.setFontPosCenter();
@@ -82,7 +91,7 @@ namespace UI {
 		screen.print(String(text + "\xBA"));
 	}
 
-	void drawHumidity(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen, int hum) {
+	void drawHumidity(int hum) {
 		screen.setDrawColor(2);
 		screen.setFont(currentFont);
 		screen.setFontPosCenter();
@@ -99,7 +108,7 @@ namespace UI {
 		screen.print(text);
 	}
 
-	void drawAreaBorders(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen) {
+	void drawAreaBorders() {
 		screen.setDrawColor(1);
 		// draw top area
 		screen.drawFrame(areaTop.x * 8, areaTop.y * 8, areaTop.w * 8, areaTop.h * 8);
