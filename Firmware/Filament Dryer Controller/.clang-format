@@ -43,3 +43,5 @@ SpacesInLineCommentPrefix:
 SpacesBeforeTrailingComments: 4
 BinPackArguments: false
 BinPackParameters: OnePerLine
+PointerAlignment: Left
+ReferenceAlignment: Left

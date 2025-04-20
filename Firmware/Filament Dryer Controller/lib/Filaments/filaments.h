@@ -14,30 +14,33 @@ struct FilamentDef {
 class Filaments {
 	public:
 
-	static Filaments &getInstance() {
-		static Filaments instance;
-		return instance;
-	}
-
-	// Delete copy constructor and assignment operator
-	Filaments(const Filaments &)	  = delete;
-	void operator=(const Filaments &) = delete;
-
-	const FilamentDef &active;
-	const FilamentDef &display;
-
+	FilamentDef getActive();
+	FilamentDef getDisplay();
 	void apply();
 	void cancel();
 	void next();
 
+	// Singleton stuff.
+	static Filaments& getInstance() {
+		static Filaments instance;
+		return instance;
+	}
+
+	Filaments(const Filaments&)		 = delete;
+	void operator=(const Filaments&) = delete;
+
 	private:
 
 	// Private constructor
-	Filaments() : active(filaments[0]), display(filaments[0]) {}
+	Filaments();
 
-	static const FilamentDef filaments[];
-	byte activeIndex  = 0;
-	byte displayIndex = 0;
+	void addFilament(String name, byte temperature, byte humidity);
+
+	static const byte maxFilaments = 8;
+	FilamentDef filaments[maxFilaments];
+	byte filamentCount = 0;
+	byte activeIndex   = 0;
+	byte displayIndex  = 0;
 };
 
 #endif

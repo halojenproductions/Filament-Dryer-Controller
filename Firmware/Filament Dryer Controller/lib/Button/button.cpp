@@ -85,9 +85,9 @@ void buttonClicked() {
 		ops.setDirty(Ops::Dirty::Bottom);
 		ops.selectionTimeout.reset();
 
-		digitalWrite(13, filaments.display.name == "PLA" ? HIGH : LOW);
-		delay(100);
-		digitalWrite(13, LOW);
+		// digitalWrite(13, filaments.display.name == "PLA" ? HIGH : LOW);
+		// delay(100);
+		// digitalWrite(13, LOW);
 	}
 	// Nothing else to do because we already told it to wake up if it was asleep.
 	ops.setDirty(Ops::Dirty::All);

@@ -17,14 +17,13 @@ class Ops {
 
 	public:
 
-	static Ops &getInstance() {
+	// Singleton stuff.
+	static Ops& getInstance() {
 		static Ops instance;
 		return instance;
 	}
-
-	// Delete copy constructor and assignment operator
-	Ops(const Ops &)			= delete;
-	void operator=(const Ops &) = delete;
+	Ops(const Ops&)			   = delete;
+	void operator=(const Ops&) = delete;
 
 	enum class Status : uint8_t {
 		Ok,

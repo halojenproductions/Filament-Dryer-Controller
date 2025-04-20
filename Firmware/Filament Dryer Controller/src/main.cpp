@@ -21,8 +21,8 @@ const int pScl	   = SCL;	 // PC5
 // Screen
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, pScl, pSda);
 
-Ops &ops			 = Ops::getInstance();
-Filaments &filaments = Filaments::getInstance();
+Ops& ops			 = Ops::getInstance();
+Filaments& filaments = Filaments::getInstance();
 
 uint32_t currentTime = millis();
 
@@ -31,7 +31,7 @@ void setup() {
 	pinMode(pButt, INPUT_PULLUP);
 	pinMode(pTemp, INPUT);
 	pinMode(pLedOk, OUTPUT);
-	
+
 	pinMode(pLedHeat, OUTPUT);
 	digitalWrite(pLedHeat, HIGH);
 
@@ -138,9 +138,9 @@ void loop() {
 			UI::drawBorderBottom(u8g2);	   // Draw the top border
 		}
 
-		UI::drawFilamentType(u8g2, filaments.display.name);
-		UI::drawFilamentTemperature(u8g2, filaments.display.temperature);
-		UI::drawFilamentHumidity(u8g2, filaments.display.humidity);
+		UI::drawFilamentType(u8g2, filaments.getDisplay().name);
+		UI::drawFilamentTemperature(u8g2, filaments.getDisplay().temperature);
+		UI::drawFilamentHumidity(u8g2, filaments.getDisplay().humidity);
 
 		UI::drawTemperature(u8g2, ops.inTemperature);
 		UI::drawHumidity(u8g2, ops.humidity);

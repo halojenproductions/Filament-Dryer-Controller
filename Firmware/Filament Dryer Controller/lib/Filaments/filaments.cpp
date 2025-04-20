@@ -1,18 +1,34 @@
 #include "filaments.h"
 
-const FilamentDef Filaments::filaments[] = {{"PLA", 40, 40}, {"PETG/TPU", 50, 35}, {"PC", 80, 30}};
+Filaments::Filaments() {
+	addFilament("PLA", 40, 40);
+	addFilament("PETG/TPU", 50, 35);
+	addFilament("PC", 80, 30);
+}
+
+FilamentDef Filaments::getActive() {
+	return Filaments::filaments[activeIndex];
+}
+
+FilamentDef Filaments::getDisplay() {
+	return Filaments::filaments[displayIndex];
+}
 
 void Filaments::apply() {
-	activeIndex						  = displayIndex;
-	const_cast<FilamentDef &>(active) = filaments[activeIndex];	   // Update active reference
+	activeIndex = displayIndex;
 }
 
 void Filaments::cancel() {
-	displayIndex					   = activeIndex;
-	const_cast<FilamentDef &>(display) = filaments[displayIndex];	 // Update display reference
+	displayIndex = activeIndex;
 }
 
 void Filaments::next() {
-	displayIndex = (displayIndex + 1) % (sizeof(filaments) / sizeof(filaments[0]));
-	const_cast<FilamentDef &>(display) = filaments[displayIndex];	 // Update reference
+	displayIndex = (displayIndex + 1) % filamentCount;
+}
+
+void Filaments::addFilament(String name, byte temperature, byte humidity) {
+	if (filamentCount < maxFilaments) {
+		filaments[filamentCount] = {name, temperature, humidity};
+		filamentCount++;
+	}
 }
