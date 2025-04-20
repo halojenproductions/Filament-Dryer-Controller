@@ -41,8 +41,8 @@ void setup() {
 	pinMode(pHeater, OUTPUT);
 	pinMode(pFan, OUTPUT);
 
-	UI::screen.setI2CAddress(0x78);	// Set the I2C address of the display
-	UI::screen.setBusClock(400000);					// Set the I2C bus clock speed to 400kHz
+	UI::screen.setI2CAddress(0x78);	   // Set the I2C address of the display
+	UI::screen.setBusClock(400000);	   // Set the I2C bus clock speed to 400kHz
 	UI::screen.begin();
 
 	attachInterrupt(digitalPinToInterrupt(pButt), handleButtonInterrupt, CHANGE);
@@ -142,8 +142,8 @@ void loop() {
 #endif
 
 		if (ops.getStatus(Ops::Status::Select)) {
-			UI::drawBorderTop();		 // Draw the top border
-			UI::drawBorderBottom();	 // Draw the bottom border
+			UI::drawBorderTop();	   // Draw the top border
+			UI::drawBorderBottom();	   // Draw the bottom border
 		}
 
 		UI::drawFilamentType(filaments.getDisplay().name);
@@ -154,39 +154,7 @@ void loop() {
 		UI::drawHumidity(ops.humidity);
 
 		// Send the display buffer (or just bits of it).
-		if (ops.getDirty(Ops::Dirty::All)) {
-			// If everything is dirty, update the whole screen..
-			UI::screen.sendBuffer();
-			ops.clearAllDirties();
-		} else {
-			// ..otherwise, just the bits that have changed.
-			if (ops.getDirty(Ops::Dirty::Filament)) {
-				// Top.
-				UI::screen.updateDisplayArea(0, 0, UI::screen.getBufferTileWidth(), 2);
-				// Bottom.
-				UI::screen.updateDisplayArea(
-					0, UI::screen.getDisplayHeight() / 8 - 2, UI::screen.getBufferTileWidth(), 2
-				);
-				ops.clearDirty(Ops::Dirty::Filament);
-			}
-			// Deliberately not updating the live readouts (temp and hum) while in selection
-			// mode.
-			if (!ops.getStatus(Ops::Status::Select)) {
-				if (ops.getDirty(Ops::Dirty::Temp)) {
-					UI::screen.updateDisplayArea(0, 2, UI::screen.getBufferTileWidth() / 2, 4);
-					ops.clearDirty(Ops::Dirty::Temp);
-				}
-				if (ops.getDirty(Ops::Dirty::Humidity)) {
-					UI::screen.updateDisplayArea(
-						UI::screen.getBufferTileWidth() / 2 - 1,
-						2,
-						UI::screen.getBufferTileWidth() / 2,
-						4
-					);
-					ops.clearDirty(Ops::Dirty::Humidity);
-				}
-			}
-		}
+		UI::updateScreen();
 	}
 
 	// Selection timeout.

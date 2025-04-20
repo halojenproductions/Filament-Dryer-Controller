@@ -1,4 +1,5 @@
 #include "filaments.h"
+#include "operations.h"
 #include <u8g2lib.h>
 
 #ifndef UI_H
@@ -10,7 +11,13 @@ namespace UI {
 		byte y;
 		byte w;
 		byte h;
+
+		void updateArea(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen) const {
+			screen.updateDisplayArea(x, y, w, h);
+		}
 	};
+
+	extern Ops& ops;
 
 	extern U8G2_SH1106_128X64_NONAME_F_HW_I2C screen;
 
@@ -31,14 +38,16 @@ namespace UI {
 	extern const Area areaHumidity;
 
 	// Functions.
-	extern void drawAreaBorders();
+	extern void updateScreen();
+
 	extern void drawBorderTop();
 	extern void drawBorderBottom();
-	extern void drawFilamentType(String text);
+	extern void drawFilamentType(const char* text);
 	extern void drawFilamentTemperature(int temp);
 	extern void drawFilamentHumidity(int hum);
 	extern void drawTemperature(int temp);
 	extern void drawHumidity(int hum);
+	extern void drawAreaBorders();
 
 }
 #endif

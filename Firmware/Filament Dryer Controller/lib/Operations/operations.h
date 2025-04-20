@@ -76,9 +76,6 @@ class Ops {
 	static constexpr uint32_t SELECTION_TIMEOUT = 1000UL * 5;
 	Timer selectionTimeout{SELECTION_TIMEOUT};
 
-	static constexpr uint32_t BUTTON_DEBOUNCE_TIME = 50UL;
-	Timer buttonDebounce{BUTTON_DEBOUNCE_TIME};
-
 	static constexpr uint32_t BUTTON_HOLD_TIMEOUT = 800UL;
 	Timer buttonHold{BUTTON_HOLD_TIMEOUT};
 

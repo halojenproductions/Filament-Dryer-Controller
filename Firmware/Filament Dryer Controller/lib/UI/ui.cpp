@@ -1,6 +1,8 @@
 #include "ui.h"
 
 namespace UI {
+	Ops& ops = Ops::getInstance();
+
 	U8G2_SH1106_128X64_NONAME_F_HW_I2C screen(U8G2_R0);
 
 	// Filament.
@@ -24,13 +26,37 @@ namespace UI {
 	constexpr Area areaTemp		= {0, 2, tilesWidth / 2, 4};
 	constexpr Area areaHumidity = {tilesWidth / 2, 2, tilesWidth / 2, 4};
 
-	void updateAreaFil() {
-		screen.updateDisplayArea(0, 2, screen.getBufferTileWidth() / 2, 4);
+	void updateScreen() {
+		if (ops.getDirty(Ops::Dirty::All)) {
+			// If everything is dirty, update the whole screen..
+			screen.sendBuffer();
+			ops.clearAllDirties();
+		} else {
+			// ..otherwise, just the bits that have changed.
+			if (ops.getDirty(Ops::Dirty::Filament)) {
+				areaTop.updateArea(screen);
+				areaBottom.updateArea(screen);
+				ops.clearDirty(Ops::Dirty::Filament);
+			}
+			// Deliberately not updating the live readouts (temp and hum) while in selection
+			// mode.
+			if (!ops.getStatus(Ops::Status::Select)) {
+				if (ops.getDirty(Ops::Dirty::Temp)) {
+					areaTemp.updateArea(screen);
+					ops.clearDirty(Ops::Dirty::Temp);
+				}
+				if (ops.getDirty(Ops::Dirty::Humidity)) {
+					areaHumidity.updateArea(screen);
+					ops.clearDirty(Ops::Dirty::Humidity);
+				}
+			}
+		}
 	}
 
-	void updateAreaTemp() {}
-
-	void updateAreaHumid() {}
+	void updateAreaFil() {
+		// screen.updateDisplayArea(areaTop.x, areaTop.y, areaTop.w, areaTop.h);
+		areaTop.updateArea(screen);
+	}
 
 	void drawBorderTop() {
 		screen.setDrawColor(1);
@@ -47,7 +73,7 @@ namespace UI {
 		);
 	}
 
-	void drawFilamentType(String text) {
+	void drawFilamentType(const char* text) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosTop();
