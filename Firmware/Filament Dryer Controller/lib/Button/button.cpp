@@ -1,30 +1,29 @@
 #include "button.h"
 #include <Arduino.h>
 
-volatile byte interrupt			= 0;
-volatile uint32_t interruptTime = 0;
-
-static const uint8_t debounceDelay = 50;	// Debounce delay in milliseconds
+volatile byte interruption			= 0;
+volatile uint32_t interruptTime		= 0;
+static constexpr byte debounceDelay = 20;
 
 bool interrupted() {
-	return interrupt & 1;
+	return interruption & 1;
 }
 
-void handleButtonInterrupt() {
-	interrupt |= 1;
+void interruptHandler() {
+	interruption |= 1;
 	interruptTime = millis();
 
 	if (digitalRead(pButt) == LOW) {
-		interrupt |= (1 << 1);	   // Button down.
+		interruption |= (1 << 1);	  // Button down.
 	} else {
-		interrupt &= ~(1 << 1);	   // Button up.
+		interruption &= ~(1 << 1);	  // Button up.
 	}
 }
 
-void buttonInterruption() {
+void interruptAnalyser() {
 	if (millis() >= interruptTime + debounceDelay) {
 		// Clear the interrupt flag.
-		interrupt &= ~1;
+		interruption &= ~1;
 
 		if (ops.getStatus(Ops::Status::ScreenAwake)) {
 			// If the screen is awake, touch its timer.
@@ -35,11 +34,14 @@ void buttonInterruption() {
 		}
 
 		// Process the button change.
-		if (interrupt & (1 << 1)) {
+		if (interruption & (1 << 1)) {
 			// Button went down.
 			ops.buttonHold.reset();
 			ops.setStatus(Ops::Status::ButtonDown);
-			ops.clearCommand(Ops::Command::ButtonHoldHandled);
+			// Allow hold only if the screen was awake.
+			if (ops.getStatus(Ops::Status::ScreenAwake)) {
+				ops.clearCommand(Ops::Command::ButtonHoldHandled);
+			}
 		} else {
 			// Button was released.
 			ops.clearStatus(Ops::Status::ButtonDown);
@@ -54,6 +56,19 @@ void buttonInterruption() {
 			}
 		}
 	}
+}
+
+void buttonClicked() {
+	// Check if we are in selection mode.
+	if (ops.getStatus(Ops::Status::Select)) {
+		filaments.next();
+		ops.setDirty(Ops::Dirty::Filament);
+		ops.selectionTimeout.reset();
+	}
+
+	// Nothing else to do because we already told it to wake up if it was asleep.
+	// But we might as well do a full screen update at this point.
+	ops.setDirty(Ops::Dirty::All);
 }
 
 void buttonHeld() {
@@ -71,22 +86,4 @@ void buttonHeld() {
 	}
 
 	ops.setDirty(Ops::Dirty::Filament);
-}
-
-void buttonClicked() {
-	ops.clearCommand(Ops::Command::ButtonClick);
-	ops.screenTimeout.reset();
-
-	// Check if we are in selection mode.
-	if (ops.getStatus(Ops::Status::Select)) {
-		filaments.next();
-		ops.setDirty(Ops::Dirty::Filament);
-		ops.selectionTimeout.reset();
-
-		// digitalWrite(13, filaments.display.name == "PLA" ? HIGH : LOW);
-		// delay(100);
-		// digitalWrite(13, LOW);
-	}
-	// Nothing else to do because we already told it to wake up if it was asleep.
-	ops.setDirty(Ops::Dirty::All);
 }

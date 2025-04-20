@@ -14,12 +14,12 @@ namespace test_Commands {
 	}
 
 	void test_Command_New(void) {
-		Ops &ops = Ops::getInstance();
+		Ops& ops = Ops::getInstance();
 		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getCommandsRaw(ops));
 	}
 
 	void test_Command_Each(void) {
-		Ops &ops = Ops::getInstance();
+		Ops& ops = Ops::getInstance();
 
 		for (uint8_t i = 0; i < lastValue(Ops::Command{}); i++) {
 			TEST_ASSERT_TRUE_MESSAGE(i < 8, "Too many enum values defined.");
@@ -27,13 +27,23 @@ namespace test_Commands {
 			Ops::Command command = fromInt<Ops::Command>(i);
 			uint8_t expected	 = (1 << i);
 
+			// Set.
 			ops.setCommand(command);
-
 			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getCommandsRaw(ops));
+			// Get.
 			TEST_ASSERT_TRUE(ops.getCommand(command));
-
+			// Clear.
 			ops.clearCommand(command);
 			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getCommandsRaw(ops));
+
+			// Check.
+			ops.setCommand(command);
+			TEST_ASSERT_TRUE(ops.checkCommand(command));
+			TEST_ASSERT_FALSE(ops.checkCommand(command));
+			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getCommandsRaw(ops));
+
+			// Reset for next iteration
+			OpsTestAccess::setCommandsRaw(ops, 0);
 		}
 	}
 }

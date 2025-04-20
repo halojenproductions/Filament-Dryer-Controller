@@ -43,7 +43,7 @@ class Ops {
 		Fan,
 		ButtonClick,
 		ButtonHold,
-		ButtonHoldHandled,
+		ButtonHoldHandled,	  // Yeah, it's confusing. I can't think of a better name.
 		_Last
 	};
 
@@ -95,15 +95,14 @@ class Ops {
 	void setCommand(Command command);
 	void clearCommand(Command command);
 	bool getCommand(Command command) const;
+	bool checkCommand(Command command);
 
 	// Dirty functions.
 	void setDirty(Dirty dirty);
 	void clearDirty(Dirty dirty);
 	bool getDirty(Dirty dirty) const;
-	bool checkDirty(Dirty dirty) ;
+	bool checkDirty(Dirty dirty);
 	void clearAllDirties();
-
-	// Other functions.
 
 	private:
 

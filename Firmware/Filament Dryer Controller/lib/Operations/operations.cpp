@@ -30,6 +30,14 @@ bool Ops::getCommand(Command command) const {
 	return commands & getEnumBit(command);
 }
 
+bool Ops::checkCommand(Command command) {
+	if (commands & getEnumBit(command)) {
+		commands &= ~getEnumBit(command);
+		return true;
+	}
+	return false;
+}
+
 // Dirty functions.
 void Ops::setDirty(Dirty dirty) {
 	dirties |= getEnumBit(dirty);

@@ -11,18 +11,14 @@
 #define DEBUG_MODE 0
 
 // Pins
-constexpr uint8_t pButt	   = 2;		 // PD2
-constexpr uint8_t pTemp	   = A0;	 // PC0
-constexpr uint8_t pLedOk   = 12;	 // PB4
-constexpr uint8_t pLedHeat = 13;	 // PB5
-constexpr uint8_t pHeater  = 9;		 // PB1
-constexpr uint8_t pFan	   = 5;		 // PD5 TODO: Move away from OS0.
-constexpr uint8_t pSda	   = SDA;	 // PC4
-constexpr uint8_t pScl	   = SCL;	 // PC5
-
-// // Screen
-// U8G2_SH1106_128X64_NONAME_F_HW_I2C screen(U8G2_R0, pScl, pSda);
-// extern U8G2_SH1106_128X64_NONAME_F_HW_I2C screen;
+constexpr byte pButt	= 2;	  // PD2
+constexpr byte pTemp	= A0;	  // PC0
+constexpr byte pLedOk	= 12;	  // PB4
+constexpr byte pLedHeat = 13;	  // PB5
+constexpr byte pHeater	= 9;	  // PB1
+constexpr byte pFan		= 5;	  // PD5 TODO: Move away from OS0.
+constexpr byte pSda		= SDA;	  // PC4
+constexpr byte pScl		= SCL;	  // PC5
 
 Ops& ops			 = Ops::getInstance();
 Filaments& filaments = Filaments::getInstance();
@@ -45,10 +41,11 @@ void setup() {
 	UI::screen.setBusClock(400000);	   // Set the I2C bus clock speed to 400kHz
 	UI::screen.begin();
 
-	attachInterrupt(digitalPinToInterrupt(pButt), handleButtonInterrupt, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(pButt), interruptHandler, CHANGE);
 
 	// TODO: Load saved settings from EEPROM.
 
+	ops.setCommand(Ops::Command::ButtonHoldHandled);
 	ops.setCommand(Ops::Command::WakeUp);
 	ops.setStatus(Ops::Status::Ok);
 	digitalWrite(pLedOk, ops.getStatus(Ops::Status::Ok));
@@ -56,16 +53,16 @@ void setup() {
 }
 
 void wakeUp() {
-	ops.clearCommand(Ops::Command::WakeUp);
 	UI::screen.setPowerSave(0);
-	ops.setDirty(Ops::Dirty::All);
 	ops.setStatus(Ops::Status::ScreenAwake);
 	ops.screenTimeout.reset();
+	ops.setDirty(Ops::Dirty::All);
 };
 
 void sleep() {
 	UI::screen.setPowerSave(1);
 	ops.clearStatus(Ops::Status::ScreenAwake);
+	filaments.cancel();
 	ops.clearStatus(Ops::Status::Select);
 };
 
@@ -76,11 +73,11 @@ void loop() {
 	// Wrangle interruption.
 	if (interrupted()) {
 		// Button changed state. Go and deal with that.
-		buttonInterruption();
+		interruptAnalyser();
 	}
 
 	// Wake up.
-	if (ops.getCommand(Ops::Command::WakeUp)) {
+	if (ops.checkCommand(Ops::Command::WakeUp)) {
 		wakeUp();
 	}
 
@@ -91,7 +88,7 @@ void loop() {
 	}
 
 	// Button clicked.
-	if (ops.getCommand(Ops::Command::ButtonClick)) {
+	if (ops.checkCommand(Ops::Command::ButtonClick)) {
 		buttonClicked();
 	}
 

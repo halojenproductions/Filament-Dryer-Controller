@@ -30,27 +30,23 @@ namespace UI {
 	static const uint8_t* currentFont  = u8g2_font_luRS19_tf;
 
 	void updateScreen() {
-		if (ops.getDirty(Ops::Dirty::All)) {
+		if (ops.checkDirty(Ops::Dirty::All)) {
 			// If everything is dirty, update the whole screen.
 			screen.sendBuffer();
 			ops.clearAllDirties();
 		} else {
 			// ..otherwise, just the bits that have changed.
-			if (ops.getDirty(Ops::Dirty::Filament)) {
+			if (ops.checkDirty(Ops::Dirty::Filament)) {
 				areaTop.updateArea(screen);
 				areaBottom.updateArea(screen);
-				ops.clearDirty(Ops::Dirty::Filament);
 			}
-			// Deliberately not updating the live readouts (temp and hum) while in selection
-			// mode.
+			// Don't update the realtime bits while in selection mode.
 			if (!ops.getStatus(Ops::Status::Select)) {
-				if (ops.getDirty(Ops::Dirty::Temp)) {
+				if (ops.checkDirty(Ops::Dirty::Temp)) {
 					areaTemp.updateArea(screen);
-					ops.clearDirty(Ops::Dirty::Temp);
 				}
-				if (ops.getDirty(Ops::Dirty::Humidity)) {
+				if (ops.checkDirty(Ops::Dirty::Humidity)) {
 					areaHumidity.updateArea(screen);
-					ops.clearDirty(Ops::Dirty::Humidity);
 				}
 			}
 		}

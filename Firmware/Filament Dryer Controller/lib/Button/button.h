@@ -8,15 +8,15 @@
 // Declare external dependencies
 extern Ops& ops;
 extern Filaments& filaments;
-extern const uint8_t pButt;
+extern const byte pButt;
 extern uint32_t currentTime;
 
-extern volatile byte interrupt;
-
-// Function declarations
+// Interrupt stuff.
 bool interrupted();
-void handleButtonInterrupt();
-void buttonInterruption();
+void interruptHandler();
+void interruptAnalyser();
+
+// Other buttony stuff.
 void buttonHeld();
 void buttonClicked();
 

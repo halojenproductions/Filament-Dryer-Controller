@@ -27,15 +27,15 @@ namespace test_Dirties {
 			Ops::Dirty dirty = fromInt<Ops::Dirty>(i);
 			uint8_t expected = (1 << i);
 
+			// Set.
 			ops.setDirty(dirty);
-
-			TEST_ASSERT_TRUE(ops.getDirty(dirty));
 			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getDirtiesRaw(ops));
-
+			// Get.
+			TEST_ASSERT_TRUE(ops.getDirty(dirty));
+			// Clear.
 			ops.clearDirty(dirty);
 			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getDirtiesRaw(ops));
-
-			TEST_ASSERT_FALSE(ops.checkDirty(dirty));
+			// Check.
 			ops.setDirty(dirty);
 			TEST_ASSERT_TRUE(ops.checkDirty(dirty));
 			TEST_ASSERT_FALSE(ops.checkDirty(dirty));
