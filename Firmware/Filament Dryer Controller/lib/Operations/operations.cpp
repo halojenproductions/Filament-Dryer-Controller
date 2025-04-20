@@ -43,6 +43,14 @@ bool Ops::getDirty(Dirty dirty) const {
 	return dirties & getEnumBit(dirty);
 }
 
+bool Ops::checkDirty(Dirty dirty) {
+	if (dirties & getEnumBit(dirty)) {
+		dirties &= ~getEnumBit(dirty);
+		return true;
+	}
+	return false;
+}
+
 void Ops::clearAllDirties() {
 	dirties = 0;
 }

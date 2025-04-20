@@ -35,6 +35,12 @@ namespace test_Dirties {
 			ops.clearDirty(dirty);
 			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getDirtiesRaw(ops));
 
+			TEST_ASSERT_FALSE(ops.checkDirty(dirty));
+			ops.setDirty(dirty);
+			TEST_ASSERT_TRUE(ops.checkDirty(dirty));
+			TEST_ASSERT_FALSE(ops.checkDirty(dirty));
+			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getDirtiesRaw(ops));
+
 			// Reset for next iteration
 			OpsTestAccess::setDirtiesRaw(ops, 0);
 		}

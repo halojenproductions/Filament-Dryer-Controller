@@ -100,6 +100,7 @@ class Ops {
 	void setDirty(Dirty dirty);
 	void clearDirty(Dirty dirty);
 	bool getDirty(Dirty dirty) const;
+	bool checkDirty(Dirty dirty) ;
 	void clearAllDirties();
 
 	// Other functions.

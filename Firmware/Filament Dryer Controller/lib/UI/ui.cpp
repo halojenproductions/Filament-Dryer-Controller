@@ -25,13 +25,13 @@ namespace UI {
 	static constexpr byte padRealtimeX = 6;
 	static constexpr byte posRealtimeY = pxHeight / 2 + 2;
 
-	// Fonts..
+	// Fonts.
 	static const uint8_t* filamentFont = u8g2_font_luBS08_tf;
 	static const uint8_t* currentFont  = u8g2_font_luRS19_tf;
 
 	void updateScreen() {
 		if (ops.getDirty(Ops::Dirty::All)) {
-			// If everything is dirty, update the whole screen..
+			// If everything is dirty, update the whole screen.
 			screen.sendBuffer();
 			ops.clearAllDirties();
 		} else {
