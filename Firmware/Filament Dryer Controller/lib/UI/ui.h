@@ -21,32 +21,18 @@ namespace UI {
 
 	extern U8G2_SH1106_128X64_NONAME_F_HW_I2C screen;
 
-	// Filament
-	extern const uint8_t* filamentFont;
-
-	// Current
-	extern const uint8_t* currentFont;
-
-	// Error
-	extern const int ERROR_X;
-	extern const int ERROR_Y;
-
-	// Zones.
-	extern const Area areaTop;
-	extern const Area areaBottom;
-	extern const Area areaTemp;
-	extern const Area areaHumidity;
-
 	// Functions.
 	extern void updateScreen();
+
+	extern void drawAll();
 
 	extern void drawBorderTop();
 	extern void drawBorderBottom();
 	extern void drawFilamentType(const char* text);
-	extern void drawFilamentTemperature(int temp);
+	extern void drawFilamentTemp(int temp);
 	extern void drawFilamentHumidity(int hum);
-	extern void drawTemperature(int temp);
-	extern void drawHumidity(int hum);
+	extern void drawRealtimeTemp(int temp);
+	extern void drawRealtimeHumidity(int hum);
 	extern void drawAreaBorders();
 
 }

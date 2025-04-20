@@ -1,18 +1,10 @@
 #include "ui.h"
 
 namespace UI {
-	Ops& ops = Ops::getInstance();
+	Ops& ops			 = Ops::getInstance();
+	Filaments& filaments = Filaments::getInstance();
 
 	U8G2_SH1106_128X64_NONAME_F_HW_I2C screen(U8G2_R0);
-
-	// Filament.
-	const uint8_t* filamentFont = u8g2_font_luBS08_tf;
-
-	// Current.
-	const uint8_t* currentFont = u8g2_font_luRS19_tf;
-
-	static constexpr byte borderHeight = 12;
-	static constexpr byte padding	   = 2;
 
 	// Screen dimensions.
 	static constexpr byte pxWidth	  = 128;	// 128 pixels.
@@ -21,10 +13,21 @@ namespace UI {
 	static constexpr byte tilesHeight = 8;		// (8x8 pixels).
 
 	// Zones.
-	constexpr Area areaTop		= {0, 0, tilesWidth, 2};
-	constexpr Area areaBottom	= {0, tilesHeight - 2, tilesWidth, 2};
-	constexpr Area areaTemp		= {0, 2, tilesWidth / 2, 4};
-	constexpr Area areaHumidity = {tilesWidth / 2, 2, tilesWidth / 2, 4};
+	static constexpr Area areaTop	   = {0, 0, tilesWidth, 2};
+	static constexpr Area areaBottom   = {0, tilesHeight - 2, tilesWidth, 2};
+	static constexpr Area areaTemp	   = {0, 2, tilesWidth / 2, 4};
+	static constexpr Area areaHumidity = {tilesWidth / 2, 2, tilesWidth / 2, 4};
+
+	// Layout.
+	static constexpr byte borderHeight = 12;
+	static constexpr byte padFilX	   = 2;
+	static constexpr byte padFilY	   = 2;
+	static constexpr byte padRealtimeX = 6;
+	static constexpr byte posRealtimeY = pxHeight / 2 + 2;
+
+	// Fonts..
+	static const uint8_t* filamentFont = u8g2_font_luBS08_tf;
+	static const uint8_t* currentFont  = u8g2_font_luRS19_tf;
 
 	void updateScreen() {
 		if (ops.getDirty(Ops::Dirty::All)) {
@@ -51,41 +54,48 @@ namespace UI {
 				}
 			}
 		}
+		screen.clearBuffer();
 	}
 
-	void updateAreaFil() {
-		// screen.updateDisplayArea(areaTop.x, areaTop.y, areaTop.w, areaTop.h);
-		areaTop.updateArea(screen);
+	void drawAll() {
+		UI::screen.setFontMode(1);
+
+		if (ops.getStatus(Ops::Status::Select)) {
+			UI::drawBorderTop();
+			UI::drawBorderBottom();
+		}
+
+		UI::drawFilamentType(filaments.getDisplay().name);
+		UI::drawFilamentTemp(filaments.getDisplay().temperature);
+		UI::drawFilamentHumidity(filaments.getDisplay().humidity);
+
+		UI::drawRealtimeTemp(ops.inTemperature);
+		UI::drawRealtimeHumidity(ops.humidity);
 	}
 
 	void drawBorderTop() {
 		screen.setDrawColor(1);
-		screen.drawBox(0, 0, screen.getDisplayWidth(), borderHeight);
+		screen.drawBox(0, 0, pxWidth, borderHeight);
 	}
 
 	void drawBorderBottom() {
 		screen.setDrawColor(1);
-		screen.drawBox(
-			0,
-			screen.getDisplayHeight() - borderHeight,
-			screen.getDisplayWidth(),
-			screen.getDisplayHeight()
-		);
+		screen.drawBox(0, pxHeight - borderHeight, pxWidth, pxHeight);
 	}
 
 	void drawFilamentType(const char* text) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosTop();
-		screen.setCursor(padding, padding - 1);
+		screen.setCursor(padFilX, padFilY - 1);
 		screen.print(text);
 	}
 
-	void drawFilamentTemperature(int temp) {
+	void drawFilamentTemp(int temp) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosBaseline();
-		screen.setCursor(padding, screen.getDisplayHeight() - padding);
+		screen.setCursor(padFilX, pxHeight - padFilY);
 
 		String text = String(temp, 10);
 		screen.print(String(text + "\xBA"));
@@ -100,24 +110,22 @@ namespace UI {
 		text		= String(text + "%");
 
 		int textWid = screen.getStrWidth(text.c_str());
-		screen.setCursor(
-			screen.getDisplayWidth() - textWid - padding, screen.getDisplayHeight() - padding
-		);
+		screen.setCursor(pxWidth - textWid - padFilX, pxHeight - padFilY);
 
 		screen.print(text);
 	}
 
-	void drawTemperature(int temp) {
+	void drawRealtimeTemp(int temp) {
 		screen.setDrawColor(2);
 		screen.setFont(currentFont);
 		screen.setFontPosCenter();
-		screen.setCursor(padding, screen.getDisplayHeight() / 2 - screen.getDescent() / 2 + 1);
+		screen.setCursor(padRealtimeX, posRealtimeY);
 
 		String text = String(temp, 10);
 		screen.print(String(text + "\xBA"));
 	}
 
-	void drawHumidity(int hum) {
+	void drawRealtimeHumidity(int hum) {
 		screen.setDrawColor(2);
 		screen.setFont(currentFont);
 		screen.setFontPosCenter();
@@ -126,10 +134,7 @@ namespace UI {
 		text		= String(text + "%");
 
 		int textWid = screen.getStrWidth(text.c_str());
-		screen.setCursor(
-			screen.getDisplayWidth() - textWid - padding,
-			screen.getDisplayHeight() / 2 - screen.getDescent() / 2 + 1
-		);
+		screen.setCursor(pxWidth - textWid - padRealtimeX, posRealtimeY);
 
 		screen.print(text);
 	}

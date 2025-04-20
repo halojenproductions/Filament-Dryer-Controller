@@ -52,6 +52,7 @@ void setup() {
 	ops.setCommand(Ops::Command::WakeUp);
 	ops.setStatus(Ops::Status::Ok);
 	digitalWrite(pLedOk, ops.getStatus(Ops::Status::Ok));
+	UI::screen.setFontMode(1);
 }
 
 void wakeUp() {
@@ -101,7 +102,7 @@ void loop() {
 			ops.outTemp = outTemp;
 		}
 
-		int inTemperature = -20 + random(2);	// TODO: get the temperature sensor value
+		int inTemperature = 20 + random(2);	   // TODO: get the temperature sensor value
 		if (inTemperature != ops.inTemperature) {
 			ops.inTemperature = inTemperature;
 			ops.setDirty(Ops::Dirty::Temp);
@@ -127,31 +128,14 @@ void loop() {
 		// TODO: Handle button press.
 	};
 
-	// Execute commands.
-
 	// Update display.
-
 	if (ops.getStatus(Ops::Status::ScreenAwake)) {
 		// Load the display buffer.
-		UI::screen.clearBuffer();
-		UI::screen.setFontMode(1);
-
 #if DEBUG_MODE
-		UI::drawAreaBorders(u8g2);		  // Draw the area borders
+		UI::drawAreaBorders();			  // Draw the area borders
 		ops.setDirty(Ops::Dirty::All);	  // Mark all areas as dirty
 #endif
-
-		if (ops.getStatus(Ops::Status::Select)) {
-			UI::drawBorderTop();	   // Draw the top border
-			UI::drawBorderBottom();	   // Draw the bottom border
-		}
-
-		UI::drawFilamentType(filaments.getDisplay().name);
-		UI::drawFilamentTemperature(filaments.getDisplay().temperature);
-		UI::drawFilamentHumidity(filaments.getDisplay().humidity);
-
-		UI::drawTemperature(ops.inTemperature);
-		UI::drawHumidity(ops.humidity);
+		UI::drawAll();
 
 		// Send the display buffer (or just bits of it).
 		UI::updateScreen();
