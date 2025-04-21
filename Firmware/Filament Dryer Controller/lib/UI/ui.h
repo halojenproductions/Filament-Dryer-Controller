@@ -28,11 +28,14 @@ namespace UI {
 
 	extern void drawBorderTop();
 	extern void drawBorderBottom();
-	extern void drawFilamentType(const char* text);
-	extern void drawFilamentTemp(int temp);
+
+	extern void drawFilamentName(const char* text);
 	extern void drawFilamentHumidity(int hum);
-	extern void drawRealtimeTemp(int temp);
+
+	extern void drawFilamentTemp(int temp);
 	extern void drawRealtimeHumidity(int hum);
+	extern void drawRealtimeTemp(int temp);
+
 	extern void drawAreaBorders();
 }
 
