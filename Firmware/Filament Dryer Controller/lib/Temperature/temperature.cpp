@@ -22,7 +22,7 @@ OutTemp::operator int() const {
 }
 
 // Implicit conversion from analogue value to centigrade.
-OutTemp &OutTemp::operator=(int value) {
+OutTemp& OutTemp::operator=(int value) {
 	// TODO: Convert analog reading to temperature in centigrade
 	// Using standard Arduino ADC (10-bit), voltage reference, and NTC thermistor calculations
 	temp_ = adcToCelsius(value);

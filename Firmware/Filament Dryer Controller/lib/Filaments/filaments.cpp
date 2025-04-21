@@ -19,6 +19,7 @@ const FilamentDef& Filaments::getDisplay() const {
 void Filaments::apply() {
 	activeIndex = displayIndex;
 	memcpy_P(&activeFilament, &FILAMENTS[activeIndex], sizeof(FilamentDef));
+	Storage::getInstance().saveFilamentIndex(activeIndex);
 }
 
 void Filaments::cancel() {
@@ -32,6 +33,8 @@ void Filaments::next() {
 }
 
 Filaments::Filaments() {
-	memcpy_P(&activeFilament, &FILAMENTS[0], sizeof(FilamentDef));
-	memcpy_P(&displayFilament, &FILAMENTS[0], sizeof(FilamentDef));
+	activeIndex	 = Storage::getInstance().loadFilamentIndex();
+	displayIndex = activeIndex;
+	memcpy_P(&activeFilament, &FILAMENTS[activeIndex], sizeof(FilamentDef));
+	memcpy_P(&displayFilament, &FILAMENTS[displayIndex], sizeof(FilamentDef));
 }

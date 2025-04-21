@@ -6,7 +6,6 @@
 #include "filaments.h"
 #include "operations.h"
 #include "ui.h"
-#include "utilities.h"
 
 #define DEBUG_MODE 0
 
@@ -19,6 +18,8 @@ constexpr byte pHeater	= 9;	  // PB1
 constexpr byte pFan		= 5;	  // PD5 TODO: Move away from OS0.
 constexpr byte pSda		= SDA;	  // PC4
 constexpr byte pScl		= SCL;	  // PC5
+
+int AOEUAOEUAOEU = 0;
 
 Ops& ops			 = Ops::getInstance();
 Filaments& filaments = Filaments::getInstance();
@@ -82,8 +83,9 @@ void loop() {
 	}
 
 	// Button held.
-	if (ops.getStatus(Ops::Status::ButtonDown) && ops.buttonHold.get(currentTime) &&
-		!ops.getCommand(Ops::Command::ButtonHoldHandled)) {
+	if (ops.getStatus(Ops::Status::ButtonDown)
+		&& ops.buttonHold.get(currentTime)
+		&& !ops.getCommand(Ops::Command::ButtonHoldHandled)) {
 		buttonHeld();
 	}
 
@@ -146,8 +148,9 @@ void loop() {
 	}
 
 	// Screen timeout.
-	if (ops.getStatus(Ops::Status::ScreenAwake) && !ops.getStatus(Ops::Status::ButtonDown) &&
-		ops.screenTimeout.check(currentTime)) {
+	if (ops.getStatus(Ops::Status::ScreenAwake)
+		&& !ops.getStatus(Ops::Status::ButtonDown)
+		&& ops.screenTimeout.check(currentTime)) {
 		sleep();
 	}
 }

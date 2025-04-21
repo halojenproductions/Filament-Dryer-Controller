@@ -1,9 +1,9 @@
+#ifndef UI_H
+#define UI_H
+
 #include "filaments.h"
 #include "operations.h"
 #include <u8g2lib.h>
-
-#ifndef UI_H
-#define UI_H
 
 namespace UI {
 	struct Area {
@@ -34,6 +34,6 @@ namespace UI {
 	extern void drawRealtimeTemp(int temp);
 	extern void drawRealtimeHumidity(int hum);
 	extern void drawAreaBorders();
-
 }
+
 #endif

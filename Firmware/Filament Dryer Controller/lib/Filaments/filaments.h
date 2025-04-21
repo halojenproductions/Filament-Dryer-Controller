@@ -5,6 +5,7 @@
 #include <WString.h>
 #include <avr/pgmspace.h>
 #include <stdint.h>
+#include "storage.h"
 
 struct FilamentDef {
 	const char* name;
@@ -32,7 +33,6 @@ class Filaments {
 	Filaments(const Filaments&)		 = delete;
 	void operator=(const Filaments&) = delete;
 
-	static const PROGMEM FilamentDef filamentData[];
 	FilamentDef activeFilament;
 	FilamentDef displayFilament;
 

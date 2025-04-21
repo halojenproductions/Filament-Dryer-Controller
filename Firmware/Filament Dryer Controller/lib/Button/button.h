@@ -1,9 +1,9 @@
+#ifndef BUTTON_H
+#define BUTTON_H
+
 #include "filaments.h"
 #include "operations.h"
 #include <Arduino.h>
-
-#ifndef BUTTON_H
-#define BUTTON_H
 
 // Declare external dependencies
 extern Ops& ops;

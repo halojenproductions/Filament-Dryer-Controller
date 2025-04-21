@@ -1,8 +1,8 @@
-#include <Arduino.h>
-#include <stdint.h>
-
 #ifndef TIMER_H
 #define TIMER_H
+
+#include <Arduino.h>
+#include <stdint.h>
 
 class Timer {
 	public:

@@ -140,12 +140,20 @@ namespace UI {
 		// draw top area
 		screen.drawFrame(areaTop.x * 8, areaTop.y * 8, areaTop.w * 8, areaTop.h * 8);
 		// draw bottom area
-		screen.drawFrame(areaBottom.x * 8, areaBottom.y * 8, areaBottom.w * 8, areaBottom.h * 8);
+		screen.drawFrame(
+			areaBottom.x * 8 + 0,
+			areaBottom.y * 8 + 0,
+			areaBottom.w * 8 + 0,
+			areaBottom.h * 8 + 0
+		);
 		// draw temp area
 		screen.drawFrame(areaTemp.x * 8, areaTemp.y * 8, areaTemp.w * 8, areaTemp.h * 8);
 		// draw humidity area
 		screen.drawFrame(
-			areaHumidity.x * 8, areaHumidity.y * 8, areaHumidity.w * 8, areaHumidity.h * 8
+			areaHumidity.x * 8,
+			areaHumidity.y * 8,
+			areaHumidity.w * 8,
+			areaHumidity.h * 8
 		);
 	}
 }

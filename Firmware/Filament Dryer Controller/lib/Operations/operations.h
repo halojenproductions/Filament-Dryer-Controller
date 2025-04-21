@@ -1,11 +1,11 @@
+#ifndef OPERATIONS_H
+#define OPERATIONS_H
+
 #include "filaments.h"
 #include "temperature.h"
 #include "timer.h"
 #include <Arduino.h>
 #include <stdint.h>
-
-#ifndef OPERATIONS_H
-#define OPERATIONS_H
 
 // Forward declare the test access class
 namespace test_Operations_Helpers {
