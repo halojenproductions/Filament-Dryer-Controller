@@ -34,11 +34,13 @@ void setup() {
 	pinMode(pHeater, OUTPUT);
 	pinMode(pFan, OUTPUT);
 
+	// TODO move to a setup method in HT.
 	// Set up humidity & temperature sensor.
 	if (!HT::sensor.begin(0x44)) {
 		ops.setStatus(Ops::Status::Error);
 	}
 
+	// TODO move to a sotup method in UI.
 	// Set up oled display.
 	UI::screen.setI2CAddress(0x78);	   // Set the I2C address of the display
 	UI::screen.setBusClock(400000);	   // Set the I2C bus clock speed to 400kHz
@@ -55,6 +57,7 @@ void setup() {
 	UI::screen.setFontMode(1);
 }
 
+// TODO: Move to UI.
 void wakeUp() {
 	UI::screen.setPowerSave(0);
 	ops.setStatus(Ops::Status::ScreenAwake);
@@ -62,6 +65,7 @@ void wakeUp() {
 	ops.setDirty(Ops::Dirty::All);
 }
 
+// TODO: Move to UI.
 void sleep() {
 	UI::screen.setPowerSave(1);
 	ops.clearStatus(Ops::Status::ScreenAwake);
@@ -98,21 +102,20 @@ void loop() {
 
 	// Read sensors.
 	if (ops.inputPolling.check(currentTime)) {
-		Thermistor outTemp = analogRead(pTemp);
-		if (outTemp != ops.thermTemp) {
-			ops.thermTemp = outTemp;
-		}
+		ops.checkTherm(Thermistor::adcToCelsius(analogRead(pTemp)));
 
-		int inTemperature = 20 + random(2);	   // TODO: get the temperature sensor value
-		if (inTemperature != ops.inTemperature) {
-			ops.inTemperature = inTemperature;
-			ops.setDirty(Ops::Dirty::Temp);
-		}
-
-		int humidity = 50 + random(2);	  // TODO: get the humidity sensor value
-		if (true || humidity != ops.humidity) {
-			ops.humidity = humidity;
+		// TODO Remove mocky shit.
+		float humidity = 50 + (int)random(2);
+		if (ops.checkHumidity(humidity)) {
+			// if(ops.checkHumidity(HT::sensor.readHumidity())) {
 			ops.setDirty(Ops::Dirty::Humidity);
+		}
+
+		// TODO Remove mocky shit.
+		float inTemperature = 20 + (int)random(2);
+		if (ops.checkTemperature(inTemperature)) {
+			// if(ops.checkTemperature(HT::sensor.readTemperature())) {
+			ops.setDirty(Ops::Dirty::Temp);
 		}
 	}
 

@@ -65,8 +65,8 @@ namespace UI {
 		UI::drawFilamentTemp(filaments.getDisplay().temperature);
 		UI::drawFilamentHumidity(filaments.getDisplay().humidity);
 
-		UI::drawRealtimeTemp(ops.inTemperature);
-		UI::drawRealtimeHumidity(ops.humidity);
+		UI::drawRealtimeTemp(ops.getTemperature());
+		UI::drawRealtimeHumidity(ops.getHumidity());
 	}
 
 	void drawBorderTop() {

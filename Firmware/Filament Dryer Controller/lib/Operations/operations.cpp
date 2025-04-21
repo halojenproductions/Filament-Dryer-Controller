@@ -62,3 +62,63 @@ bool Ops::checkDirty(Dirty dirty) {
 void Ops::clearAllDirties() {
 	dirties = 0;
 }
+
+// Inputs.
+bool Ops::checkHumidity(float humidity) {
+	// Validate the value.
+	if (isnan(humidity)) {
+		setStatus(Ops::Status::Error);
+		return false;
+	}
+
+	byte humidValue = static_cast<byte>(humidity);
+	// If the value is different from ops, set ops and return true.
+	if (humidValue != sensHumid) {
+		sensHumid = humidValue;
+		return true;
+	}
+	return false;
+}
+
+uint8_t Ops::getHumidity() const {
+	return sensHumid;
+}
+
+bool Ops::checkTemperature(float temperature) {
+	// Validate the value.
+	if (isnan(temperature) || temperature < 0 || temperature > 100) {
+		setStatus(Ops::Status::Error);
+		return false;
+	}
+
+	byte tempValue = static_cast<byte>(temperature);
+	// If the value is different from ops, set ops and return true.
+	if (tempValue != sensTemp) {
+		sensTemp = tempValue;
+		return true;
+	}
+	return false;
+}
+
+uint8_t Ops::getTemperature() const {
+	return sensTemp;
+}
+
+bool Ops::checkTherm(int8_t temperature) {
+	// Validate the value.
+	if (temperature < 0 || temperature > 100) {
+		setStatus(Ops::Status::Error);
+		return false;
+	}
+
+	// If the value is different from ops, set ops and return true.
+	if (temperature != thermTemp) {
+		thermTemp = temperature;
+		return true;
+	}
+	return false;
+}
+
+uint8_t Ops::getTherm() const {
+	return thermTemp;
+}

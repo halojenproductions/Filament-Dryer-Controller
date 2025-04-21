@@ -12,9 +12,6 @@ namespace HT {
 
 	extern Adafruit_SHT31 sensor;
 
-	// Functions.
-	extern bool readHumid();
-	extern bool readTemp();
 }
 
 #endif
