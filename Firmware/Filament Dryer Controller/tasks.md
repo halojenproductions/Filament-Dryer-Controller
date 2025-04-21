@@ -6,20 +6,19 @@
 - [x] Store as degrees
 - [x] Tests
 ### Sensor temp
-- [ ] Read sensor temp
-- [ ] Store as degrees
+- [x] Read sensor temp
+- [x] Store as degrees
 - [ ] Tests
 ### Humidity
-- [ ] Read humidity
-- [ ] Store as percent
+- [x] Read humidity
+- [x] Store as percent
 - [ ] Tests
 ### Button 
 - [x] Handle interrupt
 - [ ] Tests
-
-## Validation
-- [ ] Input validation
-- [ ] Trigger error state
+### Input validation
+- [x] Ensure values are within acceptible range
+- [x] Trigger error state
 - [ ] Handle error state
 - [ ] Tests
 
@@ -27,16 +26,16 @@
 - [ ] Active loop
 - [ ] Idle loop
 - [ ] Tests
+- [ ] Safety checks
+- [ ] Fail safe
 
 ## Output
 ### Heater
 - [ ] Active
-- [ ] Safety
 - [ ] Tests
 ### Fan
 - [ ] Active
 - [ ] Idle
-- [ ] Safety
 - [ ] Tests
 ### Display
 - [x] Show filament details
