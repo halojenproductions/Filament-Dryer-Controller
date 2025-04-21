@@ -16,20 +16,33 @@
 ### Button 
 - [x] Handle interrupt
 - [ ] Tests
-### Validation
-- [ ] Input validation
-- [ ] Tests
-- [ ] Error state
 
-## Display
+## Validation
+- [ ] Input validation
+- [ ] Trigger error state
+- [ ] Handle error state
+- [ ] Tests
+
+## Control loop
+- [ ] Active loop
+- [ ] Idle loop
+- [ ] Tests
+
+## Output
+### Heater
+- [ ] Active
+- [ ] Safety
+- [ ] Tests
+### Fan
+- [ ] Active
+- [ ] Idle
+- [ ] Safety
+- [ ] Tests
+### Display
 - [x] Show filament details
 - [x] Show realtime
 - [x] Sleep timeout
 - [x] Tests
-
-## Control loop
-- [ ] (details tbd)
-- [ ] Tests
 
 ## Persist config
 - [x] Save on apply

@@ -2,7 +2,7 @@
 #define OPERATIONS_H
 
 #include "filaments.h"
-#include "temperature.h"
+#include "thermistor.h"
 #include "timer.h"
 #include <Arduino.h>
 #include <stdint.h>
@@ -55,7 +55,7 @@ class Ops {
 		_Last
 	};
 
-	OutTemp outTemp;
+	Thermistor thermTemp;
 	int8_t inTemperature = 99;
 	int8_t humidity		 = 99;
 	int8_t FanSpeed		 = 0;

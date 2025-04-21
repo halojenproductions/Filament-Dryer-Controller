@@ -4,6 +4,7 @@
 
 #include "button.h"
 #include "filaments.h"
+#include "ht.h"
 #include "operations.h"
 #include "ui.h"
 
@@ -19,33 +20,34 @@ constexpr byte pFan		= 5;	  // PD5 TODO: Move away from OS0.
 constexpr byte pSda		= SDA;	  // PC4
 constexpr byte pScl		= SCL;	  // PC5
 
-int AOEUAOEUAOEU = 0;
-
 Ops& ops			 = Ops::getInstance();
 Filaments& filaments = Filaments::getInstance();
 
 uint32_t currentTime = millis();
 
 void setup() {
-
+	// Set up pins.
 	pinMode(pButt, INPUT_PULLUP);
 	pinMode(pTemp, INPUT);
 	pinMode(pLedOk, OUTPUT);
-
 	pinMode(pLedHeat, OUTPUT);
-	digitalWrite(pLedHeat, HIGH);
-
 	pinMode(pHeater, OUTPUT);
 	pinMode(pFan, OUTPUT);
 
+	// Set up humidity & temperature sensor.
+	if (!HT::sensor.begin(0x44)) {
+		ops.setStatus(Ops::Status::Error);
+	}
+
+	// Set up oled display.
 	UI::screen.setI2CAddress(0x78);	   // Set the I2C address of the display
 	UI::screen.setBusClock(400000);	   // Set the I2C bus clock speed to 400kHz
 	UI::screen.begin();
 
+	// Set up button interrupt.
 	attachInterrupt(digitalPinToInterrupt(pButt), interruptHandler, CHANGE);
 
-	// TODO: Load saved settings from EEPROM.
-
+	// Set initial values.
 	ops.setCommand(Ops::Command::ButtonHoldHandled);
 	ops.setCommand(Ops::Command::WakeUp);
 	ops.setStatus(Ops::Status::Ok);
@@ -58,14 +60,14 @@ void wakeUp() {
 	ops.setStatus(Ops::Status::ScreenAwake);
 	ops.screenTimeout.reset();
 	ops.setDirty(Ops::Dirty::All);
-};
+}
 
 void sleep() {
 	UI::screen.setPowerSave(1);
 	ops.clearStatus(Ops::Status::ScreenAwake);
 	filaments.cancel();
 	ops.clearStatus(Ops::Status::Select);
-};
+}
 
 void loop() {
 	currentTime = millis();
@@ -96,9 +98,9 @@ void loop() {
 
 	// Read sensors.
 	if (ops.inputPolling.check(currentTime)) {
-		OutTemp outTemp = analogRead(pTemp);
-		if (outTemp != ops.outTemp) {
-			ops.outTemp = outTemp;
+		Thermistor outTemp = analogRead(pTemp);
+		if (outTemp != ops.thermTemp) {
+			ops.thermTemp = outTemp;
 		}
 
 		int inTemperature = 20 + random(2);	   // TODO: get the temperature sensor value
@@ -117,15 +119,15 @@ void loop() {
 	// Set statuses. or should that be commands?
 	// TODO.
 	if (ops.getStatus(Ops::Status::Error)) {
-	};
+	}
 
 	if (ops.getStatus(Ops::Status::Heating)) {
-	};
+	}
 
 	// TODO.
 	if (ops.getStatus(Ops::Status::ButtonDown)) {
 		// TODO: Handle button press.
-	};
+	}
 
 	// Update display.
 	if (ops.getStatus(Ops::Status::ScreenAwake)) {

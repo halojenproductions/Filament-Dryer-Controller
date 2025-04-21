@@ -1,4 +1,4 @@
-#include "temperature.h"
+#include "thermistor.h"
 #include <Arduino.h>
 #include <unity.h>
 
@@ -16,42 +16,42 @@ bool withinTolerance(int value, int target, float above, float below) {
 
 const float tolerance = 1.0;	// +/- for temperature conversion
 
-void test_OutTempConversion0(void) {
+void test_Therm_Conversion0(void) {
 	int expected = 0;
-	OutTemp sut;
+	Thermistor sut;
 	sut = 242;
 	// TEST_ASSERT_LESS_OR_EQUAL_FLOAT((float)expected + 0.428, (float)sut);
 	// TEST_ASSERT_GREATER_OR_EQUAL_FLOAT((float)expected - 0.421, (float)sut);
 	TEST_ASSERT_FLOAT_WITHIN(tolerance, expected, sut);
 }
 
-void test_OutTempConversion25(void) {
-	int expected = 25;
-	OutTemp sut	 = 511;
+void test_Therm_Conversion25(void) {
+	int expected   = 25;
+	Thermistor sut = 511;
 	// TEST_ASSERT_LESS_OR_EQUAL_FLOAT((float)expected + 0.229, (float)sut);
 	// TEST_ASSERT_GREATER_OR_EQUAL_FLOAT((float)expected - 0.229, (float)sut);
 	TEST_ASSERT_FLOAT_WITHIN(tolerance, expected, sut);
 }
 
-void test_OutTempConversion50(void) {
-	int expected = 50;
-	OutTemp sut	 = 753;
+void test_Therm_Conversion50(void) {
+	int expected   = 50;
+	Thermistor sut = 753;
 	// TEST_ASSERT_LESS_OR_EQUAL_FLOAT((float)expected + 0.539, (float)sut);
 	// TEST_ASSERT_GREATER_OR_EQUAL_FLOAT((float)expected - 0.530, (float)sut);
 	TEST_ASSERT_FLOAT_WITHIN(tolerance, expected, sut);
 }
 
-void test_OutTempConversion75(void) {
-	int expected = 75;
-	OutTemp sut	 = 893;
+void test_Therm_Conversion75(void) {
+	int expected   = 75;
+	Thermistor sut = 893;
 	// TEST_ASSERT_LESS_OR_EQUAL_FLOAT((float)expected + 0.975, (float)sut);
 	// TEST_ASSERT_GREATER_OR_EQUAL_FLOAT((float)expected - 0.948, (float)sut);
 	TEST_ASSERT_FLOAT_WITHIN(tolerance, expected, sut);
 }
 
-void test_OutTempConversion100(void) {
-	int expected = 100;
-	OutTemp sut	 = 960;
+void test_Therm_Conversion100(void) {
+	int expected   = 100;
+	Thermistor sut = 960;
 	// TEST_ASSERT_LESS_OR_EQUAL_FLOAT((float)expected + 1.304, (float)sut);
 	// TEST_ASSERT_GREATER_OR_EQUAL_FLOAT((float)expected - 1.260, (float)sut);
 	TEST_ASSERT_FLOAT_WITHIN(2.0, expected, sut);
@@ -63,11 +63,11 @@ void setup() {
 	// delay(2000);
 	UNITY_BEGIN();
 
-	RUN_TEST(test_OutTempConversion0);
-	RUN_TEST(test_OutTempConversion25);
-	RUN_TEST(test_OutTempConversion50);
-	RUN_TEST(test_OutTempConversion75);
-	RUN_TEST(test_OutTempConversion100);
+	RUN_TEST(test_Therm_Conversion0);
+	RUN_TEST(test_Therm_Conversion25);
+	RUN_TEST(test_Therm_Conversion50);
+	RUN_TEST(test_Therm_Conversion75);
+	RUN_TEST(test_Therm_Conversion100);
 
 	UNITY_END();
 }
