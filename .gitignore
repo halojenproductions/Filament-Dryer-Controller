@@ -1,5 +1,6 @@
 *.zip
 *.gcode
 fp-info-cache
-.vscode
+# Only the repo root .vscode dir. The firmware has its own vscode dir & gitignore.
+/.vscode
 *.lck
