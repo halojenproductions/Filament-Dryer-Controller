@@ -71,7 +71,7 @@ bool Ops::checkHumidity(float humidity) {
 		return false;
 	}
 
-	byte humidValue = static_cast<byte>(humidity);
+	int8_t humidValue = static_cast<int8_t>(humidity);
 	// If the value is different from ops, set ops and return true.
 	if (humidValue != sensHumid) {
 		sensHumid = humidValue;
@@ -91,7 +91,7 @@ bool Ops::checkTemperature(float temperature) {
 		return false;
 	}
 
-	byte tempValue = static_cast<byte>(temperature);
+	int8_t tempValue = static_cast<int8_t>(temperature);
 	// If the value is different from ops, set ops and return true.
 	if (tempValue != sensTemp) {
 		sensTemp = tempValue;

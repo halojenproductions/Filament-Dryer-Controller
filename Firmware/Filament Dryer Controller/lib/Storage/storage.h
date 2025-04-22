@@ -1,26 +1,28 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
-#include <EEPROM.h>
 #include <Arduino.h>
+#include <EEPROM.h>
 
 class Storage {
-public:
-    static Storage& getInstance() {
-        static Storage instance;
-        return instance;
-    }
+	public:
 
-    void saveFilamentIndex(byte index);
-    byte loadFilamentIndex();
+	static Storage& getInstance() {
+		static Storage instance;
+		return instance;
+	}
 
-private:
-    Storage() = default;
-    Storage(const Storage&) = delete;
-    void operator=(const Storage&) = delete;
+	void saveFilamentIndex(byte index);
+	byte loadFilamentIndex();
 
-    static constexpr int ADDR_FILAMENT_INDEX = 0;  // EEPROM address
-    static constexpr byte MAGIC_BYTE = 0xAA;       // For validation
+	private:
+
+	Storage()					   = default;
+	Storage(const Storage&)		   = delete;
+	void operator=(const Storage&) = delete;
+
+	static constexpr int ADDR_FILAMENT_INDEX = 0;		// EEPROM address
+	static constexpr byte MAGIC_BYTE		 = 0xAA;	// For validation
 };
 
 #endif
