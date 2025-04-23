@@ -15,9 +15,10 @@
 Ops& ops			 = Ops::getInstance();
 Filaments& filaments = Filaments::getInstance();
 
-uint32_t currentTime = millis();
 
 void setup() {
+	ops.currentTime = millis();
+
 	// Set up pins.
 	Pins::setup();
 
@@ -41,7 +42,7 @@ void setup() {
 }
 
 void loop() {
-	currentTime = millis();
+	ops.currentTime = millis();
 
 	// Wrangle interruption.
 	if (Button::interrupted()) {
@@ -56,7 +57,7 @@ void loop() {
 
 	// Button held.
 	if (ops.getStatus(Ops::Status::ButtonDown)
-		&& ops.buttonHold.get(currentTime)
+		&& ops.buttonHold.get(ops.currentTime)
 		&& !ops.getCommand(Ops::Command::ButtonHoldHandled)) {
 		Button::buttonHeld();
 	}
@@ -67,7 +68,7 @@ void loop() {
 	}
 
 	// Read sensors.
-	if (ops.inputPollingActive.check(currentTime)) {
+	if (ops.inputPollingActive.check(ops.currentTime)) {
 		ops.checkTherm(Thermistor::adcToCelsius(analogRead(Pins::pTemp)));
 
 		// TODO Remove mocky shit.
@@ -108,14 +109,14 @@ void loop() {
 		UI::updateScreen();
 
 		// Selection timeout.
-		if (ops.getStatus(Ops::Status::Select) && ops.selectionTimeout.check(currentTime)) {
+		if (ops.getStatus(Ops::Status::Select) && ops.selectionTimeout.check(ops.currentTime)) {
 			ops.clearStatus(Ops::Status::Select);
 			filaments.cancel();
 			ops.setDirty(Ops::Dirty::Filament);
 		}
 
 		// Screen timeout.
-		if (!ops.getStatus(Ops::Status::ButtonDown) && ops.screenTimeout.check(currentTime)) {
+		if (!ops.getStatus(Ops::Status::ButtonDown) && ops.screenTimeout.check(ops.currentTime)) {
 			UI::sleep();
 		}
 	}

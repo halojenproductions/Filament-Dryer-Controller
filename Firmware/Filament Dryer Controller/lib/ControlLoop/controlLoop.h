@@ -8,7 +8,6 @@
 namespace ControlLoop {
 	extern Ops& ops;
 	extern Filaments& filaments;
-	extern uint32_t currentTime;
 
 	extern void controlLoop();
 	extern void active();

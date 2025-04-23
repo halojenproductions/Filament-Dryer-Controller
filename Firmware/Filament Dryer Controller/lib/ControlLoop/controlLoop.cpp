@@ -5,8 +5,6 @@ namespace ControlLoop {
 	Filaments& filaments = Filaments::getInstance();
 
 	void controlLoop() {
-		if (millis > 0) {
-		}
 		if (ops.getHumidity() <= filaments.getActive().humidity) {
 			// We are dry.
 			if (ops.getStatus(Ops::Status::Active)) {
