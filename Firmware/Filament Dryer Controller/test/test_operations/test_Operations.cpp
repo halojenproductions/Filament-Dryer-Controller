@@ -5,7 +5,7 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void setup() {
-	// delay(2000);
+	delay(1000);
 	UNITY_BEGIN();
 
 	// Run all fixtures.
@@ -13,6 +13,7 @@ void setup() {
 	suite_Dirties::suite_Dirties();
 	suite_Commands::suite_Commands();
 	suite_Humidity::suite_Humidity();
+	suite_Temperature::suite_Temperature();
 
 	UNITY_END();
 }

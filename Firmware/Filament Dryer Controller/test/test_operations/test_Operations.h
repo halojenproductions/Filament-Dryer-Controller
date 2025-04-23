@@ -21,6 +21,10 @@ namespace suite_Humidity {
 	void suite_Humidity();
 }
 
+namespace suite_Temperature {
+	void suite_Temperature();
+}
+
 extern void setUp(void);
 extern void tearDown(void);
 
@@ -75,6 +79,13 @@ namespace test_Operations_Helpers {
 
 		static void sensHumid(Ops& ops, uint8_t value) {
 			ops.sensHumid = value;
+		}
+		static uint8_t sensTemp(const Ops& ops) {
+			return ops.sensTemp;
+		}
+
+		static void sensTemp(Ops& ops, uint8_t value) {
+			ops.sensTemp = value;
 		}
 	};
 }

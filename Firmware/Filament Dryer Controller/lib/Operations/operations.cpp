@@ -66,7 +66,7 @@ void Ops::clearAllDirties() {
 // Inputs.
 bool Ops::checkHumidity(float humidity) {
 	// Validate the value.
-	if (isnan(humidity)) {
+	if (isnan(humidity) || humidity < 0 || humidity > 100) {
 		setStatus(Ops::Status::Error);
 		return false;
 	}
