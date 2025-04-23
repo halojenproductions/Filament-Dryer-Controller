@@ -1,25 +1,26 @@
-#include "operations.h"
 #include "test_operations.h"
 #include <Arduino.h>
 #include <unity.h>
 
 using namespace test_Operations_Helpers;
 
-namespace test_Statuses {
-	unsigned char mask = 0b11111111;
+namespace suite_Statuses {
+	Ops& ops = Ops::getInstance();
 
-	void test_Statuses() {
+	void test_Status_New();
+	void test_Status_Each();
+
+	void suite_Statuses() {
 		RUN_TEST(test_Status_New);
 		RUN_TEST(test_Status_Each);
 	}
 
+	// Tests.
 	void test_Status_New(void) {
-		Ops &ops = Ops::getInstance();
 		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getStatusesRaw(ops));
 	}
 
 	void test_Status_Each(void) {
-		Ops &ops = Ops::getInstance();
 		for (uint8_t i = 0; i < lastValue(Ops::Status{}); i++) {
 			TEST_ASSERT_TRUE_MESSAGE(i < 8, "Too many enum values defined.");
 

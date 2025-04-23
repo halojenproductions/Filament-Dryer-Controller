@@ -61,7 +61,7 @@ void test_Therm_Conversion100(void) {
 void setup() {
 	// NOTE!!! Wait for >2 secs
 	// if board doesn't support software reset via Serial.DTR/RTS
-	// delay(2000);
+	delay(500);
 	UNITY_BEGIN();
 
 	RUN_TEST(test_Therm_Conversion0);

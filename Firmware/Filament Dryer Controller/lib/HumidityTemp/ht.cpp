@@ -6,5 +6,4 @@ namespace HT {
 
 	Adafruit_SHT31 sensor = Adafruit_SHT31();
 
-
 }

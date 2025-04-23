@@ -1,26 +1,26 @@
-#include "operations.h"
 #include "test_operations.h"
 #include <Arduino.h>
 #include <unity.h>
 
 using namespace test_Operations_Helpers;
 
-namespace test_Dirties {
-	unsigned char mask = 0b11111111;
+namespace suite_Dirties {
+	Ops& ops = Ops::getInstance();
 
-	void test_Dirties() {
+	void test_Dirty_New();
+	void test_Dirty_Each();
+
+	void suite_Dirties() {
 		RUN_TEST(test_Dirty_New);
 		RUN_TEST(test_Dirty_Each);
 	}
 
+	// Tests.
 	void test_Dirty_New(void) {
-		Ops& ops = Ops::getInstance();
 		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getDirtiesRaw(ops));
 	}
 
 	void test_Dirty_Each(void) {
-		Ops& ops = Ops::getInstance();
-
 		for (uint8_t i = 0; i < lastValue(Ops::Dirty{}); i++) {
 			TEST_ASSERT_TRUE_MESSAGE(i < 8, "Too many enum values defined.");
 
@@ -47,8 +47,6 @@ namespace test_Dirties {
 	}
 
 	void test_Dirty_ClearAll(void) {
-		Ops& ops = Ops::getInstance();
-
 		OpsTestAccess::setDirtiesRaw(ops, (uint8_t)-1);
 		TEST_ASSERT_BITS_HIGH(mask, OpsTestAccess::getDirtiesRaw(ops));
 

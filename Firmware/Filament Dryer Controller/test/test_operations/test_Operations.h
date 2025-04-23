@@ -5,25 +5,19 @@
 #ifndef TEST_OPERATIONS_H
 #define TEST_OPERATIONS_H
 
-namespace test_Statuses {
-	void test_Statuses();
-	void test_Status_New();
-	void test_Status_Each();
+namespace suite_Statuses {
+	void suite_Statuses();
 }
 
-namespace test_Commands {
-	void test_Commands();
-	void test_Command_New();
-	void test_Command_Each();
+namespace suite_Commands {
+	void suite_Commands();
 }
 
-namespace test_Dirties {
-	void test_Dirties();
-	void test_Dirty_New();
-	void test_Dirty_Each();
+namespace suite_Dirties {
+	void suite_Dirties();
 }
 
-namespace test_Humidity {
+namespace suite_Humidity {
 	void suite_Humidity();
 }
 
@@ -31,6 +25,8 @@ extern void setUp(void);
 extern void tearDown(void);
 
 namespace test_Operations_Helpers {
+	constexpr byte mask = 0b11111111;
+
 	template <typename T>
 	constexpr uint8_t toInt(T enumValue) {
 		return static_cast<uint8_t>(enumValue);

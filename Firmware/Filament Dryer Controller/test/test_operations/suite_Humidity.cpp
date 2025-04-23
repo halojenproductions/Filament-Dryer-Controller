@@ -1,9 +1,8 @@
-#include "operations.h"
 #include "test_operations.h"
 
 using namespace test_Operations_Helpers;
 
-namespace test_Humidity {
+namespace suite_Humidity {
 	Ops& ops = Ops::getInstance();
 
 	void test_Humidity_Get();
@@ -16,6 +15,7 @@ namespace test_Humidity {
 		RUN_TEST(test_Humidity_Check_Changed);
 	}
 
+	// Tests.
 	void test_Humidity_Get(void) {
 		// Arrange.
 		uint8_t testValue = 50;

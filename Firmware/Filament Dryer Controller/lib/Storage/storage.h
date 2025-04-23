@@ -2,7 +2,10 @@
 #define STORAGE_H
 
 #include <Arduino.h>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
 #include <EEPROM.h>
+#pragma GCC diagnostic pop
 
 class Storage {
 	public:
