@@ -78,7 +78,6 @@ void buttonHeld() {
 	// Check if we are in selection mode.
 	if (ops.getStatus(Ops::Status::Select)) {
 		filaments.apply();
-		// TODO: Save the selection to EEPROM.
 		ops.clearStatus(Ops::Status::Select);
 	} else {
 		ops.setStatus(Ops::Status::Select);

@@ -5,6 +5,8 @@
 #include "operations.h"
 #include <Arduino.h>
 
+// TODO: give all this a namespace ya dummy.
+
 // Declare external dependencies
 extern Ops& ops;
 extern Filaments& filaments;

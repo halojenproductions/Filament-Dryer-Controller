@@ -6,6 +6,27 @@ namespace UI {
 
 	U8G2_SH1106_128X64_NONAME_F_HW_I2C screen(U8G2_R0);
 
+	void setup() {
+		screen.setI2CAddress(0x78);	   // Set the I2C address of the display
+		screen.setBusClock(400000);	   // Set the I2C bus clock speed to 400kHz
+		screen.begin();
+		screen.setFontMode(1);
+	}
+
+	void wakeUp() {
+		screen.setPowerSave(0);
+		ops.setStatus(Ops::Status::ScreenAwake);
+		ops.screenTimeout.reset();
+		ops.setDirty(Ops::Dirty::All);
+	}
+
+	void sleep() {
+		screen.setPowerSave(1);
+		ops.clearStatus(Ops::Status::ScreenAwake);
+		filaments.cancel();
+		ops.clearStatus(Ops::Status::Select);
+	}
+
 	// Screen dimensions.
 	static constexpr byte pxWidth	  = 128;	// 128 pixels.
 	static constexpr byte pxHeight	  = 64;		// 64 pixels.
@@ -17,17 +38,6 @@ namespace UI {
 	static constexpr Area areaBottom   = {0, tilesHeight - 2, tilesWidth, 2};
 	static constexpr Area areaHumidity = {0, 2, tilesWidth / 2, 4};
 	static constexpr Area areaTemp	   = {tilesWidth / 2, 2, tilesWidth / 2, 4};
-
-	// Layout.
-	static constexpr byte borderHeight = 12;
-	static constexpr byte padFilX	   = 2;
-	static constexpr byte padFilY	   = 2;
-	static constexpr byte padRealtimeX = 6;
-	static constexpr byte posRealtimeY = pxHeight / 2 + 2;
-
-	// Fonts.
-	static const uint8_t* filamentFont = u8g2_font_luBS08_tf;
-	static const uint8_t* realtimeFont = u8g2_font_luRS19_tf;
 
 	void updateScreen() {
 		if (ops.checkDirty(Ops::Dirty::All)) {
@@ -52,6 +62,17 @@ namespace UI {
 		}
 		screen.clearBuffer();
 	}
+
+	// Layout.
+	static constexpr byte borderHeight = 12;
+	static constexpr byte padFilX	   = 2;
+	static constexpr byte padFilY	   = 2;
+	static constexpr byte padRealtimeX = 6;
+	static constexpr byte posRealtimeY = pxHeight / 2 + 2;
+
+	// Fonts.
+	static const uint8_t* filamentFont = u8g2_font_luBS08_tf;
+	static const uint8_t* realtimeFont = u8g2_font_luRS19_tf;
 
 	void drawAll() {
 		UI::screen.setFontMode(1);

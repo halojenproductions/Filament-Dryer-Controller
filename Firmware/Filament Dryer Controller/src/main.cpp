@@ -40,11 +40,8 @@ void setup() {
 		ops.setStatus(Ops::Status::Error);
 	}
 
-	// TODO move to a sotup method in UI.
 	// Set up oled display.
-	UI::screen.setI2CAddress(0x78);	   // Set the I2C address of the display
-	UI::screen.setBusClock(400000);	   // Set the I2C bus clock speed to 400kHz
-	UI::screen.begin();
+	UI::setup();
 
 	// Set up button interrupt.
 	attachInterrupt(digitalPinToInterrupt(pButt), interruptHandler, CHANGE);
@@ -54,28 +51,10 @@ void setup() {
 	ops.setCommand(Ops::Command::WakeUp);
 	ops.setStatus(Ops::Status::Ok);
 	digitalWrite(pLedOk, ops.getStatus(Ops::Status::Ok));
-	UI::screen.setFontMode(1);
-}
-
-// TODO: Move to UI.
-void wakeUp() {
-	UI::screen.setPowerSave(0);
-	ops.setStatus(Ops::Status::ScreenAwake);
-	ops.screenTimeout.reset();
-	ops.setDirty(Ops::Dirty::All);
-}
-
-// TODO: Move to UI.
-void sleep() {
-	UI::screen.setPowerSave(1);
-	ops.clearStatus(Ops::Status::ScreenAwake);
-	filaments.cancel();
-	ops.clearStatus(Ops::Status::Select);
 }
 
 void loop() {
 	currentTime = millis();
-	// TODO: tweak the order of operations later.
 
 	// Wrangle interruption.
 	if (interrupted()) {
@@ -85,7 +64,7 @@ void loop() {
 
 	// Wake up.
 	if (ops.checkCommand(Ops::Command::WakeUp)) {
-		wakeUp();
+		UI::wakeUp();
 	}
 
 	// Button held.
@@ -120,16 +99,10 @@ void loop() {
 	}
 
 	// Set statuses. or should that be commands?
-	// TODO.
 	if (ops.getStatus(Ops::Status::Error)) {
 	}
 
 	if (ops.getStatus(Ops::Status::Heating)) {
-	}
-
-	// TODO.
-	if (ops.getStatus(Ops::Status::ButtonDown)) {
-		// TODO: Handle button press.
 	}
 
 	// Update display.
@@ -143,19 +116,17 @@ void loop() {
 
 		// Send the display buffer (or just bits of it).
 		UI::updateScreen();
-	}
 
-	// Selection timeout.
-	if (ops.getStatus(Ops::Status::Select) && ops.selectionTimeout.check(currentTime)) {
-		ops.clearStatus(Ops::Status::Select);
-		filaments.cancel();
-		ops.setDirty(Ops::Dirty::Filament);
-	}
+		// Selection timeout.
+		if (ops.getStatus(Ops::Status::Select) && ops.selectionTimeout.check(currentTime)) {
+			ops.clearStatus(Ops::Status::Select);
+			filaments.cancel();
+			ops.setDirty(Ops::Dirty::Filament);
+		}
 
-	// Screen timeout.
-	if (ops.getStatus(Ops::Status::ScreenAwake)
-		&& !ops.getStatus(Ops::Status::ButtonDown)
-		&& ops.screenTimeout.check(currentTime)) {
-		sleep();
+		// Screen timeout.
+		if (!ops.getStatus(Ops::Status::ButtonDown) && ops.screenTimeout.check(currentTime)) {
+			UI::sleep();
+		}
 	}
 }
