@@ -8,11 +8,11 @@
 ### Sensor temp
 - [x] Read sensor temp
 - [x] Store as degrees
-- [ ] Tests
+- [x] Tests
 ### Humidity
 - [x] Read humidity
 - [x] Store as percent
-- [ ] Tests
+- [x] Tests
 ### Button 
 - [x] Handle interrupt
 - [ ] Tests
