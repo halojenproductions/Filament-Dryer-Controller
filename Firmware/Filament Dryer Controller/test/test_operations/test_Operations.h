@@ -45,27 +45,27 @@ namespace test_Operations_Helpers {
 	class OpsTestAccess {
 		public:
 
-		static uint8_t getStatusesRaw(const Ops& ops) {
+		static uint8_t statuses(const Ops& ops) {
 			return ops.statuses;
 		}
 
-		static void setStatusesRaw(Ops& ops, uint8_t value) {
+		static void statuses(Ops& ops, uint8_t value) {
 			ops.statuses = value;
 		}
 
-		static uint8_t getCommandsRaw(const Ops& ops) {
+		static uint8_t commands(const Ops& ops) {
 			return ops.commands;
 		}
 
-		static void setCommandsRaw(Ops& ops, uint8_t value) {
+		static void commands(Ops& ops, uint8_t value) {
 			ops.commands = value;
 		}
 
-		static uint8_t getDirtiesRaw(const Ops& ops) {
+		static uint8_t dirties(const Ops& ops) {
 			return ops.dirties;
 		}
 
-		static void setDirtiesRaw(Ops& ops, uint8_t value) {
+		static void dirties(Ops& ops, uint8_t value) {
 			ops.dirties = value;
 		}
 

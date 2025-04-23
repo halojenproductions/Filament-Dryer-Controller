@@ -17,7 +17,7 @@ namespace suite_Dirties {
 
 	// Tests.
 	void test_Dirty_New(void) {
-		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getDirtiesRaw(ops));
+		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::dirties(ops));
 	}
 
 	void test_Dirty_Each(void) {
@@ -29,28 +29,28 @@ namespace suite_Dirties {
 
 			// Set.
 			ops.setDirty(dirty);
-			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getDirtiesRaw(ops));
+			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::dirties(ops));
 			// Get.
 			TEST_ASSERT_TRUE(ops.getDirty(dirty));
 			// Clear.
 			ops.clearDirty(dirty);
-			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getDirtiesRaw(ops));
+			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::dirties(ops));
 			// Check.
 			ops.setDirty(dirty);
 			TEST_ASSERT_TRUE(ops.checkDirty(dirty));
 			TEST_ASSERT_FALSE(ops.checkDirty(dirty));
-			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getDirtiesRaw(ops));
+			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::dirties(ops));
 
 			// Reset for next iteration
-			OpsTestAccess::setDirtiesRaw(ops, 0);
+			OpsTestAccess::dirties(ops, 0);
 		}
 	}
 
 	void test_Dirty_ClearAll(void) {
-		OpsTestAccess::setDirtiesRaw(ops, (uint8_t)-1);
-		TEST_ASSERT_BITS_HIGH(mask, OpsTestAccess::getDirtiesRaw(ops));
+		OpsTestAccess::dirties(ops, (uint8_t)-1);
+		TEST_ASSERT_BITS_HIGH(mask, OpsTestAccess::dirties(ops));
 
 		ops.clearAllDirties();
-		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getDirtiesRaw(ops));
+		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::dirties(ops));
 	}
 }

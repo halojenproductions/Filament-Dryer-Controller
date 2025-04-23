@@ -17,7 +17,7 @@ namespace suite_Statuses {
 
 	// Tests.
 	void test_Status_New(void) {
-		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getStatusesRaw(ops));
+		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::statuses(ops));
 	}
 
 	void test_Status_Each(void) {
@@ -29,18 +29,18 @@ namespace suite_Statuses {
 
 			ops.setStatus(status);
 
-			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getStatusesRaw(ops));
+			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::statuses(ops));
 			TEST_ASSERT_TRUE(ops.getStatus(status));
 
 			ops.clearStatus(status);
-			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::getStatusesRaw(ops));
+			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::statuses(ops));
 
 			ops.toggleStatus(status);
-			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::getStatusesRaw(ops));
+			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::statuses(ops));
 			TEST_ASSERT_TRUE(ops.getStatus(status));
 
 			// Reset for next iteration
-			OpsTestAccess::setStatusesRaw(ops, 0);
+			OpsTestAccess::statuses(ops, 0);
 		}
 	}
 }
