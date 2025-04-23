@@ -23,6 +23,10 @@ namespace test_Dirties {
 	void test_Dirty_Each();
 }
 
+namespace test_Humidity {
+	void suite_Humidity();
+}
+
 extern void setUp(void);
 extern void tearDown(void);
 
@@ -67,6 +71,14 @@ namespace test_Operations_Helpers {
 
 		static void setDirtiesRaw(Ops& ops, uint8_t value) {
 			ops.dirties = value;
+		}
+
+		static uint8_t sensHumid(const Ops& ops) {
+			return ops.sensHumid;
+		}
+
+		static void sensHumid(Ops& ops, uint8_t value) {
+			ops.sensHumid = value;
 		}
 	};
 }

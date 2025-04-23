@@ -16,6 +16,7 @@ void setup() {
 	test_Statuses::test_Statuses();
 	test_Dirties::test_Dirties();
 	test_Commands::test_Commands();
+	test_Humidity::suite_Humidity();
 
 	UNITY_END();
 }
