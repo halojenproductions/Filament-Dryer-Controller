@@ -3,23 +3,23 @@
 
 #include "filaments.h"
 #include "operations.h"
+#include "pins.h"
 #include <Arduino.h>
 
-// TODO: give all this a namespace ya dummy.
+namespace Button {
 
-// Declare external dependencies
-extern Ops& ops;
-extern Filaments& filaments;
-extern const byte pButt;
-extern uint32_t currentTime;
+	// Declare external dependencies
+	extern Ops& ops;
+	extern Filaments& filaments;
 
-// Interrupt stuff.
-bool interrupted();
-void interruptHandler();
-void interruptAnalyser();
+	// Interrupt stuff.
+	extern bool interrupted();
+	extern void interruptHandler();
+	extern void interruptAnalyser();
 
-// Other buttony stuff.
-void buttonHeld();
-void buttonClicked();
+	// Other buttony stuff.
+	extern void buttonHeld();
+	extern void buttonClicked();
+}
 
 #endif

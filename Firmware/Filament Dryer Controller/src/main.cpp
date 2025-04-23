@@ -3,22 +3,14 @@
 #include <u8g2lib.h>
 
 #include "button.h"
+#include "controlLoop.h"
 #include "filaments.h"
 #include "ht.h"
 #include "operations.h"
+#include "pins.h"
 #include "ui.h"
 
 #define DEBUG_MODE 0
-
-// Pins
-constexpr byte pButt	= 2;	  // PD2
-constexpr byte pTemp	= A0;	  // PC0
-constexpr byte pLedOk	= 12;	  // PB4
-constexpr byte pLedHeat = 13;	  // PB5
-constexpr byte pHeater	= 9;	  // PB1
-constexpr byte pFan		= 5;	  // PD5 TODO: Move away from OS0.
-constexpr byte pSda		= SDA;	  // PC4
-constexpr byte pScl		= SCL;	  // PC5
 
 Ops& ops			 = Ops::getInstance();
 Filaments& filaments = Filaments::getInstance();
@@ -27,39 +19,34 @@ uint32_t currentTime = millis();
 
 void setup() {
 	// Set up pins.
-	pinMode(pButt, INPUT_PULLUP);
-	pinMode(pTemp, INPUT);
-	pinMode(pLedOk, OUTPUT);
-	pinMode(pLedHeat, OUTPUT);
-	pinMode(pHeater, OUTPUT);
-	pinMode(pFan, OUTPUT);
+	Pins::setup();
 
 	// TODO move to a setup method in HT.
 	// Set up humidity & temperature sensor.
 	if (!HT::sensor.begin(0x44)) {
-		ops.setStatus(Ops::Status::Error);
+		ops.setStatus(Ops::Status::Error); // TODO handle error.
 	}
 
 	// Set up oled display.
 	UI::setup();
 
 	// Set up button interrupt.
-	attachInterrupt(digitalPinToInterrupt(pButt), interruptHandler, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(Pins::pButt), Button::interruptHandler, CHANGE);
 
 	// Set initial values.
 	ops.setCommand(Ops::Command::ButtonHoldHandled);
 	ops.setCommand(Ops::Command::WakeUp);
 	ops.setStatus(Ops::Status::Ok);
-	digitalWrite(pLedOk, ops.getStatus(Ops::Status::Ok));
+	digitalWrite(Pins::pLedOk, ops.getStatus(Ops::Status::Ok));
 }
 
 void loop() {
 	currentTime = millis();
 
 	// Wrangle interruption.
-	if (interrupted()) {
+	if (Button::interrupted()) {
 		// Button changed state. Go and deal with that.
-		interruptAnalyser();
+		Button::interruptAnalyser();
 	}
 
 	// Wake up.
@@ -71,17 +58,17 @@ void loop() {
 	if (ops.getStatus(Ops::Status::ButtonDown)
 		&& ops.buttonHold.get(currentTime)
 		&& !ops.getCommand(Ops::Command::ButtonHoldHandled)) {
-		buttonHeld();
+		Button::buttonHeld();
 	}
 
 	// Button clicked.
-	if (ops.checkCommand(Ops::Command::ButtonClick)) {
-		buttonClicked();
+	if (ops.checkCommand(Ops::Command::ButtonClicked)) {
+		Button::buttonClicked();
 	}
 
 	// Read sensors.
-	if (ops.inputPolling.check(currentTime)) {
-		ops.checkTherm(Thermistor::adcToCelsius(analogRead(pTemp)));
+	if (ops.inputPollingActive.check(currentTime)) {
+		ops.checkTherm(Thermistor::adcToCelsius(analogRead(Pins::pTemp)));
 
 		// TODO Remove mocky shit.
 		float humidity = 50 + (int)random(2);
@@ -97,6 +84,9 @@ void loop() {
 			ops.setDirty(Ops::Dirty::Temp);
 		}
 	}
+	// TODO Else if status is active, poll exhaust temp every time.
+
+	ControlLoop::controlLoop();
 
 	// Set statuses. or should that be commands?
 	if (ops.getStatus(Ops::Status::Error)) {

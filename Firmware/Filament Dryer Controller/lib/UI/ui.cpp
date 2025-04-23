@@ -75,19 +75,19 @@ namespace UI {
 	static const uint8_t* realtimeFont = u8g2_font_luRS19_tf;
 
 	void drawAll() {
-		UI::screen.setFontMode(1);
+		screen.setFontMode(1);
 
 		if (ops.getStatus(Ops::Status::Select)) {
-			UI::drawBorderTop();
-			UI::drawBorderBottom();
+			drawBorderTop();
+			drawBorderBottom();
 		}
 
-		UI::drawFilamentName(filaments.getDisplay().name);
-		UI::drawFilamentTemp(filaments.getDisplay().temperature);
-		UI::drawFilamentHumidity(filaments.getDisplay().humidity);
+		drawFilamentName(filaments.getDisplay().name);
+		drawFilamentTemp(filaments.getDisplay().temperature);
+		drawFilamentHumidity(filaments.getDisplay().humidity);
 
-		UI::drawRealtimeTemp(ops.getTemperature());
-		UI::drawRealtimeHumidity(ops.getHumidity());
+		drawRealtimeTemp(ops.getTemperature());
+		drawRealtimeHumidity(ops.getHumidity());
 	}
 
 	void drawBorderTop() {

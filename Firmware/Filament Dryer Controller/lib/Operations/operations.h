@@ -34,15 +34,18 @@ class Ops {
 		Fanning,
 		ButtonDown,
 		Select,
+		Active, // TODO rename to indicate dry/wet.
 		_Last
 	};
 
 	enum class Command : uint8_t {
 		WakeUp,
-		Heat,
-		Fan,
-		ButtonClick,
-		ButtonHold,
+		HeaterOn,
+		HeaterOff,
+		FanOn,
+		FanOff,
+		ButtonClicked,
+		ButtonHeld,
 		ButtonHoldHandled,	  // Yeah, it's confusing. I can't think of a better name.
 		_Last
 	};
@@ -55,9 +58,15 @@ class Ops {
 		_Last
 	};
 
+	// Global time.
+	uint32_t currentTime;
+
 	// Timers.
-	static constexpr uint32_t INPUT_POLL_TIME = 1000UL;
-	Timer inputPolling{INPUT_POLL_TIME};
+	static constexpr uint32_t INPUT_POLL_ACTIVE_TIME = 1000UL;
+	Timer inputPollingActive{INPUT_POLL_ACTIVE_TIME};
+
+	static constexpr uint32_t INPUT_POLL_IDLE_TIME = 1000UL * 60;
+	Timer inputPollingIdle{INPUT_POLL_IDLE_TIME};
 
 	static constexpr uint32_t SCREEN_TIMEOUT = 1000UL * 30;
 	Timer screenTimeout{SCREEN_TIMEOUT};
