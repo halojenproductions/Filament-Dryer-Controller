@@ -9,12 +9,16 @@ namespace ControlLoop {
 	extern Ops& ops;
 	extern Filaments& filaments;
 
-	extern void controlLoop();
 	extern void active();
 	extern void idle();
-	extern void heaterOff();
-	extern void fanOff();
 
+	// TODO? maybe turn the namespace into a singleton class and make these private?
+	extern void heaterDuty();
+	extern void heaterOn();
+	extern void heaterOff();
+	extern void fanOnLow();
+	extern void fanOnHigh();
+	extern void fanOff();
 }
 
 #endif

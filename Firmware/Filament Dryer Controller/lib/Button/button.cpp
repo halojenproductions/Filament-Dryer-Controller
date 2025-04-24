@@ -68,11 +68,11 @@ namespace Button {
 			filaments.next();
 			ops.setDirty(Ops::Dirty::Filament);
 			ops.selectionTimeout.reset();
+		} else {
+			// Nothing else to do because we already told it to wake up if it was asleep.
+			// But we might as well do a full screen update at this point.
+			ops.setDirty(Ops::Dirty::All);
 		}
-
-		// Nothing else to do because we already told it to wake up if it was asleep.
-		// But we might as well do a full screen update at this point.
-		ops.setDirty(Ops::Dirty::All);
 	}
 
 	void buttonHeld() {

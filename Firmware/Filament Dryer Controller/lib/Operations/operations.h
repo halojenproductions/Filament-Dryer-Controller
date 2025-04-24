@@ -34,7 +34,7 @@ class Ops {
 		Fanning,
 		ButtonDown,
 		Select,
-		Active, // TODO rename to indicate dry/wet.
+		Active,
 		_Last
 	};
 
@@ -61,8 +61,11 @@ class Ops {
 	// Global time.
 	uint32_t currentTime;
 
+	// Exhaust temperature delta.
+	static constexpr uint8_t tempDelta = 5;	   // Degrees Celsius.
+
 	// Timers.
-	static constexpr uint32_t INPUT_POLL_ACTIVE_TIME = 1000UL;
+	static constexpr uint32_t INPUT_POLL_ACTIVE_TIME = 100UL;
 	Timer inputPollingActive{INPUT_POLL_ACTIVE_TIME};
 
 	static constexpr uint32_t INPUT_POLL_IDLE_TIME = 1000UL * 60;
@@ -83,12 +86,6 @@ class Ops {
 	static constexpr uint32_t BUTTON_HOLD_TIMEOUT = 800UL;
 	Timer buttonHold{BUTTON_HOLD_TIMEOUT};
 
-	// Single template function that works with all enum types.
-	template <typename T>
-	static constexpr uint8_t getEnumBit(T bit) {
-		return 1 << static_cast<uint8_t>(bit);
-	}
-
 	// Status methods.
 	void setStatus(Status status);
 	void clearStatus(Status status);
@@ -107,6 +104,12 @@ class Ops {
 	bool getDirty(Dirty dirty) const;
 	bool checkDirty(Dirty dirty);
 	void clearAllDirties();
+
+	// Single template function that works with all enum types.
+	template <typename T>
+	static constexpr uint8_t getEnumBit(T bit) {
+		return 1 << static_cast<uint8_t>(bit);
+	}
 
 	/**
 	 * \brief Accepts a humidity reading from the sensor.

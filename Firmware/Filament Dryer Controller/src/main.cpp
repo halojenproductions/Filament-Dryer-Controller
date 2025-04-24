@@ -15,7 +15,6 @@
 Ops& ops			 = Ops::getInstance();
 Filaments& filaments = Filaments::getInstance();
 
-
 void setup() {
 	ops.currentTime = millis();
 
@@ -25,7 +24,7 @@ void setup() {
 	// TODO move to a setup method in HT.
 	// Set up humidity & temperature sensor.
 	if (!HT::sensor.begin(0x44)) {
-		ops.setStatus(Ops::Status::Error); // TODO handle error.
+		ops.setStatus(Ops::Status::Error);	  // TODO handle error.
 	}
 
 	// Set up oled display.
@@ -39,6 +38,7 @@ void setup() {
 	ops.setCommand(Ops::Command::WakeUp);
 	ops.setStatus(Ops::Status::Ok);
 	digitalWrite(Pins::pLedOk, ops.getStatus(Ops::Status::Ok));
+	ops.setStatus(Ops::Status::Active);
 }
 
 void loop() {
@@ -68,16 +68,18 @@ void loop() {
 	}
 
 	// Read sensors.
-	if (ops.inputPollingActive.check(ops.currentTime)) {
+	if ((ops.getStatus(Ops::Status::Active) && ops.inputPollingActive.check(ops.currentTime))
+		|| (!ops.getStatus(Ops::Status::Active) && ops.inputPollingIdle.check(ops.currentTime))) {
+		// Check thermistor.
 		ops.checkTherm(Thermistor::adcToCelsius(analogRead(Pins::pTemp)));
-
+		// Check humidity.
 		// TODO Remove mocky shit.
 		float humidity = 50 + (int)random(2);
 		if (ops.checkHumidity(humidity)) {
 			// if(ops.checkHumidity(HT::sensor.readHumidity())) {
 			ops.setDirty(Ops::Dirty::Humidity);
 		}
-
+		// Check temp.erature.
 		// TODO Remove mocky shit.
 		float inTemperature = 20 + (int)random(2);
 		if (ops.checkTemperature(inTemperature)) {
@@ -85,9 +87,13 @@ void loop() {
 			ops.setDirty(Ops::Dirty::Temp);
 		}
 	}
-	// TODO Else if status is active, poll exhaust temp every time.
 
-	ControlLoop::controlLoop();
+	// Control loop.
+	if (ops.getStatus(Ops::Status::Active)) {
+		ControlLoop::active();
+	} else {
+		ControlLoop::idle();
+	}
 
 	// Set statuses. or should that be commands?
 	if (ops.getStatus(Ops::Status::Error)) {
