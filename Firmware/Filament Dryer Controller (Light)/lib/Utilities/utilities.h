@@ -4,13 +4,13 @@
 #include "system.h"
 
 namespace Util {
-	bool bitCheck(uint8_t value, uint8_t bitPos);
+	bool bitCheck(uint8_t& value, uint8_t bitPos);
 	void bitClearAll(uint8_t& value);
 
 	// Timer methods.
 	bool checkTimer(uint8_t index);
 	bool getTimer(uint8_t index);
-	void resetTimer(uint8_t index);
+	void resetTimer(uint8_t& index);
 
 	// Inputs.
 	/**

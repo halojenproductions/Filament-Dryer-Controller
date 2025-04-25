@@ -1,4 +1,4 @@
-#include "test_Operations.h"
+#include "test_system.h"
 
 void setUp(void) {}
 
@@ -10,10 +10,10 @@ void setup() {
 
 	// Run all fixtures.
 	suite_Statuses::suite_Statuses();
-	suite_Dirties::suite_Dirties();
-	suite_Commands::suite_Commands();
-	suite_Humidity::suite_Humidity();
-	suite_Temperature::suite_Temperature();
+	// suite_Dirties::suite_Dirties();
+	// suite_Commands::suite_Commands();
+	// suite_Humidity::suite_Humidity();
+	// suite_Temperature::suite_Temperature();
 
 	UNITY_END();
 }

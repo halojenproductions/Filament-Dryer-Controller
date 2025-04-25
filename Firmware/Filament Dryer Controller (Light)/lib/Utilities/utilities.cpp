@@ -3,7 +3,7 @@
 using namespace Sys;
 
 namespace Util {
-	bool bitCheck(uint8_t value, uint8_t bitPos) {
+	bool bitCheck(uint8_t& value, uint8_t bitPos) {
 		if (bitRead(value, bitPos) == 1) {
 			bitClear(value, bitPos);
 			return true;
@@ -24,11 +24,11 @@ namespace Util {
 		return false;
 	}
 
-	bool getTimer(uint8_t index) {
+	bool getTimer(uint8_t& index) {
 		return (currentTime >= timers[index] + timerIntervals[index]);
 	}
 
-	void resetTimer(uint8_t index) {
+	void resetTimer(uint8_t& index) {
 		timers[index] = currentTime;
 	}
 

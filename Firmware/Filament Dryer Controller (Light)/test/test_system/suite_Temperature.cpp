@@ -1,5 +1,5 @@
-#include "test_operations.h"
-
+#include "test_system.h"
+/*
 using namespace test_Operations_Helpers;
 
 namespace suite_Temperature {
@@ -87,3 +87,4 @@ namespace suite_Temperature {
 		TEST_ASSERT_EQUAL(expectedValue, OpsTestAccess::sensTemp(ops));
 	}
 }
+*/

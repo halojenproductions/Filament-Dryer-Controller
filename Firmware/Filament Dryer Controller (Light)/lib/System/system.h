@@ -16,7 +16,7 @@ namespace Sys {
 	constexpr uint8_t STATUS_BUTTON_DOWN = 5;
 	constexpr uint8_t STATUS_SELECT		 = 6;
 	constexpr uint8_t STATUS_ACTIVE		 = 7;
-	extern byte statuses		;
+	extern byte statuses;
 
 	// Command bits.
 	constexpr uint8_t COMMAND_WAKEUP			  = 0;
@@ -27,14 +27,14 @@ namespace Sys {
 	constexpr uint8_t COMMAND_BUTTON_CLICKED	  = 5;
 	constexpr uint8_t COMMAND_BUTTON_HELD		  = 6;
 	constexpr uint8_t COMMAND_BUTTON_HOLD_HANDLED = 7;
-	extern byte commands							;
+	extern byte commands;
 
 	/// Dirty bits.
 	constexpr uint8_t DIRTY_ALL		 = 0;
 	constexpr uint8_t DIRTY_FILAMENT = 1;
 	constexpr uint8_t DIRTY_TEMP	 = 2;
 	constexpr uint8_t DIRTY_HUMIDITY = 3;
-	extern byte dirties				;
+	extern byte dirties;
 
 	// Timers.
 	constexpr uint8_t TIMER_INPUT_POLLING_ACTIVE = 0;
