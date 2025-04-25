@@ -5,16 +5,19 @@ namespace ControlLoop {
 	Filaments& filaments = Filaments::getInstance();
 
 	void active() {
+		// Serial.println("Active");
 		if (ops.getHumidity() > filaments.getActive().humidity) {
 			/// Moist.
 
 			if (ops.getStatus(Ops::Status::Heating)) {
 				/// Moist & heater is off.
 				/// Heater safety timer.
-				if (ops.heaterTimeout.check(ops.currentTime)) {
+				// if (ops.heaterTimeout.check(ops.currentTime)) {
+				if (ops.getTimer(Ops::Timers::HeaterTimeout)) {
 					// If the heater has been on too long, turn it off and start cooldown.
 					heaterOff();
-					ops.heaterCooldown.reset();
+					// ops.heaterCooldown.reset();
+					ops.resetTimer(Ops::Timers::HeaterCooldown);
 					ops.clearStatus(Ops::Status::Active);
 					return;
 				}
@@ -28,11 +31,6 @@ namespace ControlLoop {
 					ops.clearStatus(Ops::Status::Active);
 					return;
 				}
-
-			} else {
-				/// Moist & heater is off.
-				if (ops.getTherm() < filaments.getActive().temperature) {
-				}
 			}
 
 			/// Heater duty.
@@ -41,43 +39,46 @@ namespace ControlLoop {
 		} else {
 			/// Dry.
 
-			if (ops.getStatus(Ops::Status::Heating)) {
-				// Maybe should just set it low every time, to be safe.
-				heaterOff();
-			}
-			if (ops.getStatus(Ops::Status::Fanning)) {
-				// Maybe should just set it low every time, to be safe.
-				fanOff();
-			}
+			heaterOff();
+			fanOff();
+			// ops.inputPollingIdle.reset();
+			ops.resetTimer(Ops::Timers::InputPollingIdle);
 			ops.clearStatus(Ops::Status::Active);
+		}
+	}
+
+	void idle() {
+		if (ops.getStatus(Ops::Status::Error) /*|| !ops.heaterCooldown.get(ops.currentTime)*/) {
+			// Get out.
+			return;
+		}
+		if (ops.getHumidity() > filaments.getActive().humidity) {
+			/// Moist.
+			fanOnHigh();
+			heaterOn();
+			ops.setStatus(Ops::Status::Active);
+		} else {
 		}
 	}
 
 	void heaterDuty() {
 		if (ops.getStatus(Ops::Status::Heating)
-			&& ops.getTherm() >= ops.getTemperature() + ops.tempDelta) {
+			&& ops.getTherm() >= filaments.getActive().temperature + ops.tempDelta) {
 			// If thermistor temp is more than [delta] degrees above the sensor temperature,
 			// turn it off.
 			heaterOff();
-		} else if (
-			!ops.getStatus(Ops::Status::Heating)
-			&& ops.getTherm() < ops.getTemperature() + ops.tempDelta
-			&& ops.getStatus(Ops::Status::Fanning)
-		) {
+		} else if (!ops.getStatus(Ops::Status::Heating)
+				   && ops.getTherm() < filaments.getActive().temperature + ops.tempDelta
+				   && ops.getStatus(Ops::Status::Fanning)) {
 			heaterOn();
-		}
-	}
-
-	void idle() {
-		if (ops.getHumidity() > filaments.getActive().humidity) {
-			// TODO Moist.
-		} else {
 		}
 	}
 
 	void heaterOn() {
 		digitalWrite(Pins::pHeater, LOW);
 		digitalWrite(Pins::pLedHeat, LOW);
+		// ops.inputPollingActive.reset();
+		ops.resetTimer(Ops::Timers::InputPollingActive);
 		ops.clearStatus(Ops::Status::Heating);
 	}
 
@@ -88,14 +89,14 @@ namespace ControlLoop {
 	}
 
 	void fanOnLow() {
-		// TODO
-		analogWrite(Pins::pFan, 0);
+		// TODO scale to 255
+		analogWrite(Pins::pFan, 10);
 		ops.clearStatus(Ops::Status::Fanning);
 	}
 
 	void fanOnHigh() {
-		// TODO
-		analogWrite(Pins::pFan, 0);
+		// TODO scale to 255
+		analogWrite(Pins::pFan, 50);
 		ops.clearStatus(Ops::Status::Fanning);
 	}
 

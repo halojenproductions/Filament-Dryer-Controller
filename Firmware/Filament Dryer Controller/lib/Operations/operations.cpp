@@ -122,3 +122,4 @@ bool Ops::checkTherm(int8_t temperature) {
 uint8_t Ops::getTherm() const {
 	return thermTemp;
 }
+

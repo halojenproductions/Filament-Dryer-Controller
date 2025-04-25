@@ -15,7 +15,7 @@ namespace Pins {
 	constexpr uint8_t pSda	   = SDA;	 // PC4
 	constexpr uint8_t pScl	   = SCL;	 // PC5
 
-	inline void setup() {
+	inline void setupPins() {
 		pinMode(pButt, INPUT_PULLUP);
 		pinMode(pTemp, INPUT);
 		pinMode(pLedOk, OUTPUT);

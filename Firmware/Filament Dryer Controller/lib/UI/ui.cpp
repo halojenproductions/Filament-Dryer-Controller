@@ -6,17 +6,19 @@ namespace UI {
 
 	U8G2_SH1106_128X64_NONAME_F_HW_I2C screen(U8G2_R0);
 
-	void setup() {
+	void setupScreen() {
 		screen.setI2CAddress(0x78);	   // Set the I2C address of the display
 		screen.setBusClock(400000);	   // Set the I2C bus clock speed to 400kHz
 		screen.begin();
+
 		screen.setFontMode(1);
 	}
 
 	void wakeUp() {
 		screen.setPowerSave(0);
 		ops.setStatus(Ops::Status::ScreenAwake);
-		ops.screenTimeout.reset();
+		// ops.screenTimeout.reset();
+		ops.resetTimer(Ops::Timers::ScreenTimeout);
 		ops.setDirty(Ops::Dirty::All);
 	}
 
@@ -40,6 +42,7 @@ namespace UI {
 	static constexpr Area areaTemp	   = {tilesWidth / 2, 2, tilesWidth / 2, 4};
 
 	void updateScreen() {
+		Serial.println(F("UI::updateScreen()"));
 		if (ops.checkDirty(Ops::Dirty::All)) {
 			// If everything is dirty, update the whole screen.
 			screen.sendBuffer();
@@ -75,6 +78,7 @@ namespace UI {
 	static const uint8_t* realtimeFont = u8g2_font_luRS19_tf;
 
 	void drawAll() {
+		Serial.println(F("UI::drawAll()"));
 		screen.setFontMode(1);
 
 		if (ops.getStatus(Ops::Status::Select)) {
@@ -108,56 +112,71 @@ namespace UI {
 		screen.print(text);
 	}
 
-	void drawFilamentHumidity(int hum) {
+	void drawFilamentHumidity(uint8_t hum) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosBaseline();
 
-		String text = String(hum, 10);
-		text		= String(text + "%");
+		// String text = String(hum, 10);
+		// text		= String(text + "%");
+
+		char buffer[5];	   // Space for "100%\0"
+		snprintf(buffer, sizeof(buffer), "%d%", hum);
 
 		screen.setCursor(padFilX, pxHeight - padFilY);
-		screen.print(text);
+		screen.print(buffer);
 	}
 
-	void drawFilamentTemp(int temp) {
+	void drawFilamentTemp(uint8_t temp) {
 		screen.setDrawColor(2);
 		screen.setFont(filamentFont);
 		screen.setFontPosBaseline();
 
-		String text = String(temp, 10);
-		text		= String(text + "\xBA");
+		// String text = String(temp, 10);
+		// text		= String(text + "\xBA");
 
-		int textWid = screen.getStrWidth(text.c_str());
+		char buffer[5];	   // Space for "100%\0"
+		snprintf(buffer, sizeof(buffer), "%d\xBA", temp);
+
+		// int textWid = screen.getStrWidth(buffer.c_str());
+		uint16_t textWid = screen.getStrWidth(buffer);
 		screen.setCursor(pxWidth - textWid - padFilX, pxHeight - padFilY);
-		screen.print(text);
+		screen.print(buffer);
 	}
 
-	void drawRealtimeHumidity(int hum) {
+	void drawRealtimeHumidity(uint8_t hum) {
 		screen.setDrawColor(2);
 		screen.setFont(realtimeFont);
 		screen.setFontPosCenter();
 
-		String text = String(hum, 10);
-		text		= String(text + "%");
+		// String text = String(hum, 10);
+		// text		= String(text + "%");
+
+		char buffer[5];	   // Space for "100%\0"
+		snprintf(buffer, sizeof(buffer), "%d%", hum);
 
 		screen.setCursor(padRealtimeX, posRealtimeY);
 
-		screen.print(text);
+		screen.print(buffer);
 	}
 
-	void drawRealtimeTemp(int temp) {
+	void drawRealtimeTemp(uint8_t temp) {
 		screen.setDrawColor(2);
 		screen.setFont(realtimeFont);
 		screen.setFontPosCenter();
 
-		String text = String(temp, 10);
-		text		= String(text + "\xBA");
+		// String text = String(temp, 10);
+		// text		= String(text + "\xBA");
 
-		int textWid = screen.getStrWidth(text.c_str());
+		// int textWid = screen.getStrWidth(text.c_str());
+
+		char buffer[5];	   // Space for "100°\0"
+		snprintf(buffer, sizeof(buffer), "%d\xBA", temp);
+
+		uint16_t textWid = screen.getStrWidth(buffer);
 		screen.setCursor(pxWidth - textWid - padRealtimeX, posRealtimeY);
 
-		screen.print(text);
+		screen.print(buffer);
 	}
 
 	void drawAreaBorders() {

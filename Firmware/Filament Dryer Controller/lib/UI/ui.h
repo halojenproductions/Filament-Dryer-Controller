@@ -23,7 +23,7 @@ namespace UI {
 	extern U8G2_SH1106_128X64_NONAME_F_HW_I2C screen;
 
 	// Functions.
-	extern void setup();
+	extern void setupScreen();
 	extern void wakeUp();
 	extern void sleep();
 
@@ -35,11 +35,11 @@ namespace UI {
 	extern void drawBorderBottom();
 
 	extern void drawFilamentName(const char* text);
-	extern void drawFilamentHumidity(int hum);
+	extern void drawFilamentHumidity(uint8_t hum);
+	extern void drawFilamentTemp(uint8_t temp);
 
-	extern void drawFilamentTemp(int temp);
-	extern void drawRealtimeHumidity(int hum);
-	extern void drawRealtimeTemp(int temp);
+	extern void drawRealtimeHumidity(uint8_t hum);
+	extern void drawRealtimeTemp(uint8_t temp);
 
 	extern void drawAreaBorders();
 }

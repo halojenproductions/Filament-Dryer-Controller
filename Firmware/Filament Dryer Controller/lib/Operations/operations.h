@@ -3,7 +3,6 @@
 
 #include "filaments.h"
 #include "thermistor.h"
-#include "timer.h"
 #include <Arduino.h>
 #include <stdint.h>
 
@@ -58,6 +57,17 @@ class Ops {
 		_Last
 	};
 
+	enum class Timers : uint8_t {
+		InputPollingActive,
+		InputPollingIdle,
+		ScreenTimeout,
+		HeaterTimeout,
+		HeaterCooldown,
+		SelectionTimeout,
+		ButtonHold,
+		_Last
+	};
+
 	// Global time.
 	uint32_t currentTime;
 
@@ -65,26 +75,36 @@ class Ops {
 	static constexpr uint8_t tempDelta = 5;	   // Degrees Celsius.
 
 	// Timers.
-	static constexpr uint32_t INPUT_POLL_ACTIVE_TIME = 100UL;
-	Timer inputPollingActive{INPUT_POLL_ACTIVE_TIME};
+	uint32_t timers[static_cast<uint8_t>(Timers::_Last)];
+	uint32_t timerIntervals[static_cast<uint8_t>(Timers::_Last)];
 
-	static constexpr uint32_t INPUT_POLL_IDLE_TIME = 1000UL * 60;
-	Timer inputPollingIdle{INPUT_POLL_IDLE_TIME};
+	static constexpr uint32_t INPUT_POLL_ACTIVE_INTERVAL = 100UL;
+	// Timer inputPollingActive{INPUT_POLL_ACTIVE_INTERVAL};
+	// uint32_t timerInputPollingActive;
 
-	static constexpr uint32_t SCREEN_TIMEOUT = 1000UL * 30;
-	Timer screenTimeout{SCREEN_TIMEOUT};
+	static constexpr uint32_t INPUT_POLL_IDLE_INTERVAL = 1000UL * 60;
+	// Timer inputPollingIdle{INPUT_POLL_IDLE_INTERVAL};
+	// uint32_t timerInputPollingIdle;
 
-	static constexpr uint32_t HEATER_TIMEOUT = 1000UL * 60 * 2;
-	Timer heaterTimeout{HEATER_TIMEOUT};
+	static constexpr uint32_t SCREEN_TIMEOUT_INTERVAL = 1000UL * 30;
+	// Timer screenTimeout{SCREEN_TIMEOUT_INTERVAL};
+	// uint32_t timerScreenTimeout;
 
-	static constexpr uint32_t HEATER_COOLDOWN_TIME = 1000UL * 60 * 2;
-	Timer heaterCooldown{HEATER_COOLDOWN_TIME};
+	static constexpr uint32_t HEATER_TIMEOUT_INTERVAL = 1000UL * 60 * 2;
+	// Timer heaterTimeout{HEATER_TIMEOUT_INTERVAL};
+	// uint32_t timerHeaterTimeout;
 
-	static constexpr uint32_t SELECTION_TIMEOUT = 1000UL * 5;
-	Timer selectionTimeout{SELECTION_TIMEOUT};
+	static constexpr uint32_t HEATER_COOLDOWN_TIME_INTERVAL = 1000UL * 60 * 2;
+	// Timer heaterCooldown{HEATER_COOLDOWN_TIME_INTERVAL};
+	// uint32_t timerHeaterCooldown;
 
-	static constexpr uint32_t BUTTON_HOLD_TIMEOUT = 800UL;
-	Timer buttonHold{BUTTON_HOLD_TIMEOUT};
+	static constexpr uint32_t SELECTION_TIMEOUT_INTERVAL = 1000UL * 5;
+	// Timer selectionTimeout{SELECTION_TIMEOUT_INTERVAL};
+	// uint32_t timerSelectionTimeout;
+
+	static constexpr uint32_t BUTTON_HOLD_TIMEOUT_INTERVAL = 800UL;
+	// Timer buttonHold{BUTTON_HOLD_TIMEOUT_INTERVAL};
+	// uint32_t timerButtonHold;
 
 	// Status methods.
 	void setStatus(Status status);
@@ -104,6 +124,27 @@ class Ops {
 	bool getDirty(Dirty dirty) const;
 	bool checkDirty(Dirty dirty);
 	void clearAllDirties();
+
+	// Timer methods.
+	bool checkTimer(Timers timerEnum) {
+		if (currentTime >= timers[static_cast<uint8_t>(timerEnum)]
+							   + Ops::timerIntervals[static_cast<uint8_t>(timerEnum)]) {
+			timers[static_cast<uint8_t>(timerEnum)] = currentTime;
+			return true;
+		}
+		return false;
+	}
+
+	bool getTimer(Timers timerEnum) {
+		return (
+			currentTime >= timers[static_cast<uint8_t>(timerEnum)]
+							   + Ops::timerIntervals[static_cast<uint8_t>(timerEnum)]
+		);
+	}
+
+	void resetTimer(Timers timerEnum) {
+		timers[static_cast<uint8_t>(timerEnum)] = currentTime;
+	}
 
 	// Single template function that works with all enum types.
 	template <typename T>
@@ -162,7 +203,25 @@ class Ops {
 	private:
 
 	// Private constructor.
-	Ops() : statuses(0), commands(0), dirties(0) {}
+	Ops() : statuses(0), commands(0), dirties(0) {
+		timerIntervals[static_cast<uint8_t>(Timers::InputPollingActive)] =
+			INPUT_POLL_ACTIVE_INTERVAL;
+		timerIntervals[static_cast<uint8_t>(Timers::InputPollingIdle)] = INPUT_POLL_IDLE_INTERVAL;
+		timerIntervals[static_cast<uint8_t>(Timers::ScreenTimeout)]	   = SCREEN_TIMEOUT_INTERVAL;
+		timerIntervals[static_cast<uint8_t>(Timers::HeaterTimeout)]	   = HEATER_TIMEOUT_INTERVAL;
+		timerIntervals[static_cast<uint8_t>(Timers::HeaterCooldown)] =
+			HEATER_COOLDOWN_TIME_INTERVAL;
+		timerIntervals[static_cast<uint8_t>(Timers::SelectionTimeout)] = SELECTION_TIMEOUT_INTERVAL;
+		timerIntervals[static_cast<uint8_t>(Timers::ButtonHold)] = BUTTON_HOLD_TIMEOUT_INTERVAL;
+
+		timers[static_cast<uint8_t>(Timers::InputPollingActive)] = 0;
+		timers[static_cast<uint8_t>(Timers::InputPollingIdle)]	 = 0;
+		timers[static_cast<uint8_t>(Timers::ScreenTimeout)]		 = 0;
+		timers[static_cast<uint8_t>(Timers::HeaterTimeout)]		 = 0;
+		timers[static_cast<uint8_t>(Timers::HeaterCooldown)]	 = 0;
+		timers[static_cast<uint8_t>(Timers::SelectionTimeout)]	 = 0;
+		timers[static_cast<uint8_t>(Timers::ButtonHold)]		 = 0;
+	}
 
 	// Inputs.
 	uint8_t sensHumid = 0;
