@@ -1,0 +1,14 @@
+{
+	"C_Cpp.clang_format_path": "",
+	//"C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, TabWidth: 4, ColumnLimit: 100, AllowShortIfStatementsOnASingleLine: false, AllowShortBlocksOnASingleLine: false, AllowShortFunctionsOnASingleLine: Empty, AllowShortLambdasOnASingleLine: Empty, AllowShortLoopsOnASingleLine: Never, ContinuationIndentWidth: 4, ContinuationIndentWidth: 4, IndentWrappedFunctionNames: False, InsertBraces: True, InsertTrailingCommas: True, KeepEmptyLines: {AtEndOfFile: true,  AtStartOfBlock: true, AtStartOfFile: false}, LineEnding: CRLF, SeparateDefinitionBlocks: true, SortIncludes: true, AlignAfterOpenBracket: BlockIndent }",
+	"C_Cpp.vcFormat.newLine.beforeOpenBrace.block": "sameLine",
+	"C_Cpp.vcFormat.newLine.beforeOpenBrace.function": "sameLine",
+	"C_Cpp.formatting": "clangFormat",
+	//"C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, TabWidth: 4, ColumnLimit: 0, AllowShortIfStatementsOnASingleLine: false, AllowShortBlocksOnASingleLine: false }",
+	"C_Cpp.vcFormat.newLine.beforeCatch": false,
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
+	"C_Cpp.default.compilerPath": "${userHome}/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe"
+}

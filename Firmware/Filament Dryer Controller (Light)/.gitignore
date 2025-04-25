@@ -1,0 +1,4 @@
+.pio
+.vscode/*
+# Unignore only the settings.json file.
+!.vscode/settings.json

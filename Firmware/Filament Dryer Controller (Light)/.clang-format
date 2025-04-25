@@ -1,0 +1,56 @@
+Standard: Cpp11
+BasedOnStyle: LLVM
+UseTab: Always
+IndentWidth: 4
+TabWidth: 4
+ColumnLimit: 100
+BreakBeforeBraces: Attach
+BreakTemplateDeclarations: Yes
+BreakArrays: true
+BreakBeforeBinaryOperators: NonAssignment
+BreakBinaryOperations: RespectPrecedence
+AllowShortIfStatementsOnASingleLine: false
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: False
+AllowShortEnumsOnASingleLine: False
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: true
+BinPackArguments: false
+BinPackLongBracedList: false
+BinPackParameters: OnePerLine
+NamespaceIndentation: All
+ContinuationIndentWidth: 4
+BracedInitializerIndentWidth: 4
+IndentWrappedFunctionNames: False
+IndentAccessModifiers: false
+AccessModifierOffset: 0
+EmptyLineAfterAccessModifier: Always
+InsertBraces: true
+InsertTrailingCommas: None
+KeepEmptyLines: 
+    AtEndOfFile: true
+    AtStartOfBlock: true
+    AtStartOfFile: false
+LineEnding: CRLF
+InsertNewlineAtEOF: true
+SeparateDefinitionBlocks: Always
+SortIncludes: true
+AlignAfterOpenBracket: BlockIndent
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 1
+ReflowComments: Always
+FixNamespaceComments: false
+SpacesInLineCommentPrefix:
+  Minimum: 1
+  Maximum: 1
+SpacesBeforeTrailingComments: 4
+PointerAlignment: Left
+ReferenceAlignment: Left
+Cpp11BracedListStyle: true
