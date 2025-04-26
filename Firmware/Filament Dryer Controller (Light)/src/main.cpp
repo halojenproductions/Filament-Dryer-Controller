@@ -3,7 +3,7 @@
 // #include <u8g2lib.h>
 
 #include "button.h"
-#include "controlLoop.h"
+#include "control.h"
 #include "filaments.h"
 #include "htsensor.h"
 #include "pins.h"
@@ -33,9 +33,6 @@ void setup() {
 	Serial.println(F("Filaments::retrieve()"));
 	Filaments::retrieve();
 
-	// Set timer intervals.
-	Sys::setupTimers();
-
 	// Set up oled display.
 	// Serial.println("UI");
 	Serial.println(F("UI::setupScreen()"));
@@ -57,9 +54,9 @@ void setup() {
 	bitSet(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED);
 	bitSet(Sys::commands, Sys::COMMAND_WAKEUP);
 	bitSet(Sys::statuses, Sys::STATUS_OK);
-	digitalWrite(Pins::pLedOk, bitRead(Sys::statuses, Sys::STATUS_OK) ? HIGH : LOW);
+	digitalWrite(Pins::pLedOk, bitRead(Sys::statuses, Sys::STATUS_OK));
 	bitSet(Sys::statuses, Sys::STATUS_ACTIVE);
-	// ControlLoop::idle();
+	// Control::idle();
 
 	// Serial.println(F("Setup finished"));
 }
@@ -83,23 +80,22 @@ void loop() {
 
 	if (bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)) {
 		// Touch timers.
-		Util::resetTimer(Sys::TIMER_SCREEN_TIMEOUT);
-		Util::resetTimer(Sys::TIMER_SELECTION_TIMEOUT);
+		Util::resetTimer(Sys::screenTimeout);
+		Util::resetTimer(Sys::selectionTimeout);
 	}
 
 	// Button held.
 	if (bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)
-		&& Util::getTimer(Sys::TIMER_BUTTON_HOLD)
+		&& Util::getTimer(Sys::buttonHoldTimeout)
 		&& !bitRead(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED)) {
 		Button::buttonHeld();
 	}
 
 	// Read sensors.
 
-	if ((bitRead(Sys::statuses, Sys::STATUS_ACTIVE)
-		 && Util::checkTimer(Sys::TIMER_INPUT_POLLING_ACTIVE))
-		|| (!bitRead(Sys::statuses, Sys::STATUS_ACTIVE)
-			&& Util::checkTimer(Sys::TIMER_INPUT_POLLING_IDLE))) {
+	if ((bitRead(Sys::statuses, Sys::STATUS_ACTIVE) && Util::checkTimer(Sys::activeInputPolling))
+		|| (!bitRead(Sys::statuses, Sys::STATUS_ACTIVE) && Util::checkTimer(Sys::idleInputPolling)
+		)) {
 		// Serial.println(F("Read sensors"));
 
 		/// Check thermistor.
@@ -125,19 +121,16 @@ void loop() {
 	}
 
 	// Control loop.
-	/*
-	if (bitRead(Sys::statuses, Sys:: STATUS_ACTIVE)) {
-		Serial.println(F("active"));
-		ControlLoop::active();
+
+	if (bitRead(Sys::statuses, Sys::STATUS_ACTIVE)) {
+		Control::active();
 	} else {
-		Serial.println(F("idle"));
-		// ControlLoop::idle();
+		Control::idle();
 	}
-	*/
 
 	// Set statuses. or should that be commands?
 	if (bitRead(Sys::statuses, Sys::STATUS_ERROR)) {
-		Serial.println(F("Status::Error"));
+		// Serial.println(F("Status::Error"));
 
 		bitClear(Sys::statuses, Sys::STATUS_OK);
 		digitalWrite(Pins::pLedOk, bitRead(Sys::statuses, Sys::STATUS_OK) ? HIGH : LOW);
@@ -159,8 +152,7 @@ void loop() {
 		UI::updateScreen();
 
 		// Selection timeout.
-		if (bitRead(Sys::statuses, Sys::STATUS_SELECT)
-			&& Util::checkTimer(Sys::TIMER_SELECTION_TIMEOUT)) {
+		if (bitRead(Sys::statuses, Sys::STATUS_SELECT) && Util::checkTimer(Sys::selectionTimeout)) {
 			Serial.println(F("Selection timeout"));
 			bitClear(Sys::statuses, Sys::STATUS_SELECT);
 			Filaments::cancel();
@@ -169,7 +161,7 @@ void loop() {
 
 		// Screen timeout.
 		if (!bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)
-			&& Util::checkTimer(Sys::TIMER_SCREEN_TIMEOUT)) {
+			&& Util::checkTimer(Sys::screenTimeout)) {
 			Serial.println(F("Screen timeout."));
 			UI::sleep();
 		}

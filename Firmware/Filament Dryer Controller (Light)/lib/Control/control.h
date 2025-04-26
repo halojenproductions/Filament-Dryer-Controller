@@ -1,13 +1,19 @@
 #ifndef CONTROLLOOP_H
 #define CONTROLLOOP_H
 
-#include "system.h"
-#include "pins.h"
-#include <Arduino.h>
-#include "utilities.h"
 #include "filaments.h"
+#include "pins.h"
+#include "system.h"
+#include "timer.h"
+#include "utilities.h"
+#include <Arduino.h>
 
-namespace ControlLoop {
+namespace Control {
+	extern Timer activeTimeout;
+	extern Timer activeCooldown;
+	extern Timer heatingTimeout;
+	extern Timer heatDutyTimeout;
+	extern Timer heatingCooldown;
 
 	extern void active();
 	extern void idle();
@@ -16,8 +22,8 @@ namespace ControlLoop {
 	extern void heaterDuty();
 	extern void heaterOn();
 	extern void heaterOff();
-	extern void fanOnLow();
-	extern void fanOnHigh();
+	extern void fanLow();
+	extern void fanHigh();
 	extern void fanOff();
 }
 

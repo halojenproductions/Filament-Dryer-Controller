@@ -16,20 +16,16 @@ namespace Util {
 	}
 
 	// Timer methods.
-	bool checkTimer(uint8_t index) {
-		if (getTimer(index)) {
-			resetTimer(index);
-			return true;
-		}
-		return false;
+	bool checkTimer(Timer& timer) {
+		return timer.check(currentTime);
 	}
 
-	bool getTimer(uint8_t index) {
-		return (currentTime >= timers[index] + timerIntervals[index]);
+	bool getTimer(Timer& timer) {
+		return timer.get(currentTime);
 	}
 
-	void resetTimer(uint8_t index) {
-		timers[index] = currentTime;
+	void resetTimer(Timer& timer) {
+		timer.reset(currentTime);
 	}
 
 	// Inputs.

@@ -36,7 +36,7 @@ namespace Button {
 			// Set button down status.
 			bitSet(Sys::statuses, Sys::STATUS_BUTTON_DOWN);
 			// Start hold timer.
-			Util::resetTimer(Sys::TIMER_BUTTON_HOLD);
+			Util::resetTimer(Sys::buttonHoldTimeout);
 			bitClear(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED);
 			// If screen is asleep, instruct it to wake up.
 			if (!bitRead(Sys::statuses, Sys::STATUS_AWAKE)) {
@@ -49,7 +49,7 @@ namespace Button {
 
 			if (timeUp - timeDown >= debounceDelay) {
 				// Determine whether it was clicked or held.
-				if (!Util::getTimer(Sys::TIMER_BUTTON_HOLD)) {
+				if (!Util::getTimer(Sys::buttonHoldTimeout)) {
 					// Button was clicked.
 					buttonClicked();
 				}
@@ -66,8 +66,10 @@ namespace Button {
 		if (bitRead(Sys::statuses, Sys::STATUS_SELECT)) {
 			Filaments::next();
 			bitSet(Sys::dirties, Sys::DIRTY_FILAMENT);
-			Util::resetTimer(Sys::TIMER_SELECTION_TIMEOUT);
+			Util::resetTimer(Sys::selectionTimeout);
 		} else {
+			Util::resetTimer(Sys::idleInputPolling);
+
 			bitSet(Sys::statuses, Sys::STATUS_ACTIVE);
 			bitSet(Sys::dirties, Sys::DIRTY_ALL);
 		}
@@ -82,6 +84,7 @@ namespace Button {
 			Filaments::apply();
 			bitClear(Sys::statuses, Sys::STATUS_SELECT);
 		} else {
+			Util::resetTimer(Sys::selectionTimeout);
 			bitSet(Sys::statuses, Sys::STATUS_SELECT);
 		}
 

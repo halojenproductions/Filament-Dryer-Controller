@@ -1,39 +1,27 @@
 #include "system.h"
 
 namespace Sys {
-	byte statuses			   = 0;
-	byte commands			   = 0;
-	byte dirties			   = 0;
-	uint32_t timers[8]		   = {0};
-	uint32_t timerIntervals[8] = {0};
+	byte statuses = 0;
+	byte commands = 0;
+	byte dirties  = 0;
 
 	// Global time.
 	uint32_t currentTime		= millis();
 	// Exhaust temperature delta.
 	constexpr uint8_t tempDelta = 5;	// Degrees Celsius.
 
+	// Fan speeds.
+	constexpr uint8_t FAN_SPEED_LOW	 = 10 * (255 / 100);	// 10% duty cycle.
+	constexpr uint8_t FAN_SPEED_HIGH = 50 * (255 / 100);	// 100% duty cycle.
+
 	uint8_t sensHumid = 0;
 	uint8_t sensTemp  = 99;
 	uint8_t thermTemp = 99;
 
-	void setupTimers() {
-		timerIntervals[TIMER_INPUT_POLLING_ACTIVE] = 100UL;
-		timerIntervals[TIMER_INPUT_POLLING_IDLE]   = 1000UL * 60;
-		timerIntervals[TIMER_SCREEN_TIMEOUT]	   = 1000UL * 30;
-		timerIntervals[TIMER_ACTIVE_TIMEOUT]	   = 1000UL * 60 * 2;
-		timerIntervals[TIMER_HEATER_TIMEOUT]	   = 1000UL * 5;
-		timerIntervals[TIMER_HEATER_COOLDOWN]	   = 1000UL * 60 * 2;
-		timerIntervals[TIMER_SELECTION_TIMEOUT]	   = 1000UL * 5;
-		timerIntervals[TIMER_BUTTON_HOLD]		   = 800UL;
-
-		timers[TIMER_INPUT_POLLING_ACTIVE] = millis();
-		timers[TIMER_INPUT_POLLING_IDLE]   = millis();
-		timers[TIMER_SCREEN_TIMEOUT]	   = millis();
-		timers[TIMER_ACTIVE_TIMEOUT]	   = millis();
-		timers[TIMER_HEATER_TIMEOUT]	   = millis();
-		timers[TIMER_HEATER_COOLDOWN]	   = millis();
-		timers[TIMER_SELECTION_TIMEOUT]	   = millis();
-		timers[TIMER_BUTTON_HOLD]		   = millis();
-	}
+	Timer activeInputPolling(INPUT_POLL_ACTIVE_INTERVAL);
+	Timer idleInputPolling(INPUT_POLL_IDLE_INTERVAL);
+	Timer screenTimeout(SCREEN_TIMEOUT_INTERVAL);
+	Timer selectionTimeout(SELECTION_TIMEOUT_INTERVAL);
+	Timer buttonHoldTimeout(BUTTON_HOLD_TIMEOUT_INTERVAL);
 
 }

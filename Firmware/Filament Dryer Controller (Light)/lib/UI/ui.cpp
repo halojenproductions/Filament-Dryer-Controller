@@ -16,7 +16,7 @@ namespace UI {
 		Serial.println(F("UI::wakeUp()"));
 		screen.setPowerSave(0);
 		bitSet(Sys::statuses, Sys::STATUS_AWAKE);
-		Util::resetTimer(Sys::TIMER_SCREEN_TIMEOUT);
+		Util::resetTimer(Sys::screenTimeout);
 		bitSet(Sys::dirties, Sys::DIRTY_ALL);
 	}
 

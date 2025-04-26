@@ -8,9 +8,9 @@ namespace Util {
 	void bitClearAll(uint8_t& value);
 
 	// Timer methods.
-	bool checkTimer(uint8_t index);
-	bool getTimer(uint8_t index);
-	void resetTimer(uint8_t index);
+	bool checkTimer(Timer& timer);
+	bool getTimer(Timer& timer);
+	void resetTimer(Timer& timer);
 
 	// Inputs.
 	/**

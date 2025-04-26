@@ -6,12 +6,12 @@
 
 // Pin definitions for Filament Dryer Controller
 namespace Pins {
-	constexpr uint8_t pButt	   = 2;		 // PD2
-	constexpr uint8_t pTemp	   = A0;	 // PC0
+	constexpr uint8_t pButt	   = 2;		 // PD2 Internal pullup.
+	constexpr uint8_t pTemp	   = A0;	 // PC0 External pulldown.
 	constexpr uint8_t pLedOk   = 12;	 // PB4
-	constexpr uint8_t pLedHeat = 13;	 // PB5
-	constexpr uint8_t pHeater  = 9;		 // PB1
-	constexpr uint8_t pFan	   = 5;		 // PD5 TODO: Move away from OS0.
+	constexpr uint8_t pLedHeat = 13;	 // PB5 Active high.
+	constexpr uint8_t pHeater  = 9;		 // PB1 Active low.
+	constexpr uint8_t pFan	   = 5;		 // PD5 PWM TODO: Move away from OS0.
 	constexpr uint8_t pSda	   = SDA;	 // PC4
 	constexpr uint8_t pScl	   = SCL;	 // PC5
 
@@ -22,6 +22,10 @@ namespace Pins {
 		pinMode(pLedHeat, OUTPUT);
 		pinMode(pHeater, OUTPUT);
 		pinMode(pFan, OUTPUT);
+
+		digitalWrite(Pins::pLedHeat, LOW);
+		digitalWrite(Pins::pHeater, HIGH);
+		analogWrite(Pins::pFan, 0);
 	}
 }
 
