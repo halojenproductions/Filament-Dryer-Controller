@@ -1,50 +1,43 @@
 #include "test_system.h"
 #include <Arduino.h>
 #include <unity.h>
-/*
 using namespace test_Operations_Helpers;
 
 namespace suite_Commands {
-	Ops& ops = Ops::getInstance();
-
-	void test_Command_New();
-	void test_Command_Each();
+	void test_Commands_Unique();
+	void test_Command_Indexes();
 
 	void suite_Commands() {
-		RUN_TEST(test_Command_New);
-		RUN_TEST(test_Command_Each);
+		RUN_TEST(test_Commands_Unique);
+		RUN_TEST(test_Command_Indexes);
 	}
 
 	// Tests.
-	void test_Command_New(void) {
-		TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::commands(ops));
+	void test_Commands_Unique() {
+		// Create array of all command values
+		const uint8_t commandBitPositions[] = {
+			Sys::COMMAND_WAKEUP,
+			Sys::COMMAND_HEATER_ON,
+			Sys::COMMAND_HEATER_OFF,
+			Sys::COMMAND_FAN_ON,
+			Sys::COMMAND_FAN_OFF,
+			Sys::COMMAND_BUTTON_CLICKED,
+			Sys::COMMAND_BUTTON_HELD,
+			Sys::COMMAND_BUTTON_HOLD_HANDLED
+		};
+		const uint8_t numCommands = sizeof(commandBitPositions) / sizeof(commandBitPositions[0]);
+
+		assertArrayValuesUnique(commandBitPositions, numCommands, "Command bits not unique");
 	}
 
-	void test_Command_Each(void) {
-		for (uint8_t i = 0; i < lastValue(Ops::Command{}); i++) {
-			TEST_ASSERT_TRUE_MESSAGE(i < 8, "Too many enum values defined.");
-
-			Ops::Command command = fromInt<Ops::Command>(i);
-			uint8_t expected	 = (1 << i);
-
-			// Set.
-			ops.setCommand(command);
-			TEST_ASSERT_BITS(mask, expected, OpsTestAccess::commands(ops));
-			// Get.
-			TEST_ASSERT_TRUE(ops.getCommand(command));
-			// Clear.
-			ops.clearCommand(command);
-			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::commands(ops));
-
-			// Check.
-			ops.setCommand(command);
-			TEST_ASSERT_TRUE(ops.checkCommand(command));
-			TEST_ASSERT_FALSE(ops.checkCommand(command));
-			TEST_ASSERT_BITS_LOW(mask, OpsTestAccess::commands(ops));
-
-			// Reset for next iteration
-			OpsTestAccess::commands(ops, 0);
-		}
+	void test_Command_Indexes(void) {
+		TEST_ASSERT_EQUAL(0, Sys::COMMAND_WAKEUP);
+		TEST_ASSERT_EQUAL(1, Sys::COMMAND_HEATER_ON);
+		TEST_ASSERT_EQUAL(2, Sys::COMMAND_HEATER_OFF);
+		TEST_ASSERT_EQUAL(3, Sys::COMMAND_FAN_ON);
+		TEST_ASSERT_EQUAL(4, Sys::COMMAND_FAN_OFF);
+		TEST_ASSERT_EQUAL(5, Sys::COMMAND_BUTTON_CLICKED);
+		TEST_ASSERT_EQUAL(6, Sys::COMMAND_BUTTON_HELD);
+		TEST_ASSERT_EQUAL(7, Sys::COMMAND_BUTTON_HOLD_HANDLED);
 	}
 }
-*/

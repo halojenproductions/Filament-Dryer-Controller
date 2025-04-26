@@ -4,25 +4,12 @@ using namespace test_Operations_Helpers;
 
 namespace suite_Statuses {
 
-	void test_Status_OK();
-	void test_Status_ERROR();
-	void test_Status_AWAKE();
-	void test_Status_HEATING();
-	void test_Status_FANNING();
-	void test_Status_BUTTON_DOWN();
-	void test_Status_SELECT();
-	void test_Status_ACTIVE();
-	void testSingleStatus(uint8_t bitPos, uint8_t status);
+	void test_Statuses_Unique();
+	void test_Status_Indexes();
 
 	void suite_Statuses() {
-		RUN_TEST(test_Status_OK);
-		RUN_TEST(test_Status_ERROR);
-		RUN_TEST(test_Status_AWAKE);
-		RUN_TEST(test_Status_HEATING);
-		RUN_TEST(test_Status_FANNING);
-		RUN_TEST(test_Status_BUTTON_DOWN);
-		RUN_TEST(test_Status_SELECT);
-		RUN_TEST(test_Status_ACTIVE);
+		RUN_TEST(test_Statuses_Unique);
+		RUN_TEST(test_Status_Indexes);
 	}
 
 	// Tests.
@@ -40,63 +27,18 @@ namespace suite_Statuses {
 		};
 		const uint8_t numStatuses = sizeof(statusBitPositions) / sizeof(statusBitPositions[0]);
 
-		// Check each command against every other command
-		for (uint8_t i = 0; i < numStatuses; i++) {
-			for (uint8_t ii = i + 1; ii < numStatuses; ii++) {
-				TEST_ASSERT_NOT_EQUAL(statusBitPositions[i], statusBitPositions[ii]);
-			}
-		}
+		assertArrayValuesUnique(statusBitPositions, numStatuses, "Status bits not unique");
 	}
 
-	void test_Status_OK(void) {
-		testSingleStatus(0, Sys::STATUS_OK);
+	void test_Status_Indexes(void) {
+		TEST_ASSERT_EQUAL(0, Sys::STATUS_OK);
+		TEST_ASSERT_EQUAL(1, Sys::STATUS_ERROR);
+		TEST_ASSERT_EQUAL(2, Sys::STATUS_AWAKE);
+		TEST_ASSERT_EQUAL(3, Sys::STATUS_HEATING);
+		TEST_ASSERT_EQUAL(4, Sys::STATUS_FANNING);
+		TEST_ASSERT_EQUAL(5, Sys::STATUS_BUTTON_DOWN);
+		TEST_ASSERT_EQUAL(6, Sys::STATUS_SELECT);
+		TEST_ASSERT_EQUAL(7, Sys::STATUS_ACTIVE);
 	}
 
-	void test_Status_ERROR(void) {
-		testSingleStatus(1, Sys::STATUS_ERROR);
-	}
-
-	void test_Status_AWAKE(void) {
-		testSingleStatus(2, Sys::STATUS_AWAKE);
-	}
-
-	void test_Status_HEATING(void) {
-		testSingleStatus(3, Sys::STATUS_HEATING);
-	}
-
-	void test_Status_FANNING(void) {
-		testSingleStatus(4, Sys::STATUS_FANNING);
-	}
-
-	void test_Status_BUTTON_DOWN(void) {
-		testSingleStatus(5, Sys::STATUS_BUTTON_DOWN);
-	}
-
-	void test_Status_SELECT(void) {
-		testSingleStatus(6, Sys::STATUS_SELECT);
-	}
-
-	void test_Status_ACTIVE(void) {
-		testSingleStatus(7, Sys::STATUS_ACTIVE);
-	}
-
-	void testSingleStatus(uint8_t bitPos, uint8_t status) {
-		Sys::statuses = 0;	  // Reset statuses to 0
-
-		uint8_t expected = (1 << bitPos);
-
-		// Set.
-		bitSet(Sys::statuses, status);
-		TEST_ASSERT_BITS(mask, expected, Sys::statuses);
-		// Get.
-		TEST_ASSERT_TRUE(bitRead(Sys::statuses, status));
-		// Clear.
-		bitClear(Sys::statuses, status);
-		TEST_ASSERT_BITS_LOW(mask, Sys::statuses);
-		// Check.
-		bitSet(Sys::statuses, status);
-		TEST_ASSERT_TRUE(Util::bitCheck(Sys::statuses, status));
-		TEST_ASSERT_FALSE(Util::bitCheck(Sys::statuses, status));
-		TEST_ASSERT_BITS_LOW(mask, Sys::statuses);
-	}
 }

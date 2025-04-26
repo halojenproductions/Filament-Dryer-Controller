@@ -10,7 +10,7 @@ namespace Util {
 	// Timer methods.
 	bool checkTimer(uint8_t index);
 	bool getTimer(uint8_t index);
-	void resetTimer(uint8_t& index);
+	void resetTimer(uint8_t index);
 
 	// Inputs.
 	/**
