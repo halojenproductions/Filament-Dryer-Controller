@@ -65,11 +65,10 @@ void setup() {
 }
 
 void loop() {
-	Serial.println(F(""));
-	Serial.println(F("> Main loop start"));
+	// Serial.println(F(""));
+	// Serial.println(F("> Main loop start"));
 
 	Sys::currentTime = millis();
-	Serial.println(F("currentTime set"));
 
 	// Wrangle interruption.
 	if (Button::interrupted()) {
@@ -94,9 +93,6 @@ void loop() {
 	if (bitRead(Sys::commands, Sys::COMMAND_BUTTON_CLICKED)) {
 		Serial.println(F("buttonClicked"));
 		Button::buttonClicked();
-	} else {
-		// TODO remove this delay.
-		Serial.println(F("Button not clicked"));
 	}
 
 	// Read sensors.
@@ -105,7 +101,7 @@ void loop() {
 		 && Util::checkTimer(Sys::TIMER_INPUT_POLLING_ACTIVE))
 		|| (!bitRead(Sys::statuses, Sys::STATUS_ACTIVE)
 			&& Util::checkTimer(Sys::TIMER_INPUT_POLLING_IDLE))) {
-		Serial.println(F("Read sensors"));
+		// Serial.println(F("Read sensors"));
 
 		/// Check thermistor.
 		// TODO Remove mocky shit.
@@ -158,11 +154,9 @@ void loop() {
 		UI::drawAreaBorders();			  // Draw the area borders
 		ops.setDirty(Ops::Dirty::All);	  // Mark all areas as dirty
 #endif
-		Serial.println(F("drawAll"));
-		UI::drawAll();
+		UI::drawUI();
 
 		// Send the display buffer (or just bits of it).
-		Serial.println(F("updateScreen"));
 		UI::updateScreen();
 
 		// Selection timeout.
@@ -181,5 +175,5 @@ void loop() {
 			UI::sleep();
 		}
 	}
-	delay(10000);
+	// delay(10000);
 }

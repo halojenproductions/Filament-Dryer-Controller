@@ -28,7 +28,7 @@ namespace UI {
 
 	extern void updateScreen();
 
-	extern void drawAll();
+	extern void drawUI();
 
 	extern void drawBorderTop();
 	extern void drawBorderBottom();

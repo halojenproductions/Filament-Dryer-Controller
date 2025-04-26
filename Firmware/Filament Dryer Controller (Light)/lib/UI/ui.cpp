@@ -75,8 +75,8 @@ namespace UI {
 	static const uint8_t* filamentFont = u8g2_font_luBS08_tf;
 	static const uint8_t* realtimeFont = u8g2_font_luRS19_tf;
 
-	void drawAll() {
-		Serial.println(F("UI::drawAll()"));
+	void drawUI() {
+		Serial.println(F("UI::drawUI()"));
 		screen.setFontMode(1);
 
 		if (Util::bitCheck(Sys::statuses, Sys::STATUS_SELECT)) {

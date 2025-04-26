@@ -25,13 +25,13 @@ namespace Sys {
 		timerIntervals[TIMER_SELECTION_TIMEOUT]	   = 1000UL * 5;
 		timerIntervals[TIMER_BUTTON_HOLD]		   = 800UL;
 
-		timers[TIMER_INPUT_POLLING_ACTIVE] =  millis();
-		timers[TIMER_INPUT_POLLING_IDLE]   =  millis();
-		timers[TIMER_SCREEN_TIMEOUT]	   =  millis();
-		timers[TIMER_HEATER_TIMEOUT]	   =  millis();
-		timers[TIMER_HEATER_COOLDOWN]	   =  millis();
-		timers[TIMER_SELECTION_TIMEOUT]	   =  millis();
-		timers[TIMER_BUTTON_HOLD]		   =  millis();
+		timers[TIMER_INPUT_POLLING_ACTIVE] = millis();
+		timers[TIMER_INPUT_POLLING_IDLE]   = millis();
+		timers[TIMER_SCREEN_TIMEOUT]	   = millis();
+		timers[TIMER_HEATER_TIMEOUT]	   = millis();
+		timers[TIMER_HEATER_COOLDOWN]	   = millis();
+		timers[TIMER_SELECTION_TIMEOUT]	   = millis();
+		timers[TIMER_BUTTON_HOLD]		   = millis();
 	}
 
 }
