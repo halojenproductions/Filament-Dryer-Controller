@@ -14,8 +14,10 @@ namespace suite_Timers {
 	void test_Timers_Setup(void) {
 		Sys::setupTimers();
 
+		testTimerSetup(Sys::TIMER_INPUT_POLLING_ACTIVE);
 		testTimerSetup(Sys::TIMER_INPUT_POLLING_IDLE);
 		testTimerSetup(Sys::TIMER_SCREEN_TIMEOUT);
+		testTimerSetup(Sys::TIMER_ACTIVE_TIMEOUT);
 		testTimerSetup(Sys::TIMER_HEATER_TIMEOUT);
 		testTimerSetup(Sys::TIMER_HEATER_COOLDOWN);
 		testTimerSetup(Sys::TIMER_SELECTION_TIMEOUT);

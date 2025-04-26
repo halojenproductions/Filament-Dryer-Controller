@@ -14,15 +14,16 @@ namespace UI {
 		byte w;
 		byte h;
 
-		void updateArea(U8G2_SH1106_128X64_NONAME_F_HW_I2C& screen) const {
+		void updateArea(U8G2_SH1106_128X64_NONAME_2_HW_I2C& screen) const {
 			screen.updateDisplayArea(x, y, w, h);
 		}
 	};
 
-	extern U8G2_SH1106_128X64_NONAME_F_HW_I2C screen;
+	extern U8G2_SH1106_128X64_NONAME_2_HW_I2C screen;
 
 	// Functions.
 	extern void setupScreen();
+	extern void updateScreen_FullFrameBuffer();
 	extern void wakeUp();
 	extern void sleep();
 

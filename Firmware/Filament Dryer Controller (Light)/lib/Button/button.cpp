@@ -1,10 +1,12 @@
 #include "button.h"
 
 namespace Button {
+#define BUTT_TRIG 0	   // Button interrupt triggered bit.
+#define BUTT_DIR 1	   // Button direction bit (pressed or released). 1 = down.
 
-	volatile byte interruption			= 0;
-	volatile uint32_t interruptTime		= 0;
-	static constexpr byte debounceDelay = 20;
+	volatile byte interruption = 0;
+	volatile uint32_t timeDown = 0;
+	volatile uint32_t timeUp   = 0;
 
 	bool interrupted() {
 		return interruption & 1;
@@ -12,64 +14,59 @@ namespace Button {
 
 	void interruptHandler() {
 		interruption |= 1;
-		interruptTime = millis();
 
 		if (digitalRead(Pins::pButt) == LOW) {
+			if (millis() >= timeDown + debounceDelay) {
+				timeDown = millis();
+			}
 			interruption |= (1 << 1);	  // Button down.
 		} else {
 			interruption &= ~(1 << 1);	  // Button up.
+			timeUp = millis();
 		}
 	}
 
 	void interruptAnalyser() {
-		if (millis() >= interruptTime + debounceDelay) {
-			// Clear the interrupt flag.
-			interruption &= ~1;
+		Serial.println(F("Button::interruptAnalyser()"));
+		// Clear the interruption.
+		bitClear(interruption, BUTT_TRIG);
 
-			if (bitRead(Sys::statuses, Sys::STATUS_AWAKE)) {
-				// If the screen is awake, touch its timer.
-				// ops.screenTimeout.reset();
-				Util::resetTimer(Sys::TIMER_SCREEN_TIMEOUT);
-			} else {
-				// Otherwise wake it up.
+		if (bitRead(interruption, BUTT_DIR) && !bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)) {
+			/// Button is down for the first time.
+			// Set button down status.
+			bitSet(Sys::statuses, Sys::STATUS_BUTTON_DOWN);
+			// Start hold timer.
+			Util::resetTimer(Sys::TIMER_BUTTON_HOLD);
+			bitClear(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED);
+			// If screen is asleep, instruct it to wake up.
+			if (!bitRead(Sys::statuses, Sys::STATUS_AWAKE)) {
 				bitSet(Sys::commands, Sys::COMMAND_WAKEUP);
 			}
+		} else if (!bitRead(interruption, BUTT_DIR)) {
+			/// Button is released and not bouncing.
+			// Set button up status.
+			bitClear(Sys::statuses, Sys::STATUS_BUTTON_DOWN);
 
-			// Process the button change.
-			if (interruption & (1 << 1)) {
-				// Button went down.
-				// ops.buttonHold.reset();
-				Util::resetTimer(Sys::TIMER_BUTTON_HOLD);
-				bitSet(Sys::statuses, Sys::STATUS_BUTTON_DOWN);
-				// Allow hold only if the screen was awake.
-				if (bitRead(Sys::statuses, Sys::STATUS_AWAKE)) {
-					bitSet(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED);
+			if (timeUp - timeDown >= debounceDelay) {
+				// Determine whether it was clicked or held.
+				if (!Util::getTimer(Sys::TIMER_BUTTON_HOLD)) {
+					// Button was clicked.
+					buttonClicked();
 				}
 			} else {
-				// Button was released.
-				bitClear(Sys::statuses, Sys::STATUS_BUTTON_DOWN);
-
-				// If we haven't surpassed the hold timer it must be a click.
-				// if (!ops.buttonHold.get(ops.currentTime)) {
-				if (!Util::getTimer(Sys::TIMER_BUTTON_HOLD)) {
-					// Do click command only if the screen was awake.
-					if (bitRead(Sys::statuses, Sys::STATUS_AWAKE)) {
-						Serial.println(F("Interrupt analyser setting button clicked."));
-						bitSet(Sys::commands, Sys::COMMAND_BUTTON_CLICKED);
-					}
-					// If it was asleep, we've already told it to wake up so we are done here.
-				}
+				Serial.print(F("Skipped short click: "));
+				Serial.println(timeUp - timeDown);
 			}
 		}
 	}
 
 	void buttonClicked() {
+		Serial.println(F("Button::buttonClicked()"));
 		// Check if we are in selection mode.
 		if (bitRead(Sys::statuses, Sys::STATUS_SELECT)) {
-			// ops.selectionTimeout.reset();
-			Util::resetTimer(Sys::TIMER_SELECTION_TIMEOUT);
 			Filaments::next();
 			bitSet(Sys::dirties, Sys::DIRTY_FILAMENT);
+			Util::resetTimer(Sys::TIMER_SELECTION_TIMEOUT);
 		} else {
 			bitSet(Sys::statuses, Sys::STATUS_ACTIVE);
 			bitSet(Sys::dirties, Sys::DIRTY_ALL);
@@ -77,9 +74,8 @@ namespace Button {
 	}
 
 	void buttonHeld() {
+		Serial.println(F("Button::buttonHeld()"));
 		bitSet(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED);
-		// ops.screenTimeout.reset();
-		Util::resetTimer(Sys::TIMER_SCREEN_TIMEOUT);
 
 		// Check if we are in selection mode.
 		if (bitRead(Sys::statuses, Sys::STATUS_SELECT)) {
@@ -87,8 +83,6 @@ namespace Button {
 			bitClear(Sys::statuses, Sys::STATUS_SELECT);
 		} else {
 			bitSet(Sys::statuses, Sys::STATUS_SELECT);
-			// ops.selectionTimeout.reset();
-			Util::resetTimer(Sys::TIMER_SELECTION_TIMEOUT);
 		}
 
 		bitSet(Sys::dirties, Sys::DIRTY_FILAMENT);

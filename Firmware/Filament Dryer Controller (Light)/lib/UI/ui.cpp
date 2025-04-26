@@ -2,7 +2,7 @@
 
 namespace UI {
 
-	U8G2_SH1106_128X64_NONAME_F_HW_I2C screen(U8G2_R0);
+	U8G2_SH1106_128X64_NONAME_2_HW_I2C screen(U8G2_R0);
 
 	void setupScreen() {
 		screen.setI2CAddress(0x78);	   // Set the I2C address of the display
@@ -40,7 +40,15 @@ namespace UI {
 	static constexpr Area areaTemp	   = {tilesWidth / 2, 2, tilesWidth / 2, 4};
 
 	void updateScreen() {
-		Serial.println(F("UI::updateScreen()"));
+		// Serial.println(F("UI::updateScreen()"));
+		screen.firstPage();
+		do {
+			drawUI();
+		} while (screen.nextPage());
+	}
+
+	void updateScreen_FullFrameBuffer() {
+		// Serial.println(F("UI::updateScreen()"));
 		if (Util::bitCheck(Sys::dirties, Sys::DIRTY_ALL)) {
 			// If everything is dirty, update the whole screen.
 			screen.sendBuffer();
@@ -52,7 +60,7 @@ namespace UI {
 				areaBottom.updateArea(screen);
 			}
 			// Don't update the realtime bits while in selection mode.
-			if (!Util::bitCheck(Sys::statuses, Sys::STATUS_SELECT)) {
+			if (!bitRead(Sys::statuses, Sys::STATUS_SELECT)) {
 				if (Util::bitCheck(Sys::dirties, Sys::DIRTY_TEMP)) {
 					areaTemp.updateArea(screen);
 				}
@@ -76,10 +84,10 @@ namespace UI {
 	static const uint8_t* realtimeFont = u8g2_font_luRS19_tf;
 
 	void drawUI() {
-		Serial.println(F("UI::drawUI()"));
+		// Serial.println(F("UI::drawUI()"));
 		screen.setFontMode(1);
 
-		if (Util::bitCheck(Sys::statuses, Sys::STATUS_SELECT)) {
+		if (bitRead(Sys::statuses, Sys::STATUS_SELECT)) {
 			drawBorderTop();
 			drawBorderBottom();
 		}

@@ -72,27 +72,26 @@ void loop() {
 
 	// Wrangle interruption.
 	if (Button::interrupted()) {
-		Serial.println(F("interruptAnalyser"));
 		// Button changed state. Go and deal with that.
 		Button::interruptAnalyser();
 	}
+
 	// Wake up.
 	if (Util::bitCheck(Sys::commands, Sys::COMMAND_WAKEUP)) {
 		UI::wakeUp();
+	}
+
+	if (bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)) {
+		// Touch timers.
+		Util::resetTimer(Sys::TIMER_SCREEN_TIMEOUT);
+		Util::resetTimer(Sys::TIMER_SELECTION_TIMEOUT);
 	}
 
 	// Button held.
 	if (bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)
 		&& Util::getTimer(Sys::TIMER_BUTTON_HOLD)
 		&& !bitRead(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED)) {
-		Serial.println(F("buttonHeld"));
 		Button::buttonHeld();
-	}
-
-	// Button clicked.
-	if (bitRead(Sys::commands, Sys::COMMAND_BUTTON_CLICKED)) {
-		Serial.println(F("buttonClicked"));
-		Button::buttonClicked();
 	}
 
 	// Read sensors.
@@ -149,14 +148,14 @@ void loop() {
 
 	// Update display.
 	if (bitRead(Sys::statuses, Sys::STATUS_AWAKE)) {
+		/* Only for full frame buffer.
 		// Load the display buffer.
-#if DEBUG_MODE
-		UI::drawAreaBorders();			  // Draw the area borders
-		ops.setDirty(Ops::Dirty::All);	  // Mark all areas as dirty
-#endif
 		UI::drawUI();
 
 		// Send the display buffer (or just bits of it).
+		UI::updateScreen_FullFrameBuffer();
+		*/
+
 		UI::updateScreen();
 
 		// Selection timeout.

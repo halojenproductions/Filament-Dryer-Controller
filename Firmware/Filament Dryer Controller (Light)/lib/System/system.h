@@ -40,12 +40,13 @@ namespace Sys {
 	constexpr uint8_t TIMER_INPUT_POLLING_ACTIVE = 0;
 	constexpr uint8_t TIMER_INPUT_POLLING_IDLE	 = 1;
 	constexpr uint8_t TIMER_SCREEN_TIMEOUT		 = 2;
-	constexpr uint8_t TIMER_HEATER_TIMEOUT		 = 3;
-	constexpr uint8_t TIMER_HEATER_COOLDOWN		 = 4;
-	constexpr uint8_t TIMER_SELECTION_TIMEOUT	 = 5;
-	constexpr uint8_t TIMER_BUTTON_HOLD			 = 6;
-	extern uint32_t timers[7];
-	extern uint32_t timerIntervals[7];
+	constexpr uint8_t TIMER_ACTIVE_TIMEOUT		 = 3;
+	constexpr uint8_t TIMER_HEATER_TIMEOUT		 = 4;
+	constexpr uint8_t TIMER_HEATER_COOLDOWN		 = 5;
+	constexpr uint8_t TIMER_SELECTION_TIMEOUT	 = 6;
+	constexpr uint8_t TIMER_BUTTON_HOLD			 = 7;
+	extern uint32_t timers[8];
+	extern uint32_t timerIntervals[8];
 
 	// Global time.
 	extern uint32_t currentTime;
