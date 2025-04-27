@@ -40,5 +40,10 @@ namespace suite_util_commands {
 		// Clear.
 		clearCommand(command);
 		TEST_ASSERT_BITS_LOW(mask, commands);
+		// Check.
+		setCommand(command);
+		TEST_ASSERT_TRUE(checkCommand(command));
+		TEST_ASSERT_FALSE(checkCommand(command));
+		TEST_ASSERT_BITS_LOW(mask, commands);
 	}
 }

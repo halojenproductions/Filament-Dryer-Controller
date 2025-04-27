@@ -13,7 +13,7 @@ namespace suite_util_statuses {
 }
 
 namespace suite_util_commands {
-	void suite_Statuses();
+	void suite_commands();
 }
 
 namespace suite_util_timers {

@@ -35,6 +35,7 @@ namespace Control {
 					// Stop heating for a while but leave the fan on.
 					heaterOff();
 					resetTimer(heatingCooldown);
+					clearStatus(Status::Heating);
 					clearStatus(Status::Active);
 					return;
 				}
@@ -82,10 +83,12 @@ namespace Control {
 		if (getTimer(heatDutyTimeout)) {
 			// Element should not be on that long.
 			// Either the element is broken or the thermistor has failed. Terminal error.
-			// TODO set error state.
-			setStatus(Status::Error);
+			if (!getStatus(Status::Error)) {
+				Serial.println(F("Heater duty timeout."));
+				// TODO set error state.
+				setStatus(Status::Error);
+			}
 			heaterOff();
-			Serial.println(F("Heater duty timeout."));
 			return;
 		}
 

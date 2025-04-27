@@ -88,12 +88,12 @@ namespace Util {
 	}
 
 	bool getCommand(Command command) {
-		bitRead(commands, static_cast<uint8_t>(command));
+		return bitRead(commands, static_cast<uint8_t>(command));
 	}
 
 	bool checkCommand(Command command) {
 		if (getCommand(command)) {
-			setCommand(command);
+			clearCommand(command);
 			return true;
 		}
 		return false;

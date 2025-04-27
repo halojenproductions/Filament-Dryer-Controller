@@ -9,6 +9,7 @@ void setup() {
 	UNITY_BEGIN();
 
 	suite_util_statuses::suite_Statuses();
+	suite_util_commands::suite_commands();
 	suite_util_timers::suite_Timers();
 	suite_Humidity::suite_Humidity();
 	suite_Temperature::suite_Temperature();
