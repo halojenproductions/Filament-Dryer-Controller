@@ -38,7 +38,7 @@ namespace suite_Temperature {
 		// Act & assert together because it's my project and i can do what i want.
 		TEST_ASSERT_TRUE(Util::checkTemperature(testValue));
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
-		TEST_ASSERT_FALSE(bitRead(Sys::statuses, Sys::STATUS_ERROR));
+		TEST_ASSERT_FALSE(Util::getStatus(Sys::Status::Error));
 	}
 
 	void test_Temperature_Check_NaN(void) {
@@ -48,7 +48,7 @@ namespace suite_Temperature {
 		uint8_t expectedValue = 50;
 		// Act & assert together because it's my project and i can do what i want.
 		TEST_ASSERT_FALSE(Util::checkTemperature(testValue));
-		TEST_ASSERT_TRUE(bitRead(Sys::statuses, Sys::STATUS_ERROR));
+		TEST_ASSERT_TRUE(Util::getStatus(Sys::Status::Error));
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
 	}
 
@@ -59,7 +59,7 @@ namespace suite_Temperature {
 		uint8_t expectedValue = 50;
 		// Act & assert together because it's my project and i can do what i want.
 		TEST_ASSERT_FALSE(Util::checkTemperature(testValue));
-		TEST_ASSERT_TRUE(bitRead(Sys::statuses, Sys::STATUS_ERROR));
+		TEST_ASSERT_TRUE(Util::getStatus(Sys::Status::Error));
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
 	}
 
@@ -70,7 +70,7 @@ namespace suite_Temperature {
 		uint8_t expectedValue = 50;
 		// Act & assert together because it's my project and i can do what i want.
 		TEST_ASSERT_FALSE(Util::checkTemperature(testValue));
-		TEST_ASSERT_TRUE(bitRead(Sys::statuses, Sys::STATUS_ERROR));
+		TEST_ASSERT_TRUE(Util::getStatus(Sys::Status::Error));
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
 	}
 }

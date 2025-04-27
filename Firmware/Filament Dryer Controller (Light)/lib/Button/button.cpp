@@ -1,6 +1,8 @@
 #include "button.h"
 
 namespace Button {
+	using namespace Sys;
+	using namespace Util;
 #define BUTT_TRIG 0	   // Button interrupt triggered bit.
 #define BUTT_DIR 1	   // Button direction bit (pressed or released). 1 = down.
 
@@ -31,25 +33,25 @@ namespace Button {
 		// Clear the interruption.
 		bitClear(interruption, BUTT_TRIG);
 
-		if (bitRead(interruption, BUTT_DIR) && !bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)) {
+		if (bitRead(interruption, BUTT_DIR) && !getStatus(Status::ButtonDown)) {
 			/// Button is down for the first time.
 			// Set button down status.
-			bitSet(Sys::statuses, Sys::STATUS_BUTTON_DOWN);
+			setStatus(Status::ButtonDown);
 			// Start hold timer.
-			Util::resetTimer(Sys::buttonHoldTimeout);
-			bitClear(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED);
+			resetTimer(buttonHoldTimeout);
+			setCommand(Command::HandleButtonHold);
 			// If screen is asleep, instruct it to wake up.
-			if (!bitRead(Sys::statuses, Sys::STATUS_AWAKE)) {
-				bitSet(Sys::commands, Sys::COMMAND_WAKEUP);
+			if (!getStatus(Status::ScreenAwake)) {
+				setCommand(Command::WakeUp);
 			}
 		} else if (!bitRead(interruption, BUTT_DIR)) {
 			/// Button is released and not bouncing.
 			// Set button up status.
-			bitClear(Sys::statuses, Sys::STATUS_BUTTON_DOWN);
+			clearStatus(Status::ButtonDown);
 
 			if (timeUp - timeDown >= debounceDelay) {
 				// Determine whether it was clicked or held.
-				if (!Util::getTimer(Sys::buttonHoldTimeout)) {
+				if (!getTimer(buttonHoldTimeout)) {
 					// Button was clicked.
 					buttonClicked();
 				}
@@ -63,31 +65,31 @@ namespace Button {
 	void buttonClicked() {
 		Serial.println(F("Button::buttonClicked()"));
 		// Check if we are in selection mode.
-		if (bitRead(Sys::statuses, Sys::STATUS_SELECT)) {
+		if (getStatus(Status::Select)) {
 			Filaments::next();
-			bitSet(Sys::dirties, Sys::DIRTY_FILAMENT);
-			Util::resetTimer(Sys::selectionTimeout);
+			UI::setDirty(UI::Dirty::Filament);
+			resetTimer(selectionTimeout);
 		} else {
-			Util::resetTimer(Sys::idleInputPolling);
+			resetTimer(idleInputPolling);
 
-			bitSet(Sys::statuses, Sys::STATUS_ACTIVE);
-			bitSet(Sys::dirties, Sys::DIRTY_ALL);
+			setStatus(Status::Active);
+			UI::setDirty(UI::Dirty::All);
 		}
 	}
 
 	void buttonHeld() {
 		Serial.println(F("Button::buttonHeld()"));
-		bitSet(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED);
+		clearCommand(Command::HandleButtonHold);
 
 		// Check if we are in selection mode.
-		if (bitRead(Sys::statuses, Sys::STATUS_SELECT)) {
+		if (getStatus(Status::Select)) {
 			Filaments::apply();
-			bitClear(Sys::statuses, Sys::STATUS_SELECT);
+			clearStatus(Status::Select);
 		} else {
-			Util::resetTimer(Sys::selectionTimeout);
-			bitSet(Sys::statuses, Sys::STATUS_SELECT);
+			resetTimer(selectionTimeout);
+			setStatus(Status::Select);
 		}
 
-		bitSet(Sys::dirties, Sys::DIRTY_FILAMENT);
+		UI::setDirty(UI::Dirty::Filament);
 	}
 }

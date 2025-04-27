@@ -1,11 +1,10 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include "Arduino.h"
 #include "system.h"
 
 namespace Util {
-	bool bitCheck(uint8_t& value, uint8_t bitPos);
-	void bitClearAll(uint8_t& value);
 
 	// Timer methods.
 	bool checkTimer(Timer& timer);
@@ -39,6 +38,18 @@ namespace Util {
 	 * \note Sets Error status if thermistor reading is invalid or out of range (0-100°C).
 	 */
 	bool checkTherm(int8_t temperature);
+
+	// Status methods.
+	void setStatus(Sys::Status status);
+	void clearStatus(Sys::Status status);
+	void toggleStatus(Sys::Status status);
+	bool getStatus(Sys::Status status);
+
+	// Command methods.
+	void setCommand(Sys::Command command);
+	void clearCommand(Sys::Command command);
+	bool getCommand(Sys::Command command);
+	bool checkCommand(Sys::Command command);
 
 }
 #endif

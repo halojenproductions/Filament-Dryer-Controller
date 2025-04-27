@@ -51,11 +51,11 @@ void setup() {
 
 	// Set initial values.
 	Serial.println(F("Setting initial values"));
-	bitSet(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED);
-	bitSet(Sys::commands, Sys::COMMAND_WAKEUP);
-	bitSet(Sys::statuses, Sys::STATUS_OK);
-	digitalWrite(Pins::pLedOk, bitRead(Sys::statuses, Sys::STATUS_OK));
-	bitSet(Sys::statuses, Sys::STATUS_ACTIVE);
+	Util::clearCommand(Sys::Command::HandleButtonHold);
+	Util::setCommand(Sys::Command::WakeUp);
+	Util::setStatus(Sys::Status::Ok);
+	digitalWrite(Pins::pLedOk, Util::getStatus(Sys::Status::Ok));
+	Util::setStatus(Sys::Status::Active);
 	// Control::idle();
 
 	// Serial.println(F("Setup finished"));
@@ -74,28 +74,27 @@ void loop() {
 	}
 
 	// Wake up.
-	if (Util::bitCheck(Sys::commands, Sys::COMMAND_WAKEUP)) {
+	if (Util::checkCommand(Sys::Command::WakeUp)) {
 		UI::wakeUp();
 	}
 
-	if (bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)) {
+	if (Util::getStatus(Sys::Status::ButtonDown)) {
 		// Touch timers.
 		Util::resetTimer(Sys::screenTimeout);
 		Util::resetTimer(Sys::selectionTimeout);
 	}
 
 	// Button held.
-	if (bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)
+	if (Util::getStatus(Sys::Status::ButtonDown)
 		&& Util::getTimer(Sys::buttonHoldTimeout)
-		&& !bitRead(Sys::commands, Sys::COMMAND_BUTTON_HOLD_HANDLED)) {
+		&& Util::getCommand(Sys::Command::HandleButtonHold)) {
 		Button::buttonHeld();
 	}
 
 	// Read sensors.
 
-	if ((bitRead(Sys::statuses, Sys::STATUS_ACTIVE) && Util::checkTimer(Sys::activeInputPolling))
-		|| (!bitRead(Sys::statuses, Sys::STATUS_ACTIVE) && Util::checkTimer(Sys::idleInputPolling)
-		)) {
+	if ((Util::getStatus(Sys::Status::Active) && Util::checkTimer(Sys::activeInputPolling))
+		|| (!Util::getStatus(Sys::Status::Active) && Util::checkTimer(Sys::idleInputPolling))) {
 		// Serial.println(F("Read sensors"));
 
 		/// Check thermistor.
@@ -108,7 +107,7 @@ void loop() {
 		float humidity = 50 + (int)random(2);
 		if (Util::checkHumidity(humidity)) {
 			// TODO uncomment: if(ops.checkHumidity(HtSensor::sensor.readHumidity())) {
-			bitSet(Sys::dirties, Sys::DIRTY_HUMIDITY);
+			UI::setDirty(UI::Dirty::Humidity);
 		}
 
 		/// Check temperature.
@@ -116,31 +115,31 @@ void loop() {
 		float inTemperature = 20 + (int)random(2);
 		if (Util::checkTemperature(inTemperature)) {
 			// TODO uncomment: if(ops.checkTemperature(HtSensor::sensor.readTemperature())) {
-			bitSet(Sys::dirties, Sys::DIRTY_TEMP);
+			UI::setDirty(UI::Dirty::Temp);
 		}
 	}
 
 	// Control loop.
 
-	if (bitRead(Sys::statuses, Sys::STATUS_ACTIVE)) {
+	if (Util::getStatus(Sys::Status::Active)) {
 		Control::active();
 	} else {
 		Control::idle();
 	}
 
 	// Set statuses. or should that be commands?
-	if (bitRead(Sys::statuses, Sys::STATUS_ERROR)) {
+	if (Util::getStatus(Sys::Status::Error)) {
 		// Serial.println(F("Status::Error"));
 
-		bitClear(Sys::statuses, Sys::STATUS_OK);
-		digitalWrite(Pins::pLedOk, bitRead(Sys::statuses, Sys::STATUS_OK) ? HIGH : LOW);
+		Util::clearStatus(Sys::Status::Ok);
+		digitalWrite(Pins::pLedOk, Util::getStatus(Sys::Status::Ok) ? HIGH : LOW);
 	}
 
-	if (bitRead(Sys::statuses, Sys::STATUS_HEATING)) {
+	if (Util::getStatus(Sys::Status::Heating)) {
 	}
 
 	// Update display.
-	if (bitRead(Sys::statuses, Sys::STATUS_AWAKE)) {
+	if (Util::getStatus(Sys::Status::ScreenAwake)) {
 		/* Only for full frame buffer.
 		// Load the display buffer.
 		UI::drawUI();
@@ -152,16 +151,15 @@ void loop() {
 		UI::updateScreen();
 
 		// Selection timeout.
-		if (bitRead(Sys::statuses, Sys::STATUS_SELECT) && Util::checkTimer(Sys::selectionTimeout)) {
+		if (Util::getStatus(Sys::Status::Select) && Util::checkTimer(Sys::selectionTimeout)) {
 			Serial.println(F("Selection timeout"));
-			bitClear(Sys::statuses, Sys::STATUS_SELECT);
+			Util::clearStatus(Sys::Status::Select);
 			Filaments::cancel();
-			bitSet(Sys::dirties, Sys::DIRTY_FILAMENT);
+			UI::setDirty(UI::Dirty::Filament);
 		}
 
 		// Screen timeout.
-		if (!bitRead(Sys::statuses, Sys::STATUS_BUTTON_DOWN)
-			&& Util::checkTimer(Sys::screenTimeout)) {
+		if (!Util::getStatus(Sys::Status::ButtonDown) && Util::checkTimer(Sys::screenTimeout)) {
 			Serial.println(F("Screen timeout."));
 			UI::sleep();
 		}

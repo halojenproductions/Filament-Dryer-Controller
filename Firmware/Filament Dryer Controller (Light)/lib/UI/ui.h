@@ -1,6 +1,7 @@
 #ifndef UI_H
 #define UI_H
 
+#include "Arduino.h"
 #include "filaments.h"
 #include "system.h"
 #include "utilities.h"
@@ -42,6 +43,25 @@ namespace UI {
 	extern void drawRealtimeTemp(uint8_t temp);
 
 	extern void drawAreaBorders();
+
+	// Dirty parts.
+	enum Dirty : uint8_t {
+		All,
+		Filament,
+		Temp,
+		Humidity,
+		_Last
+	};
+
+	extern byte dirties;
+
+	// Dirty methods.
+	void setDirty(Dirty dirty);
+	void clearDirty(Dirty dirty);
+	bool getDirty(Dirty dirty);
+	bool checkDirty(Dirty dirty);
+	void clearDirties();
+
 }
 
 #endif

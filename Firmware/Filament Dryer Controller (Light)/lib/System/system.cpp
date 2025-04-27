@@ -3,7 +3,6 @@
 namespace Sys {
 	byte statuses = 0;
 	byte commands = 0;
-	byte dirties  = 0;
 
 	// Global time.
 	uint32_t currentTime		= millis();

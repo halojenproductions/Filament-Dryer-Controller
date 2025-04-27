@@ -16,14 +16,14 @@ namespace suite_Commands {
 	void test_Commands_Unique() {
 		// Create array of all command values
 		const uint8_t commandBitPositions[] = {
-			Sys::COMMAND_WAKEUP,
+			Sys::Command::WakeUp,
 			Sys::COMMAND_HEATER_ON,
 			Sys::COMMAND_HEATER_OFF,
 			Sys::COMMAND_FAN_ON,
 			Sys::COMMAND_FAN_OFF,
 			Sys::COMMAND_BUTTON_CLICKED,
 			Sys::COMMAND_BUTTON_HELD,
-			Sys::COMMAND_BUTTON_HOLD_HANDLED
+			Sys::Command::ButtonHoldHandled
 		};
 		const uint8_t numCommands = sizeof(commandBitPositions) / sizeof(commandBitPositions[0]);
 
@@ -31,13 +31,13 @@ namespace suite_Commands {
 	}
 
 	void test_Command_Indexes(void) {
-		TEST_ASSERT_EQUAL(0, Sys::COMMAND_WAKEUP);
+		TEST_ASSERT_EQUAL(0, Sys::Command::WakeUp);
 		TEST_ASSERT_EQUAL(1, Sys::COMMAND_HEATER_ON);
 		TEST_ASSERT_EQUAL(2, Sys::COMMAND_HEATER_OFF);
 		TEST_ASSERT_EQUAL(3, Sys::COMMAND_FAN_ON);
 		TEST_ASSERT_EQUAL(4, Sys::COMMAND_FAN_OFF);
 		TEST_ASSERT_EQUAL(5, Sys::COMMAND_BUTTON_CLICKED);
 		TEST_ASSERT_EQUAL(6, Sys::COMMAND_BUTTON_HELD);
-		TEST_ASSERT_EQUAL(7, Sys::COMMAND_BUTTON_HOLD_HANDLED);
+		TEST_ASSERT_EQUAL(7, Sys::Command::ButtonHoldHandled);
 	}
 }

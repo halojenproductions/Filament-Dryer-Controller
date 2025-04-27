@@ -8,34 +8,25 @@
 #include <stdint.h>
 
 namespace Sys {
-	// Status bits.
-	constexpr uint8_t STATUS_OK			 = 0;
-	constexpr uint8_t STATUS_ERROR		 = 1;
-	constexpr uint8_t STATUS_AWAKE		 = 2;
-	constexpr uint8_t STATUS_HEATING	 = 3;
-	constexpr uint8_t STATUS_HEAT_DUTY	 = 4;
-	constexpr uint8_t STATUS_BUTTON_DOWN = 5;
-	constexpr uint8_t STATUS_SELECT		 = 6;
-	constexpr uint8_t STATUS_ACTIVE		 = 7;
+	enum class Status : uint8_t {
+		Ok,
+		Error,
+		ScreenAwake,
+		Heating,
+		HeatDuty,
+		ButtonDown,
+		Select,
+		Active,
+		_Last
+	};
 	extern byte statuses;
 
-	// Command bits.
-	constexpr uint8_t COMMAND_WAKEUP			  = 0;
-	constexpr uint8_t COMMAND_HEATER_ON			  = 1;
-	constexpr uint8_t COMMAND_HEATER_OFF		  = 2;
-	constexpr uint8_t COMMAND_FAN_ON			  = 3;
-	constexpr uint8_t COMMAND_FAN_OFF			  = 4;
-	constexpr uint8_t COMMAND_BUTTON_CLICKED	  = 5;
-	constexpr uint8_t COMMAND_BUTTON_HELD		  = 6;
-	constexpr uint8_t COMMAND_BUTTON_HOLD_HANDLED = 7;
+	enum class Command : uint8_t {
+		WakeUp,
+		HandleButtonHold,
+		_Last
+	};
 	extern byte commands;
-
-	/// Dirty bits.
-	constexpr uint8_t DIRTY_ALL		 = 0;
-	constexpr uint8_t DIRTY_FILAMENT = 1;
-	constexpr uint8_t DIRTY_TEMP	 = 2;
-	constexpr uint8_t DIRTY_HUMIDITY = 3;
-	extern byte dirties;
 
 	// Timers.
 	constexpr uint32_t INPUT_POLL_ACTIVE_INTERVAL	  = 200;

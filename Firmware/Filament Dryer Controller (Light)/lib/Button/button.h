@@ -4,6 +4,7 @@
 #include "filaments.h"
 #include "pins.h"
 #include "system.h"
+#include "ui.h"
 #include "utilities.h"
 #include <Arduino.h>
 #include <math.h>

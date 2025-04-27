@@ -7,7 +7,7 @@ namespace HtSensor {
 	void setupSensor() {
 		if (!HtSensor::sensor.begin(0x44)) {
 			// TODO Uncomment when sensor is connected.
-			// bitSet(Sys::statuses, Sys:: STATUS_Error);	  // TODO handle error.
+			// Util::setStatus(Sys:: STATUS_Error);	  // TODO handle error.
 		}
 	}
 

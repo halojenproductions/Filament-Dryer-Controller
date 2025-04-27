@@ -16,14 +16,14 @@ namespace suite_Statuses {
 	void test_Statuses_Unique() {
 		// Create array of all command values
 		const uint8_t statusBitPositions[] = {
-			Sys::STATUS_OK,
-			Sys::STATUS_ERROR,
-			Sys::STATUS_AWAKE,
-			Sys::STATUS_HEATING,
+			Sys::Status::Ok,
+			Sys::Status::Error,
+			Sys::Status::ScreenAwake,
+			Sys::Status::Heating,
 			Sys::STATUS_FANNING,
-			Sys::STATUS_BUTTON_DOWN,
-			Sys::STATUS_SELECT,
-			Sys::STATUS_ACTIVE
+			Sys::Status::ButtonDown,
+			Sys::Status::Select,
+			Sys::Status::Active
 		};
 		const uint8_t numStatuses = sizeof(statusBitPositions) / sizeof(statusBitPositions[0]);
 
@@ -31,14 +31,14 @@ namespace suite_Statuses {
 	}
 
 	void test_Status_Indexes(void) {
-		TEST_ASSERT_EQUAL(0, Sys::STATUS_OK);
-		TEST_ASSERT_EQUAL(1, Sys::STATUS_ERROR);
-		TEST_ASSERT_EQUAL(2, Sys::STATUS_AWAKE);
-		TEST_ASSERT_EQUAL(3, Sys::STATUS_HEATING);
+		TEST_ASSERT_EQUAL(0, Sys::Status::Ok);
+		TEST_ASSERT_EQUAL(1, Sys::Status::Error);
+		TEST_ASSERT_EQUAL(2, Sys::Status::ScreenAwake);
+		TEST_ASSERT_EQUAL(3, Sys::Status::Heating);
 		TEST_ASSERT_EQUAL(4, Sys::STATUS_FANNING);
-		TEST_ASSERT_EQUAL(5, Sys::STATUS_BUTTON_DOWN);
-		TEST_ASSERT_EQUAL(6, Sys::STATUS_SELECT);
-		TEST_ASSERT_EQUAL(7, Sys::STATUS_ACTIVE);
+		TEST_ASSERT_EQUAL(5, Sys::Status::ButtonDown);
+		TEST_ASSERT_EQUAL(6, Sys::Status::Select);
+		TEST_ASSERT_EQUAL(7, Sys::Status::Active);
 	}
 
 }

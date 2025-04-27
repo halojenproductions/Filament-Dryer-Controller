@@ -3,17 +3,6 @@
 using namespace Sys;
 
 namespace Util {
-	bool bitCheck(uint8_t& value, uint8_t bitPos) {
-		if (bitRead(value, bitPos)) {
-			bitClear(value, bitPos);
-			return true;
-		}
-		return false;
-	}
-
-	void bitClearAll(uint8_t& value) {
-		value = 0;
-	}
 
 	// Timer methods.
 	bool checkTimer(Timer& timer) {
@@ -32,7 +21,7 @@ namespace Util {
 	bool checkHumidity(float humidity) {
 		// Validate the value.
 		if (isnan(humidity) || humidity < 0 || humidity > 100) {
-			bitSet(statuses, STATUS_ERROR);
+			setStatus(Sys::Status::Error);
 			return false;
 		}
 
@@ -48,7 +37,7 @@ namespace Util {
 	bool checkTemperature(float temperature) {
 		// Validate the value.
 		if (isnan(temperature) || temperature < 0 || temperature > 100) {
-			bitSet(statuses, STATUS_ERROR);
+			setStatus(Sys::Status::Error);
 			return false;
 		}
 
@@ -64,13 +53,47 @@ namespace Util {
 	bool checkTherm(int8_t temperature) {
 		// Validate the value.
 		if (temperature < 0 || temperature > 100) {
-			bitSet(statuses, STATUS_ERROR);
+			setStatus(Sys::Status::Error);
 			return false;
 		}
 
 		// If the value is different from ops, set ops and return true.
 		if (temperature != thermTemp) {
 			thermTemp = temperature;
+			return true;
+		}
+		return false;
+	}
+
+	// Status functions.
+	void setStatus(Status status) {
+		bitSet(statuses, static_cast<uint8_t>(status));
+	}
+
+	void clearStatus(Status status) {
+		bitClear(statuses, static_cast<uint8_t>(status));
+	}
+
+	bool getStatus(Status status) {
+		return bitRead(statuses, static_cast<uint8_t>(status));
+	}
+
+	// Command functions.
+	void setCommand(Command command) {
+		bitSet(commands, static_cast<uint8_t>(command));
+	}
+
+	void clearCommand(Command command) {
+		bitClear(commands, static_cast<uint8_t>(command));
+	}
+
+	bool getCommand(Command command) {
+		bitRead(commands, static_cast<uint8_t>(command));
+	}
+
+	bool checkCommand(Command command) {
+		if (getCommand(command)) {
+			setCommand(command);
 			return true;
 		}
 		return false;

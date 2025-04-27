@@ -1,32 +1,33 @@
 #include "control.h"
 
 namespace Control {
+	using namespace Sys;
 	using namespace Util;
 
-	Timer activeTimeout(Sys::ACTIVE_TIMEOUT_INTERVAL);
-	Timer activeCooldown(Sys::ACTIVE_COOLDOWN_INTERVAL);
-	Timer heatingTimeout(Sys::HEATING_TIMEOUT_INTERVAL);
-	Timer heatingCooldown(Sys::HEATING_COOLDOWN_TIME_INTERVAL);
-	Timer heatDutyTimeout(Sys::HEAT_DUTY_TIMEOUT_INTERVAL);
+	Timer activeTimeout(ACTIVE_TIMEOUT_INTERVAL);
+	Timer activeCooldown(ACTIVE_COOLDOWN_INTERVAL);
+	Timer heatingTimeout(HEATING_TIMEOUT_INTERVAL);
+	Timer heatingCooldown(HEATING_COOLDOWN_TIME_INTERVAL);
+	Timer heatDutyTimeout(HEAT_DUTY_TIMEOUT_INTERVAL);
 
 	void active() {
 		// Serial.println("Active");
-		if (Sys::sensHumid > Filaments::activeFilament.humidity) {
+		if (sensHumid > Filaments::activeFilament.humidity) {
 			/// Moist.
 
 			if (checkTimer(activeTimeout)) {
 				// Maybe desiccant needs replacing.
 				// TODO set error state.
-				bitSet(Sys::statuses, Sys::STATUS_ERROR);
+				setStatus(Status::Error);
 				heaterOff();
 				fanLow();
-				bitClear(Sys::statuses, Sys::STATUS_HEATING);
-				bitClear(Sys::statuses, Sys::STATUS_ACTIVE);
+				clearStatus(Status::Heating);
+				clearStatus(Status::Active);
 				Serial.println(F("Active timeout."));
 				return;
 			}
 
-			if (bitRead(Sys::statuses, Sys::STATUS_HEATING)) {
+			if (getStatus(Status::Heating)) {
 				/// Moist & heater is on.
 				/// Heater safety timer.
 				if (checkTimer(heatingTimeout)) {
@@ -34,17 +35,17 @@ namespace Control {
 					// Stop heating for a while but leave the fan on.
 					heaterOff();
 					resetTimer(heatingCooldown);
-					bitClear(Sys::statuses, Sys::STATUS_ACTIVE);
+					clearStatus(Status::Active);
 					return;
 				}
 
 				/// Box up to temperature.
-				if (Sys::sensTemp >= Filaments::activeFilament.temperature) {
+				if (sensTemp >= Filaments::activeFilament.temperature) {
 					// If the box is up to temperature: turn the heater off; turn the fan off;
 					// set status to idle; get out of here.
 					heaterOff();
 					fanOff();
-					bitClear(Sys::statuses, Sys::STATUS_HEATING);
+					clearStatus(Status::Heating);
 					return;
 				}
 			}
@@ -57,21 +58,21 @@ namespace Control {
 
 			heaterOff();
 			fanOff();
-			resetTimer(Sys::idleInputPolling);
-			bitClear(Sys::statuses, Sys::STATUS_ACTIVE);
+			resetTimer(idleInputPolling);
+			clearStatus(Status::Active);
 		}
 	}
 
 	void idle() {
-		if (bitRead(Sys::statuses, Sys::STATUS_ERROR) || !checkTimer(activeCooldown)) {
+		if (getStatus(Status::Error) || !checkTimer(activeCooldown)) {
 			// Get out.
 			return;
 		}
-		if (Sys::sensHumid > Filaments::activeFilament.humidity) {
+		if (sensHumid > Filaments::activeFilament.humidity) {
 			/// Moist.
 			fanHigh();
 			resetTimer(activeTimeout);
-			bitSet(Sys::statuses, Sys::STATUS_ACTIVE);
+			setStatus(Status::Active);
 		} else {
 			// TODO
 		}
@@ -82,26 +83,26 @@ namespace Control {
 			// Element should not be on that long.
 			// Either the element is broken or the thermistor has failed. Terminal error.
 			// TODO set error state.
-			bitSet(Sys::statuses, Sys::STATUS_ERROR);
+			setStatus(Status::Error);
 			heaterOff();
 			Serial.println(F("Heater duty timeout."));
 			return;
 		}
 
-		if (!bitRead(Sys::statuses, Sys::STATUS_HEATING)) {
+		if (!getStatus(Status::Heating)) {
 			// Not sure why we'd get here, but if we do.. well.. turn the heater off.
 			heaterOff();
 		}
 
-		if (bitRead(Sys::statuses, Sys::STATUS_HEATING)
-			&& bitRead(Sys::statuses, Sys::STATUS_HEAT_DUTY)
-			&& Sys::thermTemp >= Filaments::activeFilament.temperature + Sys::tempDelta) {
+		if (getStatus(Status::Heating)
+			&& getStatus(Status::HeatDuty)
+			&& thermTemp >= Filaments::activeFilament.temperature + tempDelta) {
 			// If thermistor temp is more than [delta] degrees above the sensor temperature,
 			// cycle it off.
 			heaterOff();
-		} else if (bitRead(Sys::statuses, Sys::STATUS_HEATING)
-				   && Sys::thermTemp < Filaments::activeFilament.temperature + Sys::tempDelta
-				   && !bitRead(Sys::statuses, Sys::STATUS_HEAT_DUTY)) {
+		} else if (getStatus(Status::Heating)
+				   && thermTemp < Filaments::activeFilament.temperature + tempDelta
+				   && !getStatus(Status::HeatDuty)) {
 
 			resetTimer(heatDutyTimeout);
 			heaterOn();
@@ -110,7 +111,7 @@ namespace Control {
 
 	void heaterOn() {
 		fanHigh();	  // The fan should already be on, this is just for safety.
-		bitSet(Sys::statuses, Sys::STATUS_HEAT_DUTY);
+		setStatus(Status::HeatDuty);
 		digitalWrite(Pins::pHeater, LOW);
 		digitalWrite(Pins::pLedHeat, HIGH);
 	}
@@ -118,17 +119,17 @@ namespace Control {
 	void heaterOff() {
 		digitalWrite(Pins::pHeater, HIGH);
 		digitalWrite(Pins::pLedHeat, LOW);
-		bitClear(Sys::statuses, Sys::STATUS_HEAT_DUTY);
+		clearStatus(Status::HeatDuty);
 	}
 
 	void fanHigh() {
 		// TODO scale to 255
-		analogWrite(Pins::pFan, Sys::FAN_SPEED_HIGH);
+		analogWrite(Pins::pFan, FAN_SPEED_HIGH);
 	}
 
 	void fanLow() {
 		// TODO scale to 255
-		analogWrite(Pins::pFan, Sys::FAN_SPEED_LOW);
+		analogWrite(Pins::pFan, FAN_SPEED_LOW);
 	}
 
 	void fanOff() {

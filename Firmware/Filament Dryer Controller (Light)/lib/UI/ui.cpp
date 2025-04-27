@@ -15,16 +15,16 @@ namespace UI {
 	void wakeUp() {
 		Serial.println(F("UI::wakeUp()"));
 		screen.setPowerSave(0);
-		bitSet(Sys::statuses, Sys::STATUS_AWAKE);
+		Util::setStatus(Sys::Status::ScreenAwake);
 		Util::resetTimer(Sys::screenTimeout);
-		bitSet(Sys::dirties, Sys::DIRTY_ALL);
+		UI::setDirty(UI::Dirty::All);
 	}
 
 	void sleep() {
 		screen.setPowerSave(1);
-		bitClear(Sys::statuses, Sys::STATUS_AWAKE);
+		Util::clearStatus(Sys::Status::ScreenAwake);
 		Filaments::cancel();
-		bitClear(Sys::statuses, Sys::STATUS_SELECT);
+		Util::clearStatus(Sys::Status::Select);
 	}
 
 	// Screen dimensions.
@@ -49,22 +49,22 @@ namespace UI {
 
 	void updateScreen_FullFrameBuffer() {
 		// Serial.println(F("UI::updateScreen()"));
-		if (Util::bitCheck(Sys::dirties, Sys::DIRTY_ALL)) {
+		if (checkDirty(UI::Dirty::All)) {
 			// If everything is dirty, update the whole screen.
 			screen.sendBuffer();
-			Util::bitClearAll(Sys::dirties);
+			clearDirties();
 		} else {
 			// ..otherwise, just the bits that have changed.
-			if (Util::bitCheck(Sys::dirties, Sys::DIRTY_FILAMENT)) {
+			if (checkDirty(UI::Dirty::Filament)) {
 				areaTop.updateArea(screen);
 				areaBottom.updateArea(screen);
 			}
 			// Don't update the realtime bits while in selection mode.
-			if (!bitRead(Sys::statuses, Sys::STATUS_SELECT)) {
-				if (Util::bitCheck(Sys::dirties, Sys::DIRTY_TEMP)) {
+			if (!Util::getStatus(Sys::Status::Select)) {
+				if (checkDirty(UI::Dirty::Temp)) {
 					areaTemp.updateArea(screen);
 				}
-				if (Util::bitCheck(Sys::dirties, Sys::DIRTY_HUMIDITY)) {
+				if (checkDirty(UI::Dirty::Humidity)) {
 					areaHumidity.updateArea(screen);
 				}
 			}
@@ -87,7 +87,7 @@ namespace UI {
 		// Serial.println(F("UI::drawUI()"));
 		screen.setFontMode(1);
 
-		if (bitRead(Sys::statuses, Sys::STATUS_SELECT)) {
+		if (Util::getStatus(Sys::Status::Select)) {
 			drawBorderTop();
 			drawBorderBottom();
 		}
@@ -206,4 +206,32 @@ namespace UI {
 			areaHumidity.h * 8
 		);
 	}
+
+	// Dirty functions.
+	byte dirties = 0;
+
+	void setDirty(Dirty dirty) {
+		bitSet(dirties, static_cast<uint8_t>(dirty));
+	}
+
+	void clearDirty(Dirty dirty) {
+		bitClear(dirties, static_cast<uint8_t>(dirty));
+	}
+
+	bool getDirty(Dirty dirty) {
+		return bitRead(dirties, static_cast<uint8_t>(dirty));
+	}
+
+	bool checkDirty(Dirty dirty) {
+		if (getDirty(dirty)) {
+			setDirty(dirty);
+			return true;
+		}
+		return false;
+	}
+
+	void clearDirties() {
+		dirties = 0;
+	}
+
 }
