@@ -224,7 +224,7 @@ namespace UI {
 
 	bool checkDirty(Dirty dirty) {
 		if (getDirty(dirty)) {
-			setDirty(dirty);
+			clearDirty(dirty);
 			return true;
 		}
 		return false;

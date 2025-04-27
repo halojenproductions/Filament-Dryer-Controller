@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 namespace Sys {
-	enum class Status : uint8_t {
+	enum class Status : uint16_t {
 		Ok,
 		Error,
 		ScreenAwake,
@@ -19,6 +19,7 @@ namespace Sys {
 		Active,
 		_Last
 	};
+
 	extern byte statuses;
 
 	enum class Command : uint8_t {
@@ -26,6 +27,7 @@ namespace Sys {
 		HandleButtonHold,
 		_Last
 	};
+
 	extern byte commands;
 
 	// Timers.

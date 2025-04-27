@@ -6,26 +6,10 @@
 #ifndef TEST_OPERATIONS_H
 #define TEST_OPERATIONS_H
 
-namespace suite_Statuses {
-	void suite_Statuses();
-}
-
-namespace suite_Commands {
-	void suite_Commands();
-}
-
-namespace suite_Dirties {
-	void suite_Dirties();
-}
-
-namespace suite_Timers {
-	void suite_Timers();
-}
-
 extern void setUp(void);
 extern void tearDown(void);
 
-namespace test_Operations_Helpers {
+namespace test_system_helpers {
 	constexpr byte mask = 0b11111111;
 
 	template <typename T>

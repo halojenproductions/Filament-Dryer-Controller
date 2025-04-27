@@ -2,35 +2,35 @@
 #include <Arduino.h>
 #include <unity.h>
 
-namespace test_Ui_Dirties {
+namespace test_ui_dirties {
 	using namespace UI;
 	constexpr byte mask = 0b11111111;
 
-	void Ui_Dirties_max_8_defined();
-	void Ui_Dirties_Each();
-	void Ui_Dirties_ClearAll();
+	void dirties_max_8_defined();
+	void dirties_Each();
+	void dirties_ClearAll();
 	void testDirty(uint8_t dirtyValue);
 
-	void suite_Ui_Dirties() {
-		RUN_TEST(Ui_Dirties_max_8_defined);
-		RUN_TEST(Ui_Dirties_Each);
-		RUN_TEST(Ui_Dirties_ClearAll);
+	void suite_Dirties() {
+		RUN_TEST(dirties_max_8_defined);
+		RUN_TEST(dirties_Each);
+		RUN_TEST(dirties_ClearAll);
 	}
 
 	// Tests.
-	void Ui_Dirties_max_8_defined(void) {
+	void dirties_max_8_defined(void) {
 		TEST_ASSERT_LESS_OR_EQUAL_MESSAGE(8, Dirty::_Last, "Too many dirty bits defined.");
 	}
 
-	void Ui_Dirties_Each(void) {
-		for (uint8_t i = 0; i < Dirty::_Last; i++) {
+	void dirties_Each(void) {
+		for (uint16_t i = 0; i < Dirty::_Last; i++) {
 			testDirty(i);
 			// Reset for next iteration.
 			dirties = 0;
 		}
 	}
 
-	void Ui_Dirties_ClearAll(void) {
+	void dirties_ClearAll(void) {
 		dirties = (uint8_t)-1;
 		TEST_ASSERT_BITS_HIGH(mask, dirties);
 

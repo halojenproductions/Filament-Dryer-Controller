@@ -9,10 +9,6 @@ void setup() {
 	UNITY_BEGIN();
 
 	// Run all fixtures.
-	suite_Statuses::suite_Statuses();
-	suite_Commands::suite_Commands();
-	suite_Dirties::suite_Dirties();
-	suite_Timers::suite_Timers();
 
 	UNITY_END();
 }

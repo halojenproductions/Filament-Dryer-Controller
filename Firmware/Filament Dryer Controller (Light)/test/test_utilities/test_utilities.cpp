@@ -8,8 +8,8 @@ void setup() {
 	delay(200);
 	UNITY_BEGIN();
 
-	// Run all fixtures.
-	suite_Timers::suite_Timers();
+	suite_util_statuses::suite_Statuses();
+	suite_util_timers::suite_Timers();
 	suite_Humidity::suite_Humidity();
 	suite_Temperature::suite_Temperature();
 

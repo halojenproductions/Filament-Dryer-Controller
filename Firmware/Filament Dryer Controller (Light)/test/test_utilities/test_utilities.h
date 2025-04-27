@@ -6,7 +6,17 @@
 #ifndef TEST_UTILITIES_H
 #define TEST_UTILITIES_H
 
-namespace suite_Timers {
+constexpr byte mask = 0b11111111;
+
+namespace suite_util_statuses {
+	void suite_Statuses();
+}
+
+namespace suite_util_commands {
+	void suite_Statuses();
+}
+
+namespace suite_util_timers {
 	void suite_Timers();
 }
 
@@ -18,7 +28,11 @@ namespace suite_Temperature {
 	void suite_Temperature();
 }
 
-extern void setUp(void);
-extern void tearDown(void);
+void setUp(void);
+void tearDown(void);
+
+void setup();
+
+void loop();
 
 #endif

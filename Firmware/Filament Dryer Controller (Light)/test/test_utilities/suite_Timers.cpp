@@ -1,50 +1,30 @@
 #include "test_utilities.h"
 
-namespace suite_Timers {
-	void test_Timers_Setup();
-	void test_Timers_GetCheckReset();
-	void testTimerSetup(uint8_t index);
+namespace suite_util_timers {
+	using namespace Sys;
+	using namespace Util;
+
+	void timers_GetCheckReset();
 
 	void suite_Timers() {
-		RUN_TEST(test_Timers_Setup);
-		RUN_TEST(test_Timers_GetCheckReset);
+		RUN_TEST(timers_GetCheckReset);
 	}
 
 	// Tests.
-	void test_Timers_Setup(void) {
-		Sys::setupTimers();
-
-		testTimerSetup(Sys::TIMER_INPUT_POLLING_ACTIVE);
-		testTimerSetup(Sys::TIMER_INPUT_POLLING_IDLE);
-		testTimerSetup(Sys::TIMER_SCREEN_TIMEOUT);
-		testTimerSetup(Sys::TIMER_ACTIVE_TIMEOUT);
-		testTimerSetup(Sys::TIMER_HEATER_TIMEOUT);
-		testTimerSetup(Sys::TIMER_HEATER_COOLDOWN);
-		testTimerSetup(Sys::TIMER_SELECTION_TIMEOUT);
-		testTimerSetup(Sys::TIMER_BUTTON_HOLD);
-	}
-
-	void test_Timers_GetCheckReset(void) {
-		Sys::timerIntervals[0] = 100UL;
-		Sys::timers[0]		   = millis();
-		Sys::currentTime	   = millis();
+	void timers_GetCheckReset(void) {
+		Timer sut(100UL);
+		Sys::currentTime = millis();
 
 		// Within interval.
-		TEST_ASSERT_FALSE(Util::getTimer(0));
-		TEST_ASSERT_FALSE(Util::checkTimer(0));
+		TEST_ASSERT_FALSE(Util::getTimer(sut));
+		TEST_ASSERT_FALSE(Util::checkTimer(sut));
 
 		// Beyond interval.
-		delay(110);
-		Sys::currentTime = millis();
-		TEST_ASSERT_TRUE(Util::getTimer(0));
-		TEST_ASSERT_TRUE(Util::checkTimer(0));
+		Sys::currentTime += 110;
+		TEST_ASSERT_TRUE(Util::getTimer(sut));
+		TEST_ASSERT_TRUE(Util::checkTimer(sut));
 
 		// Was reset when checked beyond interval.
-		TEST_ASSERT_FALSE(Util::checkTimer(0));
-	}
-
-	void testTimerSetup(uint8_t index) {
-		TEST_ASSERT_GREATER_THAN(0, Sys::timerIntervals[index]);
-		TEST_ASSERT_GREATER_THAN(0, Sys::timers[index]);
+		TEST_ASSERT_FALSE(Util::checkTimer(sut));
 	}
 }

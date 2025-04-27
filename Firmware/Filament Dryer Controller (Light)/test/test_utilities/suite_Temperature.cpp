@@ -1,18 +1,18 @@
 #include "test_utilities.h"
 
 namespace suite_Temperature {
-	void test_Temperature_Check_NotChanged();
-	void test_Temperature_Check_Changed();
-	void test_Temperature_Check_NaN();
-	void test_Temperature_Check_UnderLimit();
-	void test_Temperature_Check_OverLimit();
+	void Temperature_Check_NotChanged();
+	void Temperature_Check_Changed();
+	void Temperature_Check_NaN();
+	void Temperature_Check_UnderLimit();
+	void Temperature_Check_OverLimit();
 
 	void suite_Temperature() {
-		RUN_TEST(test_Temperature_Check_NotChanged);
-		RUN_TEST(test_Temperature_Check_Changed);
-		RUN_TEST(test_Temperature_Check_NaN);
-		RUN_TEST(test_Temperature_Check_UnderLimit);
-		RUN_TEST(test_Temperature_Check_OverLimit);
+		RUN_TEST(Temperature_Check_NotChanged);
+		RUN_TEST(Temperature_Check_Changed);
+		RUN_TEST(Temperature_Check_NaN);
+		RUN_TEST(Temperature_Check_UnderLimit);
+		RUN_TEST(Temperature_Check_OverLimit);
 	}
 
 	void reset(void) {
@@ -22,7 +22,7 @@ namespace suite_Temperature {
 	}
 
 	// Tests.
-	void test_Temperature_Check_NotChanged(void) {
+	void Temperature_Check_NotChanged(void) {
 		reset();
 		// Arrange.
 		float testValue = 50.0;
@@ -30,7 +30,7 @@ namespace suite_Temperature {
 		TEST_ASSERT_FALSE(Util::checkTemperature(testValue));
 	}
 
-	void test_Temperature_Check_Changed(void) {
+	void Temperature_Check_Changed(void) {
 		reset();
 		// Arrange.
 		float testValue		  = 22.2;
@@ -41,7 +41,7 @@ namespace suite_Temperature {
 		TEST_ASSERT_FALSE(Util::getStatus(Sys::Status::Error));
 	}
 
-	void test_Temperature_Check_NaN(void) {
+	void Temperature_Check_NaN(void) {
 		reset();
 		// Arrange.
 		float testValue		  = NAN;
@@ -52,7 +52,7 @@ namespace suite_Temperature {
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
 	}
 
-	void test_Temperature_Check_UnderLimit(void) {
+	void Temperature_Check_UnderLimit(void) {
 		reset();
 		// Arrange.
 		float testValue		  = -0.1;
@@ -63,7 +63,7 @@ namespace suite_Temperature {
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
 	}
 
-	void test_Temperature_Check_OverLimit(void) {
+	void Temperature_Check_OverLimit(void) {
 		reset();
 		// Arrange.
 		float testValue		  = 100.1;
