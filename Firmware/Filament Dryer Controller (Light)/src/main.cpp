@@ -120,7 +120,6 @@ void loop() {
 	}
 
 	// Control loop.
-
 	if (Util::getStatus(Sys::Status::Active)) {
 		Control::active();
 	} else {
