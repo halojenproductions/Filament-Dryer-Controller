@@ -1,8 +1,20 @@
 include <FDC_Panel_Library.scad>
 
-
+Pcb();
 Screen();
 
+module Pcb(){
+	translate([0, 0, screen_glass_dims.z + screen_board_dims.z + header_hei])
+	difference(){
+		cuber(
+			[
+				pcb_dims.x, 
+				pcb_dims.y, 
+				pcb_dims.z,
+			],
+		);
+	}
+}
 
 module Screen(){
 	translate([0, -2, 0]){

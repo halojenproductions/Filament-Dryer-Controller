@@ -23,8 +23,27 @@ button_cham = screen_cham;
 button_standoff_z = line[2]*2;
 button_standoff_wid = line[0]*2;
 
-
 	header_pitch = 2.54;
 	header_dia = 2.5;
 	header_hei = 2.5;
+
+screwpost_pitch_top = 35;
+screwpost_pitch_bot = 35;
+screwpost_dia = 5;
+
+frame_unnamed_dim = 5;
+frame_dims = [
+	screen_board_dims.x + frame_unnamed_dim*2,
+	screen_board_dims.y + frame_unnamed_dim*2,
+	header_hei,
+];
+
+pcb_dims = [
+	frame_dims.x, 
+	60, 
+	1.6
+];
+
+
+
 
