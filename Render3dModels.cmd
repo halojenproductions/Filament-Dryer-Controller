@@ -5,14 +5,14 @@
 %openscad% ^
 --backend=manifold ^
 -D ex=[1,0,0,0] -D q=100 ^
--o %outDir%\FDC_Panel.stl ^
+-o %outDir%\FDC_Panel_Front.stl ^
 %scadfile%
 
-@REM %openscad% ^
-@REM --backend=manifold ^
-@REM -D ex=[0,1,0,0,0] -D q=80 ^
-@REM -o %outDir%\Base.stl ^
-@REM %scadfile%
+%openscad% ^
+--backend=manifold ^
+-D ex=[0,1,0,0] -D q=100 ^
+-o %outDir%\FDC_Panel_Frame.stl ^
+%scadfile%
 
 @REM %openscad% ^
 @REM --backend=manifold ^

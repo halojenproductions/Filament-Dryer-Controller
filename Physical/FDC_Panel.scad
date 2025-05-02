@@ -11,14 +11,20 @@ ex = [1,1,0,0];
 /* [Hidden] */
 $fn = $preview ? 50 : q;
 
-translate([
-	0, 
-	screen_pos.y, 
-	face_thick + screen_standoff_z +screen_glass_dims.z + screen_board_dims.z
-])
-Frame();
+if(ex[0]){
+	Front();
+}
 
-*Front();
+if(ex[1]){
+	translate([
+		0, 
+		screen_pos.y, 
+		face_thick + screen_standoff_z + screen_glass_dims.z + screen_board_dims.z,
+	])
+	Frame();
+}
+
+echo(str("Variable = ", screen_standoff_z + screen_glass_dims.z + screen_board_dims.z));
 
 // Ghosts.
 %translate([0, 0, face_thick + screen_standoff_z]){
@@ -97,6 +103,9 @@ module Face(){
 			r = screen_standoff_wid,
 		);
 	}
+
+	translate([0, screen_pos.y, face_thick])
+	ScreenShroud();
 }
 
 
@@ -140,3 +149,94 @@ module ButtonHole_(){
 	}
 }
 
+module ScreenShroud(){
+	translate([0, -2, -nonzero()]){
+		difference(){
+			cuber(
+				[
+					screen_shroud_dims.x,
+					screen_shroud_dims.y,
+					screen_shroud_dims.z,
+				],
+				r = screen_shroud_offset,
+			);
+			translate([0, 0, -nonzero()])
+			cuber([
+				screen_board_dims.x,
+				screen_board_dims.y,
+				screen_shroud_dims.z + nonzero()*2,
+			]);
+		}
+
+		/// Locators.
+		// Top left.
+		Locator(screen_screw_pos[0], [-1, 1]);
+		// Top right.
+		Locator(screen_screw_pos[1], [1, 1]);
+		// Bottom left.
+		Locator(screen_screw_pos[2], [-1, -1]);
+		// Bottom right.
+		Locator(screen_screw_pos[3], [1, -1]);
+	}
+
+	module Locator(holePos = [0, 0], corner = [-1, 1]) {
+		x1 = corner.x < 0 ? -screen_shroud_dims.x/2 : screen_shroud_dims.x/2;
+		y1 = corner.y < 0 ? -screen_shroud_dims.y/2 : screen_shroud_dims.y/2;
+		hei = screen_standoff_z + screen_glass_dims.z;
+
+		hull(){
+			translate([x1, holePos.y])
+			cuber([
+				nonzero(),
+				frame_locator_dia,
+				hei,
+			]);
+			translate([holePos.x, y1])
+			cuber([
+				frame_locator_dia,
+				nonzero(),
+				hei,
+			]);
+			translate(holePos)
+			cylr(
+				frame_locator_dia, 
+				hei,
+				[1, 1, 0],
+			);
+		}
+
+		// Pin.
+		translate(holePos)
+		cylr(
+			screen_screw_hole_dia - .1, 
+			hei + screen_board_dims.z + frame_dims.z/2 - line[2],
+			[1, 1, 0],
+		);
+	}
+}
+
+module ScreenPosts(){
+	translate([0, 0, face_thick]){
+		// Top left.
+		ScreenPost(screen_screw_pos[0]);
+		// Top right.
+		ScreenPost(screen_screw_pos[1]);
+		// Bottom left.
+		ScreenPost(screen_screw_pos[2]);
+		// Bottom right.
+		ScreenPost(screen_screw_pos[3]);
+	}
+}
+
+module ScreenPost(pos){
+	translate(pos)
+	coner(
+		screen_screw_hole_dia, 
+		screen_screw_hole_dia, 
+		screen_standoff_z + screen_glass_dims.z ,
+		[1, 1, 0], 
+		screen_cham, 
+		0,
+		ex
+	);
+}

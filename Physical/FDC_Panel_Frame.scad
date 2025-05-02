@@ -46,24 +46,23 @@ module FrameMain(){
 	module Locator(holePos = [0, 0], corner = [-1, 1]) {
 		x1 = corner.x < 0 ? -frame_dims.x/2 : frame_dims.x/2;
 		y1 = corner.y < 0 ? -frame_dims.y/2 : frame_dims.y/2;
-		locaterExtra = line[0]*2;
 
 		hull(){
 			translate([x1, holePos.y])
 			cuber([
 				nonzero(),
-				screen_screw_hole_dia + locaterExtra,
+				frame_locator_dia,
 				frame_dims.z,
 			]);
 			translate([holePos.x, y1])
 			cuber([
-				screen_screw_hole_dia + locaterExtra,
+				frame_locator_dia,
 				nonzero(),
 				frame_dims.z,
 			]);
 			translate(holePos)
 			cylr(
-				screen_screw_hole_dia + locaterExtra, 
+				frame_locator_dia, 
 				frame_dims.z,
 				[1, 1, 0],
 			);

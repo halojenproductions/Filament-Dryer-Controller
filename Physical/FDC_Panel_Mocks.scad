@@ -43,28 +43,28 @@ module Screen(){
 			/// Screw holes.
 			translate([0, 0, screen_glass_dims.z]){
 				// Top left.
-				translate([-screen_screw_pitch.x/2, screen_screw_pitch.y/2, 0])
+				translate(screen_screw_pos[0])
 				cylr(
 					screen_screw_hole_dia, 
 					screen_board_dims.z,
 					[1, 1, 0]
 				);
 				// Top right.
-				translate([screen_screw_pitch.x/2, screen_screw_pitch.y/2, 0])
+				translate(screen_screw_pos[1])
 				cylr(
 					screen_screw_hole_dia, 
 					screen_board_dims.z,
 					[1, 1, 0]
 				);
 				// Bottom left.
-				translate([-screen_screw_pitch.x/2, -screen_screw_pitch.y/2, 0])
+				translate(screen_screw_pos[2])
 				cylr(
 					screen_screw_hole_dia, 
 					screen_board_dims.z,
 					[1, 1, 0]
 				);
 				// Bottom right.
-				translate([screen_screw_pitch.x/2, -screen_screw_pitch.y/2, 0])
+				translate(screen_screw_pos[3])
 				cylr(
 					screen_screw_hole_dia, 
 					screen_board_dims.z,
