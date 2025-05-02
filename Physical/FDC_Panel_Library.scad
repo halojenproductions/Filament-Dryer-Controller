@@ -3,6 +3,24 @@ line = [.42, .45, .2];
 
 screen_board_dims=[36, 33.5, 1.2];
 screen_screw_pitch = [30.5, 28.5];
+screen_screw_pos = [
+	[
+		-screen_screw_pitch.x/2, 
+		screen_screw_pitch.y/2 ,
+	],
+	[
+		screen_screw_pitch.x/2, 
+		screen_screw_pitch.y/2
+	],
+	[
+		-screen_screw_pitch.x/2, 
+		-screen_screw_pitch.y/2
+	],
+	[
+		screen_screw_pitch.x/2, 
+		-screen_screw_pitch.y/2
+	],
+];
 screen_screw_hole_dia = 3;
 screen_glass_dims = [34.5, 23, 1.8];
 screen_visible_dims = [31, 16];

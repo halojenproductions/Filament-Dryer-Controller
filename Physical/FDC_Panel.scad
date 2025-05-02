@@ -2,6 +2,7 @@ use <..\..\3D Printing\Library.scad>
 use <..\..\3D Printing\Hardware.scad>
 include <FDC_Panel_Library.scad>
 use <FDC_Panel_Mocks.scad>
+use <FDC_Panel_Frame.scad>
 
 q = 100;
 ex = [1,1,0,0];
@@ -16,78 +17,16 @@ translate([
 	face_thick + screen_standoff_z +screen_glass_dims.z + screen_board_dims.z
 ])
 Frame();
-Front();
+
+*Front();
 
 // Ghosts.
 %translate([0, 0, face_thick + screen_standoff_z]){
-	Pcb();
+	*Pcb();
 	translate([0, screen_pos.y, 0])
 	Screen();
 }
 
-module Frame(){
-	translate([0, -2, 0]){
-		difference(){
-			cuber(
-				[
-					frame_dims.x, 
-					frame_dims.y,
-					frame_dims.z,
-				],
-				r = 1,
-			);
-			translate([0, 0, -nonzero()])
-			cuber(
-				[
-					screen_board_dims.x, 
-					screen_board_dims.y,
-					frame_dims.z + nonzero()*2,
-				],
-			);
-		}
-
-		/// Locators.
-		// Top left.
-		translate([
-			-screen_screw_pitch.x/2 - screen_screw_hole_dia/2, 
-			screen_screw_pitch.y/2 + screen_screw_hole_dia/2,
-			0,
-		])
-		Locator();
-		// Top right.
-		translate([
-			screen_screw_pitch.x/2 + screen_screw_hole_dia/2, 
-			screen_screw_pitch.y/2 + screen_screw_hole_dia/2,
-			0,
-		])
-		Locator();
-		// Bottom left.
-		translate([
-			-screen_screw_pitch.x/2 - screen_screw_hole_dia/2, 
-			-screen_screw_pitch.y/2 - screen_screw_hole_dia/2,
-			0,
-		])
-		Locator();
-		// Bottom right.
-		translate([
-			screen_screw_pitch.x/2 + screen_screw_hole_dia/2, 
-			-screen_screw_pitch.y/2 - screen_screw_hole_dia/2,
-			0,
-		])
-		Locator();
-	}
-
-	module Locator(){
-		cuber(
-			[
-				screen_screw_hole_dia*2,
-				screen_screw_hole_dia*2,
-				frame_dims.z,
-			],
-			r = screen_screw_hole_dia/2,
-		);
-	}
-}
 
 module Front() {
 	difference(){
