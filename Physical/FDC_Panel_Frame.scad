@@ -84,8 +84,8 @@ module FrameLocatorHoles_(){
 	module FrameLocatorHole(pos){
 		translate([pos.x, pos.y, -nonzero()])
 		cylr(
-			screen_screw_hole_dia, 
-			frame_dims.z/2 + nonzero(1),
+			hole(frame_screw_hole_dia), 
+			frame_dims.z + nonzero(1),
 			[1, 1, 0],
 		);
 	}

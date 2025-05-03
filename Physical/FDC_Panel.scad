@@ -21,10 +21,10 @@ if(ex[1]){
 		screen_pos.y, 
 		face_thick + screen_standoff_z + screen_glass_dims.z + screen_board_dims.z,
 	])
-	Frame();
+	*Frame();
 }
 
-echo(str("Variable = ", screen_standoff_z + screen_glass_dims.z + screen_board_dims.z));
+echo(str("screen_standoff_z + screen_glass_dims.z = ", screen_standoff_z + screen_glass_dims.z));
 
 // Ghosts.
 %translate([0, 0, face_thick + screen_standoff_z]){
@@ -183,34 +183,58 @@ module ScreenShroud(){
 		x1 = corner.x < 0 ? -screen_shroud_dims.x/2 : screen_shroud_dims.x/2;
 		y1 = corner.y < 0 ? -screen_shroud_dims.y/2 : screen_shroud_dims.y/2;
 		hei = screen_standoff_z + screen_glass_dims.z;
+		difference(){
+			hull(){
+				translate([x1, holePos.y])
+				cuber([
+					nonzero(),
+					frame_locator_dia,
+					hei,
+				]);
+				translate([holePos.x, y1])
+				cuber([
+					frame_locator_dia,
+					nonzero(),
+					hei,
+				]);
+				translate(holePos)
+				cylr(
+					frame_locator_dia, 
+					hei,
+					[1, 1, 0],
+				);
+			}
 
-		hull(){
-			translate([x1, holePos.y])
-			cuber([
-				nonzero(),
-				frame_locator_dia,
-				hei,
-			]);
-			translate([holePos.x, y1])
-			cuber([
-				frame_locator_dia,
-				nonzero(),
-				hei,
-			]);
-			translate(holePos)
-			cylr(
-				frame_locator_dia, 
-				hei,
-				[1, 1, 0],
-			);
+			ScreenInserts();
 		}
 
 		// Pin.
-		translate(holePos)
-		cylr(
-			screen_screw_hole_dia - .1, 
-			hei + screen_board_dims.z + frame_dims.z/2 - line[2],
-			[1, 1, 0],
+		// translate(holePos)
+		// cylr(
+		// 	screen_screw_hole_dia - .1, 
+		// 	hei + screen_board_dims.z + frame_dims.z/2 - line[2],
+		// 	[1, 1, 0],
+		// );
+	}
+}
+
+module ScreenInserts(){
+	translate([0, 0, face_thick + screen_standoff_z + screen_glass_dims.z]){
+		// Top left.
+		ScreenInsert(screen_screw_pos[0]);
+		// Top right.
+		ScreenInsert(screen_screw_pos[1]);
+		// Bottom left.
+		ScreenInsert(screen_screw_pos[2]);
+		// Bottom right.
+		ScreenInsert(screen_screw_pos[3]);
+	}
+
+	module ScreenInsert(pos){
+		threaded_insert(
+			[hole(2.9), 3, 0], 
+			pos,
+			[0, 0],
 		);
 	}
 }

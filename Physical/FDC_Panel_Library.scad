@@ -1,7 +1,7 @@
 use <..\..\3D Printing\Library.scad>
 line = [.42, .45, .2];
 
-screen_board_dims=[36, 33.5, 1.2];
+screen_board_dims=[36, 33.5, 1.0];
 screen_screw_pitch = [30.5, 28.5];
 screen_screw_pos = [
 	[
@@ -22,7 +22,7 @@ screen_screw_pos = [
 	],
 ];
 screen_screw_hole_dia = 3;
-screen_glass_dims = [34.5, 23, 1.8];
+screen_glass_dims = [34.5, 23, 1.6];
 screen_visible_dims = [31, 16];
 screen_standoff_z = line[2]*2;
 screen_standoff_wid = line[0]*2;
@@ -63,7 +63,8 @@ frame_dims = [
 	screen_board_dims.y + frame_unnamed_dim*2,
 	header_hei,
 ];
-frame_locator_dia = screen_screw_hole_dia + line[0]*2;
+frame_locator_dia = screen_screw_hole_dia + line[0]*4;
+frame_screw_hole_dia = 2;
 
 pcb_dims = [
 	frame_dims.x, 
