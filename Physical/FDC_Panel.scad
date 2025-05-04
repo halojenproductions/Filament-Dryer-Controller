@@ -21,10 +21,11 @@ if(ex[1]){
 		screen_pos.y, 
 		face_thick + screen_standoff_z + screen_glass_dims.z + screen_board_dims.z,
 	])
-	*Frame();
+	Frame();
 }
 
-echo(str("screen_standoff_z + screen_glass_dims.z = ", screen_standoff_z + screen_glass_dims.z));
+echo(str("screen_shroud_dims.z = ", screen_shroud_dims.z));
+echo(str("screen_shroud_dims.z + frame_dims.z = ", screen_shroud_dims.z + frame_dims.z));
 
 // Ghosts.
 %translate([0, 0, face_thick + screen_standoff_z]){
@@ -38,11 +39,18 @@ module Front() {
 	difference(){
 		Face();
 
-		translate([0, screen_pos.y])
-		ScreenHole_();
+		translate([0, screen_pos.y]){
+			ScreenHole_();
+
+			LedHoles_();
+
+			FrameScrewPostInserts_();
+		}
 		
 		translate([0, button_pos.y])
 		ButtonHole_();
+
+
 	}
 }
 
@@ -104,10 +112,18 @@ module Face(){
 		);
 	}
 
+	// Screen shroud.
 	translate([0, screen_pos.y, face_thick])
 	ScreenShroud();
-}
 
+	// Led shrouds.
+	translate([0, screen_pos.y, face_thick])
+	LedShrouds();
+
+	// Frame screw posts.
+	translate([0, screen_pos.y, face_thick])
+	FrameScrewPosts();
+}
 
 module ScreenHole_(){
 	cuber(
@@ -149,6 +165,41 @@ module ButtonHole_(){
 	}
 }
 
+module LedHoles_(){
+	translate([0, -2]){
+		Led(led_pos[0]);
+		Led(led_pos[1]);
+	}
+
+	module Led(pos){
+		translate(pos)
+		cylr(hole(led_dia, .1), face_thick + screen_shroud_dims.z);
+	}
+}
+
+module LedShrouds(){
+	translate([0, -2]){
+		LedShroud(led_pos[0]);
+		LedShroud(led_pos[1]);
+	}
+	
+	module LedShroud(pos){
+		translate(pos)
+		difference(){
+			cylr(
+				led_shroud_dia, 
+				screen_standoff_z + screen_glass_dims.z + screen_board_dims.z,
+				[1, 1, 0],
+			);
+			cylr(
+				hole(led_dia, .1), 
+				screen_standoff_z + screen_glass_dims.z + screen_board_dims.z + nonzero(),
+				[1, 1, 0],
+			);
+		}
+	}
+}
+
 module ScreenShroud(){
 	translate([0, -2, -nonzero()]){
 		difference(){
@@ -183,6 +234,7 @@ module ScreenShroud(){
 		x1 = corner.x < 0 ? -screen_shroud_dims.x/2 : screen_shroud_dims.x/2;
 		y1 = corner.y < 0 ? -screen_shroud_dims.y/2 : screen_shroud_dims.y/2;
 		hei = screen_standoff_z + screen_glass_dims.z;
+
 		difference(){
 			hull(){
 				translate([x1, holePos.y])
@@ -205,7 +257,14 @@ module ScreenShroud(){
 				);
 			}
 
-			ScreenInserts();
+			LocatorHole([holePos.x, holePos.y, hei + nonzero()]);
+		}
+
+
+		module LocatorHole(pos){
+			translate(pos)
+			mirror([0, 0, 1])
+			cylr(hole(screen_screw_hole_dia), 1.2);
 		}
 
 		// Pin.
@@ -218,49 +277,39 @@ module ScreenShroud(){
 	}
 }
 
-module ScreenInserts(){
-	translate([0, 0, face_thick + screen_standoff_z + screen_glass_dims.z]){
+
+module FrameScrewPosts(){
+	translate([0, -2]){
 		// Top left.
-		ScreenInsert(screen_screw_pos[0]);
+		ScrewPost(frame_screw_pos[0]);
 		// Top right.
-		ScreenInsert(screen_screw_pos[1]);
-		// Bottom left.
-		ScreenInsert(screen_screw_pos[2]);
-		// Bottom right.
-		ScreenInsert(screen_screw_pos[3]);
+		ScrewPost(frame_screw_pos[1]);
 	}
 
-	module ScreenInsert(pos){
-		threaded_insert(
-			[hole(2.9), 3, 0], 
-			pos,
-			[0, 0],
+	module ScrewPost(pos){
+		translate(pos)
+		coner(
+			frame_screw_post_dia, 
+			frame_screw_post_dia, 
+			screen_shroud_dims.z,
+			[1, 1, 0], 
+			0, 
+			0,
 		);
 	}
 }
 
-module ScreenPosts(){
-	translate([0, 0, face_thick]){
+module FrameScrewPostInserts_(){
+	translate([0, -2, face_thick + screen_shroud_dims.z]){
 		// Top left.
-		ScreenPost(screen_screw_pos[0]);
+		Insert(frame_screw_pos[0]);
 		// Top right.
-		ScreenPost(screen_screw_pos[1]);
-		// Bottom left.
-		ScreenPost(screen_screw_pos[2]);
-		// Bottom right.
-		ScreenPost(screen_screw_pos[3]);
+		Insert(frame_screw_pos[1]);
+	}
+
+	module Insert(pos){
+		translate(pos)
+		threaded_insert(frame_insert_dims);
 	}
 }
 
-module ScreenPost(pos){
-	translate(pos)
-	coner(
-		screen_screw_hole_dia, 
-		screen_screw_hole_dia, 
-		screen_standoff_z + screen_glass_dims.z ,
-		[1, 1, 0], 
-		screen_cham, 
-		0,
-		ex
-	);
-}
