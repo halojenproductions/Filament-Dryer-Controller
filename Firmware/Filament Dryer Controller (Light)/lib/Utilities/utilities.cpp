@@ -115,4 +115,20 @@ namespace Util {
 		return bitRead(errors, static_cast<uint8_t>(error));
 	}
 
+	bool terminalError() {
+		// Create a copy of the errors byte
+		byte errorMask = errors;
+
+		// Clear all resettable error bits
+		for (uint8_t i = 0; i < static_cast<uint8_t>(Error::_Last); i++) {
+			Error error = static_cast<Error>(i);
+			if (errorIsResettable(error)) {
+				bitClear(errorMask, i);
+			}
+		}
+
+		// If any bits remain set, we have a terminal error
+		return errorMask > 0;
+	}
+
 }

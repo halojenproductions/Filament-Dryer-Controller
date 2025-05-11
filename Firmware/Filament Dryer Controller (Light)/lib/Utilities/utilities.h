@@ -54,6 +54,7 @@ namespace Util {
 	void setError(Sys::Error error);
 	void clearError(Sys::Error error);
 	bool getError(Sys::Error error);
+	bool terminalError();
 
 }
 #endif

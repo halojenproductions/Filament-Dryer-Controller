@@ -40,6 +40,8 @@ namespace suite_util_errors {
 			// Clear.
 			clearError(error);
 			TEST_ASSERT_BITS_LOW(mask, errors);
+			// Terminal error check.
+			TEST_ASSERT_FALSE(terminalError());
 		} else {
 			// Terminal errors.
 			// Set.
@@ -50,6 +52,8 @@ namespace suite_util_errors {
 			// NOT cleared.
 			clearError(error);
 			TEST_ASSERT_BITS(mask, expected, errors);
+			// Terminal error check.
+			TEST_ASSERT_TRUE(terminalError());
 		}
 	}
 }
