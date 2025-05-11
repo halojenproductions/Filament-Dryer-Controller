@@ -105,7 +105,7 @@ namespace Util {
 	}
 
 	void clearError(Error error) {
-		if (error == Error::ActiveTimeout || error == Error::HeatingTimeout) {
+		if (errorIsResettable(error)) {
 			// Only non-terminal errors can be cleared.
 			bitClear(errors, static_cast<uint8_t>(error));
 		}

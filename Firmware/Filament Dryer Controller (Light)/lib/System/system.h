@@ -41,6 +41,10 @@ namespace Sys {
 
 	extern byte errors;
 
+	constexpr bool errorIsResettable(Error error) {
+		return (error == Error::ActiveTimeout || error == Error::HeatingTimeout);
+	}
+
 	// Timers.
 	constexpr uint32_t INPUT_POLL_ACTIVE_INTERVAL	  = 200;
 	constexpr uint32_t INPUT_POLL_IDLE_INTERVAL		  = 1000UL * 60;
