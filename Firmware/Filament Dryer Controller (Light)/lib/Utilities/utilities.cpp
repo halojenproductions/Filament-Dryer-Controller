@@ -99,4 +99,20 @@ namespace Util {
 		return false;
 	}
 
+	// Error functions.
+	void setError(Error error) {
+		bitSet(errors, static_cast<uint8_t>(error));
+	}
+
+	void clearError(Error error) {
+		if (error == Error::ActiveTimeout || error == Error::HeatingTimeout) {
+			// Only non-terminal errors can be cleared.
+			bitClear(errors, static_cast<uint8_t>(error));
+		}
+	}
+
+	bool getError(Error error) {
+		return bitRead(errors, static_cast<uint8_t>(error));
+	}
+
 }

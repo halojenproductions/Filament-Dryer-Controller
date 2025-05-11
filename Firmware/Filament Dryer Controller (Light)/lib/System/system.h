@@ -30,6 +30,17 @@ namespace Sys {
 
 	extern byte commands;
 
+	enum class Error : uint16_t {
+		ActiveTimeout,		// Warning. (Humidity has not decreased. Desiccant saturated? Lid open?)
+		HeatingTimeout,		// Pause. (Box has not reached temperature. Lid open?)
+		HeatDutyTimeout,	// Terminal. (Heater broken? Thermistor broken?)
+		Sensor,				// Terminal. (Humidity/temperature out of range. Sensor broken?)
+		Thermistor,			// Terminal. (Therm out of range. Thermistor broken?)
+		_Last
+	};
+
+	extern byte errors;
+
 	// Timers.
 	constexpr uint32_t INPUT_POLL_ACTIVE_INTERVAL	  = 200;
 	constexpr uint32_t INPUT_POLL_IDLE_INTERVAL		  = 1000UL * 60;

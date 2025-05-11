@@ -16,6 +16,10 @@ namespace suite_util_commands {
 	void suite_commands();
 }
 
+namespace suite_util_errors {
+	void suite_Errors();
+}
+
 namespace suite_util_timers {
 	void suite_Timers();
 }

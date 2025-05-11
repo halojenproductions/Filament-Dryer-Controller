@@ -42,7 +42,6 @@ namespace Util {
 	// Status methods.
 	void setStatus(Sys::Status status);
 	void clearStatus(Sys::Status status);
-	void toggleStatus(Sys::Status status);
 	bool getStatus(Sys::Status status);
 
 	// Command methods.
@@ -50,6 +49,11 @@ namespace Util {
 	void clearCommand(Sys::Command command);
 	bool getCommand(Sys::Command command);
 	bool checkCommand(Sys::Command command);
+
+	// Error methods.
+	void setError(Sys::Error error);
+	void clearError(Sys::Error error);
+	bool getError(Sys::Error error);
 
 }
 #endif

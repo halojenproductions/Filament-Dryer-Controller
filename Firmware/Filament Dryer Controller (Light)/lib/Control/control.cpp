@@ -126,12 +126,10 @@ namespace Control {
 	}
 
 	void fanHigh() {
-		// TODO scale to 255
 		analogWrite(Pins::pFan, FAN_SPEED_HIGH);
 	}
 
 	void fanLow() {
-		// TODO scale to 255
 		analogWrite(Pins::pFan, FAN_SPEED_LOW);
 	}
 
