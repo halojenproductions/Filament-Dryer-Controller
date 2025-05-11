@@ -10,6 +10,7 @@ namespace UI {
 		screen.begin();
 
 		screen.setFontMode(1);
+		screen.setBitmapMode(1);
 	}
 
 	void wakeUp() {
@@ -58,6 +59,7 @@ namespace UI {
 			if (checkDirty(UI::Dirty::Filament)) {
 				areaTop.updateArea(screen);
 				areaBottom.updateArea(screen);
+				// TODO: draw symbols.
 			}
 			// Don't update the realtime bits while in selection mode.
 			if (!Util::getStatus(Sys::Status::Select)) {
@@ -78,6 +80,11 @@ namespace UI {
 	static constexpr byte padFilY	   = 2;
 	static constexpr byte padRealtimeX = 6;
 	static constexpr byte posRealtimeY = pxHeight / 2 + 2;
+	static constexpr byte padSymX	   = 2;
+	static constexpr byte padSymY	   = 2;
+	static constexpr byte posSymMoistX = pxWidth - padSymX - Moist_width + 2;
+	static constexpr byte posSymHeatX  = posSymMoistX - padSymX - Heat_width;
+	static constexpr byte posSymFullX  = posSymHeatX - padSymX - Full_width;
 
 	// Fonts.
 	static const uint8_t* filamentFont = u8g2_font_luBS08_tf;
@@ -98,6 +105,15 @@ namespace UI {
 
 		drawRealtimeTemp(Sys::sensTemp);
 		drawRealtimeHumidity(Sys::sensHumid);
+
+		if (Util::getStatus(Sys::Status::Active)) {
+			drawSymbolMoist();
+		}
+		if (Util::getStatus(Sys::Status::Heating)) {
+			drawSymbolHeat();
+		}
+		// TODO: Moist status, distint from Active status.
+		drawSymbolFull();
 	}
 
 	void drawBorderTop() {
@@ -183,6 +199,21 @@ namespace UI {
 		screen.setCursor(pxWidth - textWid - padRealtimeX, posRealtimeY);
 
 		screen.print(buffer);
+	}
+
+	void drawSymbolMoist() {
+		screen.setDrawColor(2);
+		screen.drawXBMP(posSymMoistX, padSymY, Moist_width, Moist_height, Symbols::Moist_bits);
+	}
+
+	void drawSymbolHeat() {
+		screen.setDrawColor(2);
+		screen.drawXBMP(posSymHeatX, padSymY, Heat_width, Heat_height, Symbols::Heat_bits);
+	}
+
+	void drawSymbolFull() {
+		screen.setDrawColor(2);
+		screen.drawXBMP(posSymFullX, padSymY, Full_width, Full_height, Symbols::Full_bits);
 	}
 
 	void drawAreaBorders() {

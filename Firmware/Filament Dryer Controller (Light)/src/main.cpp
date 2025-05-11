@@ -104,17 +104,17 @@ void loop() {
 
 		/// Check humidity.
 		// TODO Remove mocky shit.
-		float humidity = 50 + (int)random(2);
-		if (Util::checkHumidity(humidity)) {
-			// TODO uncomment: if(ops.checkHumidity(HtSensor::sensor.readHumidity())) {
+		// float humidity = 50 + (int)random(2);
+		// if (Util::checkHumidity(humidity)) {
+		if (Util::checkHumidity(HtSensor::sensor.readHumidity())) {
 			UI::setDirty(UI::Dirty::Humidity);
 		}
 
 		/// Check temperature.
 		// TODO Remove mocky shit.
-		float inTemperature = 20 + (int)random(2);
-		if (Util::checkTemperature(inTemperature)) {
-			// TODO uncomment: if(ops.checkTemperature(HtSensor::sensor.readTemperature())) {
+		// float inTemperature = 20 + (int)random(2);
+		// if (Util::checkTemperature(inTemperature)) {
+		if (Util::checkTemperature(HtSensor::sensor.readTemperature())) {
 			UI::setDirty(UI::Dirty::Temp);
 		}
 	}

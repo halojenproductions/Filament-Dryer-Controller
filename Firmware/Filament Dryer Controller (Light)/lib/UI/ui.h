@@ -7,6 +7,7 @@
 #include "utilities.h"
 #include <Arduino.h>
 #include <u8g2lib.h>
+#include "symbols.h"
 
 namespace UI {
 	struct Area {
@@ -41,6 +42,10 @@ namespace UI {
 
 	extern void drawRealtimeHumidity(uint8_t hum);
 	extern void drawRealtimeTemp(uint8_t temp);
+
+	extern void drawSymbolMoist();
+	extern void drawSymbolHeat();
+	extern void drawSymbolFull();
 
 	extern void drawAreaBorders();
 

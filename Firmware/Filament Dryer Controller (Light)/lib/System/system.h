@@ -33,7 +33,7 @@ namespace Sys {
 	// Timers.
 	constexpr uint32_t INPUT_POLL_ACTIVE_INTERVAL	  = 200;
 	constexpr uint32_t INPUT_POLL_IDLE_INTERVAL		  = 1000UL * 60;
-	constexpr uint32_t SCREEN_TIMEOUT_INTERVAL		  = 1000UL * 30;
+	constexpr uint32_t SCREEN_TIMEOUT_INTERVAL		  = 1000UL * 300;	 // TODO: Change back to 30.
 	constexpr uint32_t ACTIVE_TIMEOUT_INTERVAL		  = 1000UL * 60 * 5;
 	constexpr uint32_t ACTIVE_COOLDOWN_INTERVAL		  = 1000UL * 60 * 2;
 	constexpr uint32_t HEATING_TIMEOUT_INTERVAL		  = 1000UL * 60 * 2;
