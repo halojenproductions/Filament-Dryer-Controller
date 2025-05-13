@@ -23,6 +23,7 @@ screen_screw_pos = [
 ];
 screen_screw_hole_dia = 3;
 screen_glass_dims = [34.5, 23, 1.6];
+screen_window_shift_y = 2;
 screen_visible_dims = [31, 16];
 screen_standoff_z = line[2]*2;
 screen_standoff_wid = line[0]*2;
@@ -104,7 +105,7 @@ button_anchor_dims = [
 
 button_pos = [
 	0, 
-	screen_pos.y - 2 - screen_shroud_dims.y/2 
+	screen_pos.y - screen_shroud_dims.y/2 
 	- button_anchor_dims.y - button_hinge_len 
 	- button_flange_offset - button_dims.y/2, 
 	face_thick + button_dims.z

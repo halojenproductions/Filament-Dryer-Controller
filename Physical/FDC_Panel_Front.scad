@@ -69,7 +69,7 @@ module Face(){
 
 	// Screen standoff.
 	difference() {
-		translate([0, screen_pos.y, face_thick])
+		translate([0, screen_pos.y + screen_window_shift_y, face_thick])
 		cuber(
 			[
 				screen_visible_dims.x + screen_standoff_wid*2, 
@@ -111,22 +111,24 @@ module Face(){
 }
 
 module ScreenHole_(){
-	cuber(
-		[screen_visible_dims.x , screen_visible_dims.y, face_dims.z]
-	);
-	hull(){
+	translate([0, screen_window_shift_y]){
 		cuber(
-			[screen_visible_dims.x, screen_visible_dims.y, screen_cham]
+			[screen_visible_dims.x , screen_visible_dims.y, face_dims.z]
 		);
-		translate([0, 0, -nonzero()])
-		cuber(
-			[
-				screen_visible_dims.x + screen_cham*2, 
-				screen_visible_dims.y + screen_cham*2, 
-				nonzero(),
-			],
-			r = screen_cham,
-		);
+		hull(){
+			cuber(
+				[screen_visible_dims.x, screen_visible_dims.y, screen_cham]
+			);
+			translate([0, 0, -nonzero()])
+			cuber(
+				[
+					screen_visible_dims.x + screen_cham*2, 
+					screen_visible_dims.y + screen_cham*2, 
+					nonzero(),
+				],
+				r = screen_cham,
+			);
+		}
 	}
 }
 
@@ -152,10 +154,8 @@ module ButtonHole_(){
 }
 
 module LedHoles_(){
-	translate([0, -2]){
-		Led(led_pos[0]);
-		Led(led_pos[1]);
-	}
+	Led(led_pos[0]);
+	Led(led_pos[1]);
 
 	module Led(pos){
 		translate(pos)
@@ -164,10 +164,8 @@ module LedHoles_(){
 }
 
 module LedShrouds(){
-	translate([0, -2]){
-		LedShroud(led_pos[0]);
-		LedShroud(led_pos[1]);
-	}
+	LedShroud(led_pos[0]);
+	LedShroud(led_pos[1]);
 	
 	module LedShroud(pos){
 		translate(pos)
@@ -187,7 +185,7 @@ module LedShrouds(){
 }
 
 module ScreenShroud(){
-	translate([0, -2, -nonzero()]){
+	translate([0, 0, -nonzero()]){
 		difference(){
 			cuber(
 				[
@@ -265,12 +263,10 @@ module ScreenShroud(){
 
 
 module FrameScrewPosts(){
-	translate([0, -2]){
-		// Top left.
-		ScrewPost(frame_screw_pos[0]);
-		// Top right.
-		ScrewPost(frame_screw_pos[1]);
-	}
+	// Top left.
+	ScrewPost(frame_screw_pos[0]);
+	// Top right.
+	ScrewPost(frame_screw_pos[1]);
 
 	module ScrewPost(pos){
 		translate(pos)
@@ -286,7 +282,7 @@ module FrameScrewPosts(){
 }
 
 module FrameScrewPostInserts_(){
-	translate([0, -2, face_thick + screen_shroud_dims.z]){
+	translate([0, 0, face_thick + screen_shroud_dims.z]){
 		// Top left.
 		Insert(frame_screw_pos[0]);
 		// Top right.

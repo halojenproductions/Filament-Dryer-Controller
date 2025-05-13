@@ -8,19 +8,17 @@ $fn = $preview ? 50 : q;
 Frame();
 
 module Frame() {
-	translate([0, -2, 0]){
-		difference(){
-			union(){
-				FrameTop();
+	difference(){
+		union(){
+			FrameTop();
 
-				FrameMain();
+			FrameMain();
 
-				FrameButtonAnchor();
-			}
-
-			FrameScrewHoles_();
-			FrameLedHoles_();
+			FrameButtonAnchor();
 		}
+
+		FrameScrewHoles_();
+		FrameLedHoles_();
 	}
 }
 
