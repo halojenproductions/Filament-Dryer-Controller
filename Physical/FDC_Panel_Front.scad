@@ -319,7 +319,7 @@ module ButtonAnchorShroud(){
 			translate([0, - screen_shroud_offset/2 - button_anchor_dims.y/2])
 			cuber(
 				[
-					hole(button_dims.x),
+					hole(button_dims.x, -.1),
 					screen_shroud_offset,
 					button_hinge_thick + line[2],
 				],

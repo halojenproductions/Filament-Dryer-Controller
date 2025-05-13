@@ -27,7 +27,7 @@ screen_window_shift_y = 2;
 screen_visible_dims = [31, 16];
 screen_standoff_z = line[2]*2;
 screen_standoff_wid = line[0]*2;
-screen_pos = [0, 10, 0];
+screen_pos = [0, 6.5, 0];
 screen_cham = 1.0;
 
 screen_shroud_offset = line[0]*2;
@@ -95,7 +95,7 @@ button_dims = [16, 12, screen_shroud_dims.z + frame_dims.z - 3];
 button_cham = screen_cham;
 button_flange_offset = line[0]*2;
 button_hinge_len = 2;
-button_hinge_thick = line[2]*2;
+button_hinge_thick = line[2]*3;
 
 button_anchor_dims = [
 	button_dims.x + 5, 

@@ -65,7 +65,7 @@ module FrameLedHoles_(){
 
 			translate([0, 0, frame_top_dims.z])
 			mirror([0, 0, 1])
-			cylr(led_dia + 1, line[2]*5);
+			coner(led_dia + 1.5, led_dia + 1.5, 1.5, r2=.5, cham2=1);
 		}
 	}
 }
