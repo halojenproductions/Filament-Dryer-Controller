@@ -1,8 +1,13 @@
 include <FDC_Panel_Library.scad>
 
+q = 100;
+ex = [1,1,1,0];
 
 /* [Hidden] */
+$fn = $preview ? 50 : q;
 
+
+Button();
 
 module Button() {
 	ButtonBack();

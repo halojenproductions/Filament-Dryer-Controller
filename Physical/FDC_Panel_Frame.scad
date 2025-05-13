@@ -1,7 +1,9 @@
 include <FDC_Panel_Library.scad>
 
+q = 100;
 
 /* [Hidden] */
+$fn = $preview ? 50 : q;
 
 Frame();
 
