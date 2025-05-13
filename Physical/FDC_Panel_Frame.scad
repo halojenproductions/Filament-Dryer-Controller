@@ -3,6 +3,7 @@ include <FDC_Panel_Library.scad>
 
 /* [Hidden] */
 
+Frame();
 
 module Frame() {
 	translate([0, -2, 0]){
@@ -11,6 +12,8 @@ module Frame() {
 				FrameTop();
 
 				FrameMain();
+
+				FrameButtonAnchor();
 			}
 
 			FrameScrewHoles_();
@@ -25,6 +28,18 @@ module FrameTop(){
 		frame_top_dims,
 		[1, 0, 0],
 		frame_top_dims.y/2
+	);
+}
+
+module FrameButtonAnchor(){
+	translate([0, - screen_board_dims.y/2 - screen_shroud_offset - button_anchor_dims.y/2])
+	mirror([0, 0, 1])
+	cuber(
+		[
+			button_anchor_dims.x + screen_shroud_offset*2,
+			button_anchor_dims.y,
+			screen_shroud_dims.z - button_anchor_dims.z,
+		],
 	);
 }
 
@@ -112,7 +127,7 @@ module FrameMain(){
 		translate(holePos)
 		mirror([0, 0, 1])
 		cylr(
-			screen_screw_hole_dia - 0.1, 
+			screen_screw_hole_dia, 
 			screen_board_dims.z + 1,
 			[1, 1, 0],
 		);

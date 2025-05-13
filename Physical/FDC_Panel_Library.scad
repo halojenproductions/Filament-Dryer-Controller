@@ -43,12 +43,6 @@ face_in_offset = 2;
 face_rad = 5;
 face_cham = 1.2;
 
-button_dims = [16, 12];
-button_pos = [0, -18, 0];
-button_cham = screen_cham;
-button_standoff_z = line[2]*2;
-button_standoff_wid = line[0]*2;
-
 led_dia = 3.0;
 led_shroud_dia = hole(led_dia) + line[0]*4;
 led_pitch = 18;
@@ -95,6 +89,31 @@ led_pos = [
 		frame_screw_pos[1].y,
 	],
 ];
+
+button_dims = [16, 12, screen_shroud_dims.z + frame_dims.z - 3];
+button_cham = screen_cham;
+button_flange_offset = line[0]*2;
+button_hinge_len = 2;
+button_hinge_thick = line[2]*2;
+
+button_anchor_dims = [
+	button_dims.x + 5, 
+	2,
+	button_dims.z,
+];
+
+button_pos = [
+	0, 
+	screen_pos.y - 2 - screen_shroud_dims.y/2 
+	- button_anchor_dims.y - button_hinge_len 
+	- button_flange_offset - button_dims.y/2, 
+	face_thick + button_dims.z
+];
+
+ // Relative to button position.
+button_anchor_pos_y = button_dims.y/2 + button_flange_offset 
++ button_hinge_len + button_anchor_dims.y/2;
+
 
 pcb_dims = [
 	frame_dims.x, 

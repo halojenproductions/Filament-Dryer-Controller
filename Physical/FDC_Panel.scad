@@ -3,9 +3,10 @@ use <..\..\3D Printing\Hardware.scad>
 include <FDC_Panel_Library.scad>
 use <FDC_Panel_Mocks.scad>
 use <FDC_Panel_Frame.scad>
+use <FDC_Panel_Button.scad>
 
 q = 100;
-ex = [1,1,0,0];
+ex = [1,1,1,0];
 
 
 /* [Hidden] */
@@ -22,6 +23,12 @@ if(ex[1]){
 		face_thick + screen_standoff_z + screen_glass_dims.z + screen_board_dims.z,
 	])
 	Frame();
+}
+
+if(ex[2]){
+	translate(button_pos)
+	mirror([0, 0, 1])
+	Button();
 }
 
 echo(str("screen_shroud_dims.z = ", screen_shroud_dims.z));
@@ -120,6 +127,10 @@ module Face(){
 	translate([0, screen_pos.y, face_thick])
 	LedShrouds();
 
+	// Button anchor shroud.
+	translate([0, button_pos.y, face_thick])
+	ButtonAnchorShroud();
+
 	// Frame screw posts.
 	translate([0, screen_pos.y, face_thick])
 	FrameScrewPosts();
@@ -149,6 +160,7 @@ module ButtonHole_(){
 	cuber(
 		[button_dims.x , button_dims.y, face_dims.z + nonzero()]
 	);
+	// Champher.
 	hull(){
 		cuber(
 			[button_dims.x, button_dims.y, button_cham]
@@ -313,3 +325,37 @@ module FrameScrewPostInserts_(){
 	}
 }
 
+module ButtonAnchorShroud(){
+	translate([0, button_anchor_pos_y]){
+		difference(){
+			cuber(
+				[
+					button_anchor_dims.x + screen_shroud_offset*2,
+					button_anchor_dims.y + screen_shroud_offset*2,
+					button_anchor_dims.z,
+				],
+				r = screen_shroud_offset,
+			);
+			translate([0, 0, -nonzero()])
+			cuber([
+				hole(button_anchor_dims.x),
+				hole(button_anchor_dims.y),
+				button_anchor_dims.z + nonzero()*2,
+			]);
+
+			// Hinge cutout.
+			translate([0, 0, button_anchor_dims.z])
+			mirror([0, 0, 1])
+			translate([0, - screen_shroud_offset/2 - button_anchor_dims.y/2])
+			cuber(
+				[
+					hole(button_dims.x),
+					screen_shroud_offset,
+					button_hinge_thick + line[2],
+				],
+
+			);
+			
+		}
+	}
+}
