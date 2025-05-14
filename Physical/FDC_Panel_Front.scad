@@ -133,22 +133,23 @@ module ScreenHole_(){
 }
 
 module ButtonHole_(){
+	button_hole_dims = [hole(button_dims.x), hole(button_dims.y)];
 	cuber(
-		[button_dims.x , button_dims.y, face_dims.z + nonzero()]
+		[button_hole_dims.x , button_hole_dims.y, face_dims.z + nonzero()]
 	);
 	// Champher.
 	hull(){
 		cuber(
-			[button_dims.x, button_dims.y, button_cham]
+			[button_hole_dims.x, button_hole_dims.y, button_hole_cham]
 		);
 		translate([0, 0, -nonzero()])
 		cuber(
 			[
-				button_dims.x + button_cham*2, 
-				button_dims.y + button_cham*2, 
+				button_hole_dims.x + button_hole_cham*2, 
+				button_hole_dims.y + button_hole_cham*2, 
 				nonzero(),
 			],
-			r = button_cham,
+			r = button_hole_cham,
 		);
 	}
 }

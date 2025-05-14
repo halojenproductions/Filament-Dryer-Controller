@@ -92,10 +92,12 @@ led_pos = [
 ];
 
 button_dims = [16, 12, screen_shroud_dims.z + frame_dims.z - 3];
-button_cham = screen_cham;
+button_hole_cham = screen_cham;
 button_flange_offset = line[0]*2;
 button_hinge_len = 2;
 button_hinge_thick = line[2]*3;
+button_cham = .5;
+
 
 button_anchor_dims = [
 	button_dims.x + 5, 

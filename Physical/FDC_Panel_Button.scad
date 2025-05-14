@@ -12,9 +12,61 @@ Button();
 module Button() {
 	ButtonBack();
 
+	ButtonFront();
+
 	ButtonAnchor();
 
 	Hinge();
+
+	module ButtonFront(){
+		rise = face_thick - (face_thick - button_hole_cham) + .05;
+		run = button_dims.y/2 - face_thick/2;
+		angle = atan(rise/run);
+		hype = sqrt(pow(rise, 2) + pow(run, 2));
+
+		translate([0, 0, button_dims.z]){
+			difference(){
+				hull(){
+					translate([0, -button_dims.y/2, face_thick/2])
+					rotate([0, 90, 0])
+					cylr(
+						face_thick,
+						button_dims.x,
+						[1, 0, 1],
+						button_cham,
+						1
+					);
+
+					translate([0, -button_dims.y/4, 0])
+					cuber(
+						[button_dims.x, button_dims.y/2, face_thick - button_hole_cham],
+						[1, 1, 0],
+					);
+				}
+				
+				// Curvey cutout.
+				translate([0, 0, face_thick - button_hole_cham ])
+				rotate([-angle, 0, 0])
+				rotate([-90, 0, 0])
+				rotate([0, 90, 0])
+				segment(
+					[
+						hype,
+						.2,
+						button_dims.x, 
+					],
+					[0, 0, 1],
+					360
+				);
+			}
+			
+			// Bottom.
+			cuber(
+				[button_dims.x, button_dims.y, face_thick - button_hole_cham],
+				[1, 1, 0],
+			);
+		}
+	}
 	
 
 	module ButtonBack(){
