@@ -39,7 +39,7 @@ module Button() {
 					);
 
 					// Bottom cylinder.
-					translate([0, -button_dims.y/2 + .2, face_thick/2])
+					translate([0, -button_dims.y/2 + .1, face_thick/2])
 					rotate([0, 90, 0])
 					cylr(
 						face_thick,
