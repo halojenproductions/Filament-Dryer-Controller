@@ -37,9 +37,11 @@ module FrameButtonAnchor(){
 	cuber(
 		[
 			button_anchor_dims.x + screen_shroud_offset*2,
-			button_anchor_dims.y,
+			button_anchor_dims.y + screen_shroud_offset*2,
 			screen_shroud_dims.z - button_anchor_dims.z,
 		],
+		[1, 1, 0],
+		screen_shroud_offset
 	);
 }
 

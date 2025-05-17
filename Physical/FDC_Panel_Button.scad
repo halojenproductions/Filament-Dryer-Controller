@@ -27,7 +27,8 @@ module Button() {
 		translate([0, 0, button_dims.z]){
 			difference(){
 				hull(){
-					translate([0, -button_dims.y/2, face_thick/2])
+					// Middle cylinder.
+					translate([0, 0, face_thick/2])
 					rotate([0, 90, 0])
 					cylr(
 						face_thick,
@@ -37,15 +38,27 @@ module Button() {
 						1
 					);
 
-					translate([0, -button_dims.y/4, 0])
+					// Bottom cylinder.
+					translate([0, -button_dims.y/2 + .2, face_thick/2])
+					rotate([0, 90, 0])
+					cylr(
+						face_thick,
+						button_dims.x,
+						[1, 0, 1],
+						button_cham,
+						1
+					);
+
+					// Base bit.
+					translate([0, 0, 0])
 					cuber(
-						[button_dims.x, button_dims.y/2, face_thick - button_hole_cham],
+						[button_dims.x, button_dims.y, face_thick - button_hole_cham],
 						[1, 1, 0],
 					);
 				}
 				
 				// Curvey cutout.
-				translate([0, 0, face_thick - button_hole_cham ])
+				translate([0, button_dims.y/2, face_thick - button_hole_cham])
 				rotate([-angle, 0, 0])
 				rotate([-90, 0, 0])
 				rotate([0, 90, 0])
@@ -89,7 +102,11 @@ module Button() {
 	}
 
 	module Hinge(){
-		translate([0, button_anchor_pos_y - button_hinge_len])
+		translate([
+			0, 
+			button_anchor_pos_y - button_hinge_len, 
+			button_anchor_dims.z - button_hinge_thick - line[2]
+		])
 		cuber(
 			[
 				button_dims.x,

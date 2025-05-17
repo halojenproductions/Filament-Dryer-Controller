@@ -133,14 +133,16 @@ module ScreenHole_(){
 }
 
 module ButtonHole_(){
-	button_hole_dims = [hole(button_dims.x), hole(button_dims.y)];
+	button_hole_dims = [hole(button_dims.x, .2), hole(button_dims.y, .2)];
 	cuber(
-		[button_hole_dims.x , button_hole_dims.y, face_dims.z + nonzero()]
+		[button_hole_dims.x , button_hole_dims.y, face_dims.z + nonzero()],
+		[1, 1, 0],
 	);
 	// Champher.
 	hull(){
 		cuber(
-			[button_hole_dims.x, button_hole_dims.y, button_hole_cham]
+			[button_hole_dims.x, button_hole_dims.y, button_hole_cham],
+			[1, 1, 0],
 		);
 		translate([0, 0, -nonzero()])
 		cuber(
@@ -149,7 +151,8 @@ module ButtonHole_(){
 				button_hole_dims.y + button_hole_cham*2, 
 				nonzero(),
 			],
-			r = button_hole_cham,
+			[1, 1, 0],
+			button_hole_cham,
 		);
 	}
 }
@@ -315,16 +318,14 @@ module ButtonAnchorShroud(){
 			]);
 
 			// Hinge cutout.
-			translate([0, 0, button_anchor_dims.z])
-			mirror([0, 0, 1])
 			translate([0, - screen_shroud_offset/2 - button_anchor_dims.y/2])
 			cuber(
 				[
 					hole(button_dims.x, -.1),
-					screen_shroud_offset,
-					button_hinge_thick + line[2],
+					screen_shroud_offset + nonzero(),
+					button_anchor_dims.z + nonzero(),
 				],
-
+				[1, 1, 0],
 			);
 			
 		}
