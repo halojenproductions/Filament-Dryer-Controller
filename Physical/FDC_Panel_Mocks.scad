@@ -6,12 +6,15 @@ ex = [1,1,1,0];
 /* [Hidden] */
 $fn = $preview ? 50 : q;
 
+module Mocks(){
+	*translate(pcb_pos)
+	Pcb();
 
-Pcb();
-Screen();
+	translate(screen_pos)
+	Screen();
+}
 
 module Pcb(){
-	translate([0, 0, screen_glass_dims.z + screen_board_dims.z + header_hei])
 	difference(){
 		cuber(
 			[
@@ -19,6 +22,8 @@ module Pcb(){
 				pcb_dims.y, 
 				pcb_dims.z,
 			],
+			[1, 1, 0],
+			5
 		);
 	}
 }

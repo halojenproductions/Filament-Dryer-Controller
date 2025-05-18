@@ -1,33 +1,23 @@
 use <..\..\3D Printing\Library.scad>
+
+/**
+ * Dimensions.
+ * 
+ * Something i've learnt: 
+ * Never make dimensions dependent on positions and always 
+ * define positions after all dimensions are defined.
+ */
+
 line = [.42, .45, .2];
 
 screen_board_dims=[36, 33.5, 1.0];
 screen_screw_pitch = [30.5, 28.5];
-screen_screw_pos = [
-	[
-		-screen_screw_pitch.x/2, 
-		screen_screw_pitch.y/2 ,
-	],
-	[
-		screen_screw_pitch.x/2, 
-		screen_screw_pitch.y/2
-	],
-	[
-		-screen_screw_pitch.x/2, 
-		-screen_screw_pitch.y/2
-	],
-	[
-		screen_screw_pitch.x/2, 
-		-screen_screw_pitch.y/2
-	],
-];
 screen_screw_hole_dia = 3;
 screen_glass_dims = [34.5, 23, 1.6];
 screen_window_shift_y = 2;
 screen_visible_dims = [31, 16];
 screen_standoff_z = line[2]*2;
 screen_standoff_wid = line[0]*2;
-screen_pos = [0, 6.5, 0];
 screen_cham = 1.0;
 
 screen_shroud_offset = line[0]*2;
@@ -60,7 +50,7 @@ frame_dims = [
 ];
 frame_locator_dia = hole(screen_screw_hole_dia) + line[0]*4;
 frame_screw_hole_dia = 2; // M2
-frame_insert_dims = [hole(2.8), 3];
+frame_insert_dims = [3.2, 3]; // M2 heatset insert.
 frame_screw_post_dia = frame_insert_dims[0] + line[0]*6;
 frame_top_dims = [
 	screen_shroud_dims.x, 
@@ -68,28 +58,6 @@ frame_top_dims = [
 	frame_dims.z,
 ];
 frame_screw_pitch_x = screen_screw_pitch.x;
-frame_screw_pos = [
-	[
-		-frame_screw_pitch_x/2, 
-		screen_board_dims.y/2 + frame_top_dims.y/2,
-	],
-	[
-		frame_screw_pitch_x/2, 
-		screen_board_dims.y/2 + frame_top_dims.y/2
-	],
-	// TODO bottom screws
-];
-
-led_pos = [
-	[
-		-led_pitch/2, 
-		frame_screw_pos[0].y,
-	],
-	[
-		led_pitch/2, 
-		frame_screw_pos[1].y,
-	],
-];
 
 button_dims = [16, 12, screen_shroud_dims.z + frame_dims.z - 3];
 button_hole_cham = screen_cham;
@@ -105,11 +73,49 @@ button_anchor_dims = [
 	button_dims.z,
 ];
 
+pcb_dims = [
+	frame_dims.x, 
+	60, 
+	1.6
+];
+
+pcb_screw_post_len = screen_shroud_dims.z + frame_dims.z;
+
+
+/**
+ * Positions.
+ * 
+ * Something i've learnt: 
+ * Never make dimensions dependent on positions and always 
+ * define positions after all dimensions are defined.
+ */
+
+screen_pos = [0, 6.5, face_thick + screen_standoff_z];
+
+screen_screw_pos = [
+	[
+		-screen_screw_pitch.x/2, 
+		screen_screw_pitch.y/2 ,
+	],
+	[
+		screen_screw_pitch.x/2, 
+		screen_screw_pitch.y/2
+	],
+	[
+		-screen_screw_pitch.x/2, 
+		-screen_screw_pitch.y/2
+	],
+	[
+		screen_screw_pitch.x/2, 
+		-screen_screw_pitch.y/2
+	],
+];
+
 button_pos = [
 	0, 
 	screen_pos.y - screen_shroud_dims.y/2 
-	- button_anchor_dims.y - button_hinge_len 
-	- button_flange_offset - button_dims.y/2, 
+		- button_anchor_dims.y - button_hinge_len 
+		- button_flange_offset - button_dims.y/2, 
 	face_thick + button_dims.z
 ];
 
@@ -117,12 +123,49 @@ button_pos = [
 button_anchor_pos_y = button_dims.y/2 + button_flange_offset 
 + button_hinge_len + button_anchor_dims.y/2;
 
-
-pcb_dims = [
-	frame_dims.x, 
-	60, 
-	1.6
+frame_pos = [
+	0, 
+	screen_pos.y,
+	face_thick + screen_shroud_dims.z
 ];
 
+frame_screw_pos = [
+	[
+		-frame_screw_pitch_x/2, 
+		screen_board_dims.y/2 + frame_top_dims.y/2,
+	],
+	[
+		frame_screw_pitch_x/2, 
+		screen_board_dims.y/2 + frame_top_dims.y/2
+	],
+	[
+		-frame_screw_pitch_x/2, 
+		button_pos.y - button_dims.y/2 
+		- button_flange_offset + frame_screw_post_dia/2
+	],
+	[ 
+		frame_screw_pitch_x/2, 
+		button_pos.y - button_dims.y/2 
+		- button_flange_offset + frame_screw_post_dia/2
+	],
+];
+
+led_pos = [
+	[
+		-led_pitch/2, 
+		frame_screw_pos[0].y,
+	],
+	[
+		led_pitch/2, 
+		frame_screw_pos[1].y,
+	],
+];
+
+
+pcb_pos = [
+	0,
+	0,
+	frame_pos.z + frame_dims.z
+];
 
 

@@ -17,11 +17,7 @@ if(ex[0]){
 }
 
 if(ex[1]){
-	translate([
-		0, 
-		screen_pos.y, 
-		face_thick + screen_standoff_z + screen_glass_dims.z + screen_board_dims.z,
-	])
+	translate(frame_pos)
 	Frame();
 }
 
@@ -31,15 +27,7 @@ if(ex[2]){
 	Button();
 }
 
-echo(str("screen_shroud_dims.z = ", screen_shroud_dims.z));
-echo(str("screen_shroud_dims.z + frame_dims.z = ", screen_shroud_dims.z + frame_dims.z));
-
 // Ghosts.
-%translate([0, 0, face_thick + screen_standoff_z]){
-	*Pcb();
-	translate([0, screen_pos.y, 0])
-	Screen();
-}
-
+%Mocks();
 
 
