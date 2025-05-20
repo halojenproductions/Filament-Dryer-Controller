@@ -15,6 +15,8 @@ module Frame() {
 			FrameMain();
 
 			FrameButtonAnchor();
+
+			FrameBottom();
 		}
 
 		FrameScrewHoles_();
@@ -23,53 +25,12 @@ module Frame() {
 }
 
 module FrameTop(){
-	translate([0, screen_board_dims.y/2])
+	translate([0, screen_board_dims.y/2 - screen_shroud_offset])
 	cuber(
-		frame_top_dims,
+		[frame_top_dims.x, frame_top_dims.y + screen_shroud_offset, frame_top_dims.z],
 		[1, 0, 0],
-		frame_top_dims.y/2
-	);
-}
-
-module FrameButtonAnchor(){
-	translate([0, - screen_board_dims.y/2 - screen_shroud_offset - button_anchor_dims.y/2])
-	mirror([0, 0, 1])
-	cuber(
-		[
-			button_anchor_dims.x + screen_shroud_offset*2,
-			button_anchor_dims.y + screen_shroud_offset*2,
-			screen_shroud_dims.z - button_anchor_dims.z,
-		],
-		[1, 1, 0],
 		screen_shroud_offset
 	);
-}
-
-module FrameScrewHoles_(){
-	// Screwholes.
-	Screwhole(frame_screw_pos[0]);
-	Screwhole(frame_screw_pos[1]);
-
-	module Screwhole(pos){
-		translate(pos)
-		cylr(frame_screw_hole_dia, frame_dims.z + nonzero());
-	}
-}
-
-module FrameLedHoles_(){
-	// Leds.
-	Led(led_pos[0]);
-	Led(led_pos[1]);
-
-	module Led(pos){
-		translate(pos){
-			cylr(hole(led_dia, .1), frame_top_dims.z + nonzero());
-
-			translate([0, 0, frame_top_dims.z])
-			mirror([0, 0, 1])
-			coner(led_dia + 1.5, led_dia + 1.5, 1.5, r2=.5, cham2=1);
-		}
-	}
 }
 
 module FrameMain(){
@@ -80,7 +41,7 @@ module FrameMain(){
 				frame_dims.y,
 				frame_dims.z,
 			],
-			r = frame_unnamed_dim,
+			r = screen_shroud_offset,
 		);
 		translate([0, 0, -nonzero()])
 		cuber([
@@ -134,6 +95,91 @@ module FrameMain(){
 			[1, 1, 0],
 		);
 
+	}
+}
+
+module FrameButtonAnchor(){
+	translate([
+		0, 
+		- screen_board_dims.y/2 - screen_shroud_offset,
+		frame_dims.z
+	])
+	mirror([0, 1, 0])
+	mirror([0, 0, 1])
+	intersection(){
+		translate([0, -screen_shroud_offset, 0])
+		cuber(
+			[
+				button_anchor_dims.x + screen_shroud_offset*2,
+				button_anchor_dims.y + screen_shroud_offset*2,
+				frame_dims.z + (screen_shroud_dims.z - button_anchor_dims.z),
+			],
+			[1, 0, 0],
+			screen_shroud_offset
+		);
+		cuber(
+			[
+				button_anchor_dims.x + screen_shroud_offset*2,
+				button_anchor_dims.y + screen_shroud_offset,
+				frame_dims.z + (screen_shroud_dims.z - button_anchor_dims.z),
+			],
+			[1, 0, 0],
+		);
+	}
+}
+
+module FrameScrewHoles_(){
+	// Screwholes.
+	Screwhole(pcb_screw_pos[0]);
+	Screwhole(pcb_screw_pos[1]);
+
+	module Screwhole(pos){
+		translate(pos)
+		cylr(frame_screw_hole_dia, frame_dims.z + nonzero());
+	}
+}
+
+module FrameLedHoles_(){
+	// Leds.
+	Led(led_pos[0]);
+	Led(led_pos[1]);
+
+	module Led(pos){
+		translate(pos){
+			cylr(led_shroud_dia, frame_top_dims.z + nonzero());
+
+			// translate([0, 0, frame_top_dims.z])
+			// mirror([0, 0, 1])
+			// coner(led_shroud_dia, led_shroud_dia, 1.5, r2=.5, cham2=1);
+		}
+	}
+}
+
+module FrameBottom(){
+	Side(pcb_screw_pos[2]);
+	Side(pcb_screw_pos[3]);
+
+	module Side(bot_pos){
+		difference(){
+			hull(){
+				translate([bot_pos.x, -frame_dims.y/2])
+				mirror([0, 1, 0])
+				cuber(
+					[
+						pcb_screw_post_dia, 
+						nonzero(),
+						frame_dims.z + nonzero(),
+					],
+					[1, 0, 0],
+				);
+				
+				translate([bot_pos.x, bot_pos.y - screen_pos.y])
+				cylr(pcb_screw_post_dia, frame_dims.z + nonzero());
+			}
+
+			translate([bot_pos.x, bot_pos.y - screen_pos.y])
+			cylr(hole(frame_screw_dims[0], .1), frame_dims.z + nonzero());
+		}
 	}
 }
 

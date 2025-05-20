@@ -1,3 +1,4 @@
+use <..\..\3D Printing\Hardware.scad>
 include <FDC_Panel_Library.scad>
 
 q = 100;
@@ -12,6 +13,31 @@ module Mocks(){
 
 	translate(screen_pos)
 	Screen();
+
+	translate([0, 0, pcb_screw_pos_z])
+	FrameScrews();
+}
+
+module FrameScrews(){
+	translate([0, screen_pos.y]){
+		// Top left.
+		Screw(pcb_screw_pos[0]);
+		// Top right.
+		Screw(pcb_screw_pos[1]);
+		// Bottom left.
+	}
+	Screw(pcb_screw_pos[2]);
+	// Bottom right.
+	Screw(pcb_screw_pos[3]);
+
+	module Screw(pos){
+		screw_caphead(
+			[frame_screw_dims[0], hole(5), frame_screw_dims[1], .5, 0], 
+			pos,
+			[0, 0],
+			false
+		);
+	}
 }
 
 module Pcb(){

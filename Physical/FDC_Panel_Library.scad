@@ -1,4 +1,5 @@
 use <..\..\3D Printing\Library.scad>
+use <..\..\3D Printing\Hardware.scad>
 
 /**
  * Dimensions.
@@ -35,26 +36,26 @@ face_rad = 5;
 face_cham = 1.2;
 
 led_dia = 3.0;
-led_shroud_dia = hole(led_dia) + line[0]*4;
-led_pitch = 18;
+led_shroud_dia = led_dia + line[0]*4;
+led_pitch = 20.5;
 
 	header_pitch = 2.54;
 	header_dia = 2.5;
 	header_hei = 2.5;
 
-frame_unnamed_dim = 4;
 frame_dims = [
-	screen_board_dims.x + frame_unnamed_dim*2,
-	screen_board_dims.y + frame_unnamed_dim*2,
+	screen_shroud_dims.x,
+	screen_shroud_dims.y,
 	header_hei,
 ];
 frame_locator_dia = hole(screen_screw_hole_dia) + line[0]*4;
-frame_screw_hole_dia = 2; // M2
-frame_insert_dims = [3.2, 3]; // M2 heatset insert.
-frame_screw_post_dia = frame_insert_dims[0] + line[0]*6;
+frame_screw_hole_dia = 2; // Don't use, deprecated.
+frame_screw_dims = [2, 6]; // M2
+pcb_inserts = ["M2", 2, .3];
+pcb_screw_post_dia = heatset_insert_hole(pcb_inserts[0]) + line[0]*6;
 frame_top_dims = [
 	screen_shroud_dims.x, 
-	max(led_dia + screen_shroud_offset*2, frame_screw_post_dia), 
+	max(led_shroud_dia, pcb_screw_post_dia), 
 	frame_dims.z,
 ];
 frame_screw_pitch_x = screen_screw_pitch.x;
@@ -129,43 +130,71 @@ frame_pos = [
 	face_thick + screen_shroud_dims.z
 ];
 
-frame_screw_pos = [
-	[
-		-frame_screw_pitch_x/2, 
-		screen_board_dims.y/2 + frame_top_dims.y/2,
-	],
-	[
-		frame_screw_pitch_x/2, 
-		screen_board_dims.y/2 + frame_top_dims.y/2
-	],
-	[
-		-frame_screw_pitch_x/2, 
-		button_pos.y - button_dims.y/2 
-		- button_flange_offset + frame_screw_post_dia/2
-	],
-	[ 
-		frame_screw_pitch_x/2, 
-		button_pos.y - button_dims.y/2 
-		- button_flange_offset + frame_screw_post_dia/2
-	],
-];
-
-led_pos = [
-	[
-		-led_pitch/2, 
-		frame_screw_pos[0].y,
-	],
-	[
-		led_pitch/2, 
-		frame_screw_pos[1].y,
-	],
-];
-
-
 pcb_pos = [
 	0,
 	0,
 	frame_pos.z + frame_dims.z
 ];
 
+pcb_screw_pos = [
+	[ // Relative to frame position.
+		-frame_screw_pitch_x/2, 
+		screen_board_dims.y/2 + pcb_screw_post_dia/2,
+	],
+	[ // Relative to frame position.
+		frame_screw_pitch_x/2, 
+		screen_board_dims.y/2 + frame_top_dims.y/2,
+	],
+	[
+		-frame_screw_pitch_x/2, 
+		button_pos.y - button_dims.y/2 
+		- button_flange_offset + pcb_screw_post_dia/2
+	],
+	[ 
+		frame_screw_pitch_x/2, 
+		button_pos.y - button_dims.y/2 
+		- button_flange_offset + pcb_screw_post_dia/2
+	],
+];
+pcb_screw_pos_z = pcb_pos.z + pcb_dims.z;
 
+pcb_insert_pos = [
+	[
+		pcb_screw_pos[0].x,
+		pcb_screw_pos[0].y + screen_pos.y, 
+		frame_pos.z,
+	],
+	[
+		pcb_screw_pos[1].x,
+		pcb_screw_pos[1].y + screen_pos.y, 
+		frame_pos.z,
+	],
+	[
+		pcb_screw_pos[2].x,
+		pcb_screw_pos[2].y, 
+		pcb_pos.z,
+	],
+	[
+		pcb_screw_pos[3].x,
+		pcb_screw_pos[3].y, 
+		pcb_pos.z,
+	],
+];
+
+led_pos = [
+	[
+		-led_pitch/2, 
+		pcb_screw_pos[0].y,
+	],
+	[
+		led_pitch/2, 
+		pcb_screw_pos[1].y,
+	],
+];
+
+
+assert(
+	(screen_shroud_dims.z - pcb_inserts[1])
+	>= 0,
+	"Insert would be in the face."
+);

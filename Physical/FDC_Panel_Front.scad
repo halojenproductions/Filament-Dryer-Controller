@@ -25,13 +25,11 @@ module Front() {
 
 			LedHoles_();
 
-			FrameScrewPostInserts_();
 		}
 		
 		translate([0, button_pos.y])
 		ButtonHole_();
 
-		PcbScrewPostInserts_();
 	}
 }
 
@@ -167,7 +165,7 @@ module LedHoles_(){
 
 	module Led(pos){
 		translate(pos)
-		cylr(hole(led_dia, .1), face_thick + screen_shroud_dims.z);
+		cylr(hole(led_dia, .1), frame_pos.z);
 	}
 }
 
@@ -272,74 +270,36 @@ module ScreenShroud(){
 
 module FrameScrewPosts(){
 	// Top left.
-	TopScrewPost(frame_screw_pos[0]);
+	PcbScrewPost(pcb_screw_pos[0]);
 	// Top right.
-	TopScrewPost(frame_screw_pos[1]);
-
-	module TopScrewPost(pos){
-		translate(pos)
-		coner(
-			frame_screw_post_dia, 
-			frame_screw_post_dia, 
-			screen_shroud_dims.z,
-			[1, 1, 0], 
-			0, 
-			0,
-		);
-	}
+	PcbScrewPost(pcb_screw_pos[1]);
 }
+
 
 module PcbScrewPosts(){
 	// Bottom left.
-	BotScrewPost(frame_screw_pos[2]);
+	PcbScrewPost(pcb_screw_pos[2]);
 	// Bottom right.
-	BotScrewPost(frame_screw_pos[3]);
+	PcbScrewPost(pcb_screw_pos[3]);
+}
 
-	module BotScrewPost(pos){
+module PcbScrewPost(pos){
+	difference(){
 		translate(pos)
-		difference(){
-			coner(
-				frame_screw_post_dia, 
-				frame_screw_post_dia, 
-				pcb_screw_post_len,
-				[1, 1, 0], 
-				-1, 
-				0,
-				true,
-			);
-		}
+		coner(
+			pcb_screw_post_dia, 
+			pcb_screw_post_dia, 
+			screen_shroud_dims.z,
+			[1, 1, 0], 
+			-1, 
+			0,
+			true,
+		);
+
+		heatset_insert(pcb_inserts, pos=[pos.x, pos.y, screen_shroud_dims.z]);
 	}
 }
 
-module FrameScrewPostInserts_(){
-	// For frame and pcb screws.
-	translate([0, 0, face_thick + screen_shroud_dims.z]){
-		// Top left.
-		Insert(frame_screw_pos[0]);
-		// Top right.
-		Insert(frame_screw_pos[1]);
-	}
-
-	module Insert(pos){
-		translate(pos)
-		insert_threaded(frame_insert_dims);
-	}
-}
-
-module PcbScrewPostInserts_(){
-	// For frame and pcb screws.
-	translate([0, 0, face_thick + screen_shroud_dims.z]){
-		// Bottom left.
-		Insert(frame_screw_pos[2]);
-		// Bottom right.
-		Insert(frame_screw_pos[3]);
-	}
-
-	module Insert(pos){
-		translate(pos)
-		insert_threaded(frame_insert_dims, rec = pcb_pos.z - (face_thick + screen_shroud_dims.z));
-	}
-}
 
 module ButtonAnchorShroud(){
 	translate([0, button_anchor_pos_y]){
