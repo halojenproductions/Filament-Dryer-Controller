@@ -8,14 +8,40 @@ ex = [1,1,1,0];
 $fn = $preview ? 50 : q;
 
 module Mocks(){
-	*translate(pcb_pos)
+	translate(pcb_pos)
+	render(convexity = 50)
+	color("#999999", .5)
 	Pcb();
 
 	translate(screen_pos)
+	render(convexity = 5)
+	color("#999999", .5)
 	Screen();
 
 	translate([0, 0, pcb_screw_pos_z])
+	render(convexity = 5)
+	color("#999999", .5)
 	FrameScrews();
+
+	translate([0, 0, face_thick + back_screw_post_len + back_screw_post_disc_thick])
+	render(convexity = 5)
+	color("#999999", .5)
+	BackScrews();
+}
+
+module BackScrews(){
+	for(pos = back_screw_pos){
+		Screw(pos);
+	}
+
+	module Screw(pos){
+		screw_caphead(
+			back_screw_dims, 
+			pos,
+			[0, 0],
+			false
+		);
+	}
 }
 
 module FrameScrews(){
@@ -32,7 +58,7 @@ module FrameScrews(){
 
 	module Screw(pos){
 		screw_caphead(
-			[frame_screw_dims[0], hole(5), frame_screw_dims[1], .5, 0], 
+			[pcb_screw_dims[0], hole(3.2), pcb_screw_dims[1], 1.3, 0], 
 			pos,
 			[0, 0],
 			false
@@ -49,9 +75,16 @@ module Pcb(){
 				pcb_dims.z,
 			],
 			[1, 1, 0],
-			5
+			1
 		);
 	}
+
+	translate([
+		0, 
+		screen_board_dims.y/2 + screen_pos.y - pcb_header_dims.y/2 - header_pitch/2, 
+		pcb_dims.z
+	])
+	cuber(pcb_header_dims, [1, 1, 0]);
 }
 
 module Screen(){

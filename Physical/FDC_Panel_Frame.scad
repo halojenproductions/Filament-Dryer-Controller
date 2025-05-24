@@ -27,7 +27,11 @@ module Frame() {
 module FrameTop(){
 	translate([0, screen_board_dims.y/2 - screen_shroud_offset])
 	cuber(
-		[frame_top_dims.x, frame_top_dims.y + screen_shroud_offset, frame_top_dims.z],
+		[
+			frame_top_dims.x, 
+			frame_top_dims.y + screen_shroud_offset + line[0], 
+			frame_top_dims.z
+		],
 		[1, 0, 0],
 		screen_shroud_offset
 	);
@@ -135,7 +139,7 @@ module FrameScrewHoles_(){
 
 	module Screwhole(pos){
 		translate(pos)
-		cylr(frame_screw_hole_dia, frame_dims.z + nonzero());
+		cylr(hole(pcb_screw_dims[0], .1), frame_dims.z + nonzero());
 	}
 }
 
@@ -168,17 +172,17 @@ module FrameBottom(){
 					[
 						pcb_screw_post_dia, 
 						nonzero(),
-						frame_dims.z + nonzero(),
+						frame_dims.z,
 					],
 					[1, 0, 0],
 				);
 				
 				translate([bot_pos.x, bot_pos.y - screen_pos.y])
-				cylr(pcb_screw_post_dia, frame_dims.z + nonzero());
+				cylr(pcb_screw_post_dia, frame_dims.z);
 			}
 
-			translate([bot_pos.x, bot_pos.y - screen_pos.y])
-			cylr(hole(frame_screw_dims[0], .1), frame_dims.z + nonzero());
+			translate([bot_pos.x, bot_pos.y - screen_pos.y, -nonzero()])
+			cylr(hole(pcb_screw_dims[0], .1), frame_dims.z + nonzero(1));
 		}
 	}
 }

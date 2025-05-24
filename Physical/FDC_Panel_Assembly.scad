@@ -5,9 +5,10 @@ use <FDC_Panel_Mocks.scad>
 use <FDC_Panel_Front.scad>
 use <FDC_Panel_Frame.scad>
 use <FDC_Panel_Button.scad>
+use <FDC_Panel_Back.scad>
 
 q = 100;
-ex = [1,1,1,0];
+ex = [1,1,1,1];
 
 /* [Hidden] */
 $fn = $preview ? 50 : q;
@@ -18,7 +19,7 @@ echo("Screw stack: ",
 
 
 if(ex[0]){
-	color("green")
+	color("SeaGreen")
 	Front();
 }
 
@@ -31,8 +32,15 @@ if(ex[1]){
 if(ex[2]){
 	translate(button_pos)
 	mirror([0, 0, 1])
-	color("blue")
+	color("SteelBlue")
 	Button();
+}
+
+if(ex[3]){
+	*translate([0, 0, face_dims.z + back_dims.z])
+	mirror([0, 0, 1])
+	color("SaddleBrown")
+	Back();
 }
 
 // Ghosts.

@@ -110,6 +110,9 @@ module Face(){
 	// Pcb screw posts (position not relative to frame).
 	translate([0, 0, face_thick])
 	PcbScrewPosts();
+
+	translate([0, 0, face_thick])
+	BackScrewPosts();
 }
 
 module ScreenHole_(){
@@ -275,7 +278,6 @@ module FrameScrewPosts(){
 	PcbScrewPost(pcb_screw_pos[1]);
 }
 
-
 module PcbScrewPosts(){
 	// Bottom left.
 	PcbScrewPost(pcb_screw_pos[2]);
@@ -291,7 +293,7 @@ module PcbScrewPost(pos){
 			pcb_screw_post_dia, 
 			screen_shroud_dims.z,
 			[1, 1, 0], 
-			-1, 
+				-(face_dims.z - face_thick), 
 			0,
 			true,
 		);
@@ -330,6 +332,29 @@ module ButtonAnchorShroud(){
 				[1, 1, 0],
 			);
 			
+		}
+	}
+}
+
+module BackScrewPosts(){
+	for(pos = back_screw_pos){
+		Post(pos);
+	}
+
+	module Post(pos){
+		difference(){
+			translate(pos)
+			coner(
+				back_screw_post_dia, 
+				back_screw_post_dia, 
+				back_screw_post_len,
+				[1, 1, 0], 
+				-(face_dims.z - face_thick), 
+				0,
+				true,
+			);
+
+			heatset_insert(back_inserts, pos=[pos.x, pos.y, back_screw_post_len]);
 		}
 	}
 }

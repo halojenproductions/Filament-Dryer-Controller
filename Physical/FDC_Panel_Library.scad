@@ -28,11 +28,18 @@ screen_shroud_dims = [
 	screen_standoff_z + screen_glass_dims.z + screen_board_dims.z,
 ];
 
+back_screw_dims = [3, 5.5, 10, 3, 0]; // M3.
+back_screw_thread_dia = 3; // M3.
+back_screw_post_len = 9;
+back_inserts = [back_screw_dims[0], 4, [back_screw_post_len-1, true]];
+back_screw_post_dia = heatset_insert_hole(back_inserts[0]) + line[0]*6;
+back_screw_post_shroud_thick = 2;
+back_screw_post_disc_thick = 3;
 
-face_dims = [50, 65, 2.0];
+
 face_thick = 1.4;
 face_in_offset = 2;
-face_rad = 5;
+face_rad = back_screw_post_dia/2 + face_in_offset;
 face_cham = 1.2;
 
 led_dia = 3.0;
@@ -49,9 +56,8 @@ frame_dims = [
 	header_hei,
 ];
 frame_locator_dia = hole(screen_screw_hole_dia) + line[0]*4;
-frame_screw_hole_dia = 2; // Don't use, deprecated.
-frame_screw_dims = [2, 6]; // M2
-pcb_inserts = ["M2", 2, .3];
+pcb_screw_dims = [2, 6]; // M2
+pcb_inserts = [pcb_screw_dims[0], 2, .6];
 pcb_screw_post_dia = heatset_insert_hole(pcb_inserts[0]) + line[0]*6;
 frame_top_dims = [
 	screen_shroud_dims.x, 
@@ -66,8 +72,6 @@ button_flange_offset = line[0]*2;
 button_hinge_len = 2;
 button_hinge_thick = line[2]*3;
 button_cham = .5;
-
-
 button_anchor_dims = [
 	button_dims.x + 5, 
 	2,
@@ -76,12 +80,14 @@ button_anchor_dims = [
 
 pcb_dims = [
 	frame_dims.x, 
-	60, 
+	58, 
 	1.6
 ];
-
+pcb_header_dims = [10.5, 5, 9];
 pcb_screw_post_len = screen_shroud_dims.z + frame_dims.z;
 
+back_shell_thick = 3;
+back_perim_thick = 1.6;
 
 /**
  * Positions.
@@ -181,6 +187,12 @@ pcb_insert_pos = [
 	],
 ];
 
+assert(
+	(screen_shroud_dims.z - pcb_inserts[1])
+	>= 0,
+	"Insert would be in the face."
+);
+
 led_pos = [
 	[
 		-led_pitch/2, 
@@ -193,8 +205,54 @@ led_pos = [
 ];
 
 
-assert(
-	(screen_shroud_dims.z - pcb_inserts[1])
-	>= 0,
-	"Insert would be in the face."
-);
+back_screw_pos = [
+	[
+		-frame_dims.x/2 - 1, 
+		1 + frame_pos.y + pcb_screw_pos[0].y + 
+			(frame_top_dims.y + screen_shroud_offset)/2 + 
+			back_screw_post_dia/2 + back_screw_post_shroud_thick,
+	],
+	[
+		frame_dims.x/2 + 1, 
+		1 + frame_pos.y + pcb_screw_pos[0].y + 
+			(frame_top_dims.y + screen_shroud_offset)/2 + 
+			back_screw_post_dia/2 + back_screw_post_shroud_thick,
+	],
+	[
+		-frame_dims.x/2 - 1, 
+		-1 - frame_pos.y - pcb_screw_pos[0].y - 
+			(frame_top_dims.y + screen_shroud_offset)/2 - 
+			back_screw_post_dia/2 - back_screw_post_shroud_thick,
+	],
+	[
+		frame_dims.x/2 + 1, 
+		-1 - frame_pos.y - pcb_screw_pos[0].y - 
+			(frame_top_dims.y + screen_shroud_offset)/2 - 
+			back_screw_post_dia/2 - back_screw_post_shroud_thick,
+	],
+];
+
+
+/**
+ * Outside dims.
+ * 
+ * Ok so i decided there's an exception to the rule. The outermost 
+ * thing/things can have their dimensions depend on positions.
+ */
+
+face_dims = [
+	abs(back_screw_pos[0].x) + back_screw_pos[1].x +
+		back_screw_post_dia + face_in_offset*2,
+	back_screw_pos[0].y + abs(back_screw_pos[2].y) + 
+		back_screw_post_dia + face_in_offset*2,
+	2.0
+];
+
+back_dims = [
+	face_dims.x, 
+	face_dims.y, 
+	pcb_pos.z + pcb_dims.z + pcb_header_dims.z + 
+		back_shell_thick - face_thick,
+];
+
+
