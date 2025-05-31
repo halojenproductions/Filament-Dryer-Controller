@@ -6,7 +6,7 @@ use <FDC_Panel_Frame.scad>
 use <FDC_Panel_Button.scad>
 
 q = 100;
-ex = [1,1,1,0];
+ex = [1,1,0,0];
 
 /* [Hidden] */
 $fn = $preview ? 50 : q;
@@ -15,6 +15,17 @@ if(ex[0]){
 	Front();
 }
 
+if(ex[1]){
+	LedLenses();
+}
+
+if(ex[2]){
+	purge_castle(h=line[2]*3, single=true);
+}
+
+if(ex[3]){
+	purge_castle(h=line[2]*2, single=true);
+}
 
 module Front() {
 	difference(){
@@ -167,7 +178,7 @@ module LedHoles_(){
 	Led(led_pos[1]);
 
 	module Led(pos){
-		translate(pos)
+		translate([pos.x, pos.y, line[2]*2])
 		cylr(hole(led_dia, .1), frame_pos.z);
 	}
 }
@@ -345,8 +356,8 @@ module BackScrewPosts(){
 		difference(){
 			translate(pos)
 			coner(
-				back_screw_post_dia, 
-				back_screw_post_dia, 
+				back_screw_post_dia - .1, 
+				back_screw_post_dia - .1, 
 				back_screw_post_len,
 				[1, 1, 0], 
 				-(face_dims.z - face_thick), 
@@ -356,5 +367,17 @@ module BackScrewPosts(){
 
 			heatset_insert(back_inserts, pos=[pos.x, pos.y, back_screw_post_len]);
 		}
+	}
+}
+
+module LedLenses(){
+	translate([0, screen_pos.y, 0]){
+		LedLens(led_pos[0]);
+		LedLens(led_pos[1]);
+	}
+
+	module LedLens(pos){
+		translate(pos)
+		cylr(hole(led_dia, .1), line[2]*2);
 	}
 }

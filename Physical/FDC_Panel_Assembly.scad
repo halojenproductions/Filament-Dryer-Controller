@@ -8,7 +8,7 @@ use <FDC_Panel_Button.scad>
 use <FDC_Panel_Back.scad>
 
 q = 100;
-ex = [1,1,1,1];
+ex = [1,1,1,1,0];
 
 /* [Hidden] */
 $fn = $preview ? 50 : q;
@@ -24,20 +24,25 @@ if(ex[0]){
 }
 
 if(ex[1]){
+	color("LightCyan")
+	LedLenses();
+}
+
+if(ex[2]){
 	translate(frame_pos)
 	color("yellow")
 	Frame();
 }
 
-if(ex[2]){
+if(ex[3]){
 	translate(button_pos)
 	mirror([0, 0, 1])
 	color("SteelBlue")
 	Button();
 }
 
-if(ex[3]){
-	*translate([0, 0, face_dims.z + back_dims.z])
+if(ex[4]){
+	translate([0, 0, face_dims.z + back_dims.z])
 	mirror([0, 0, 1])
 	color("SaddleBrown")
 	Back();

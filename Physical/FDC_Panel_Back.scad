@@ -106,7 +106,7 @@ module ShellOutside(){
 	}
 
 	module Bottom(){
-		inset = face_rad - hole(back_screw_dims[1], .2)/2 - line[0];
+		inset = face_rad - hole(back_screw_dims[1], .2)/2 - line[0]*2;
 		hull(){
 			translate([0, 0, back_screw_post_dia])
 			cuber(
