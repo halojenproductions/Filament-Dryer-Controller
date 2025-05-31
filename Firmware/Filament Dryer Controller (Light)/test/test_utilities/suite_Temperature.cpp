@@ -19,6 +19,7 @@ namespace suite_Temperature {
 		// Reset state before each test
 		Sys::sensTemp = 50;
 		Sys::statuses = 0;
+		Sys::errors   = 0;
 	}
 
 	// Tests.
@@ -38,7 +39,7 @@ namespace suite_Temperature {
 		// Act & assert together because it's my project and i can do what i want.
 		TEST_ASSERT_TRUE(Util::checkTemperature(testValue));
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
-		TEST_ASSERT_FALSE(Util::getStatus(Sys::Status::Error));
+		TEST_ASSERT_FALSE(Util::getError(Sys::Error::Sensor));
 	}
 
 	void Temperature_Check_NaN(void) {
@@ -48,7 +49,7 @@ namespace suite_Temperature {
 		uint8_t expectedValue = 50;
 		// Act & assert together because it's my project and i can do what i want.
 		TEST_ASSERT_FALSE(Util::checkTemperature(testValue));
-		TEST_ASSERT_TRUE(Util::getStatus(Sys::Status::Error));
+		TEST_ASSERT_TRUE(Util::getError(Sys::Error::Sensor));
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
 	}
 
@@ -59,7 +60,7 @@ namespace suite_Temperature {
 		uint8_t expectedValue = 50;
 		// Act & assert together because it's my project and i can do what i want.
 		TEST_ASSERT_FALSE(Util::checkTemperature(testValue));
-		TEST_ASSERT_TRUE(Util::getStatus(Sys::Status::Error));
+		TEST_ASSERT_TRUE(Util::getError(Sys::Error::Sensor));
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
 	}
 
@@ -70,7 +71,7 @@ namespace suite_Temperature {
 		uint8_t expectedValue = 50;
 		// Act & assert together because it's my project and i can do what i want.
 		TEST_ASSERT_FALSE(Util::checkTemperature(testValue));
-		TEST_ASSERT_TRUE(Util::getStatus(Sys::Status::Error));
+		TEST_ASSERT_TRUE(Util::getError(Sys::Error::Sensor));
 		TEST_ASSERT_EQUAL(expectedValue, Sys::sensTemp);
 	}
 }

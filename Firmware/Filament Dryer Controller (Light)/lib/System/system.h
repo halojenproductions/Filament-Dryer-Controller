@@ -10,7 +10,6 @@
 namespace Sys {
 	enum class Status : uint16_t {
 		Ok,
-		Error,
 		ScreenAwake,
 		Heating,
 		HeatDuty,

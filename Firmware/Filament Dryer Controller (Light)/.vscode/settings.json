@@ -10,5 +10,15 @@
 	"editor.insertSpaces": false,
 	"files.insertFinalNewline": true,
 	"files.trimFinalNewlines": true,
-	"C_Cpp.default.compilerPath": "${userHome}/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe"
+	"C_Cpp.default.compilerPath": "${userHome}/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",
+	"github.copilot.nextEditSuggestions.enabled": true,
+	"github.copilot.nextEditSuggestions.fixes": true,
+	"github.copilot.chat.codesearch.enabled": true,
+	"github.copilot.chat.codeGeneration.instructions": [
+		{"text": "use new zealand english"},
+		{"text": "avoid unnecessary comments"},
+		{"text": "this is for an arduino atmega328p so keep efficiency and memory usage in mind"},
+		{"text": "avoid using libraries unless necessary"},
+		{"text": "follow the style of existing code as much as possible (but suggest improvements if needed)"}
+	]
 }

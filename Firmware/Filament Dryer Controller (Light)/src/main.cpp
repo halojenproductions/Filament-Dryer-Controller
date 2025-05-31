@@ -127,7 +127,7 @@ void loop() {
 	}
 
 	// Set statuses. or should that be commands?
-	if (Util::getStatus(Sys::Status::Error)) {
+	if (Util::hasError()) {
 		// Serial.println(F("Status::Error"));
 
 		Util::clearStatus(Sys::Status::Ok);

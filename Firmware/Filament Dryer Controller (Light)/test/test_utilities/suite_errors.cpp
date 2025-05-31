@@ -35,6 +35,8 @@ namespace suite_util_errors {
 			// Set.
 			setError(error);
 			TEST_ASSERT_BITS(mask, expected, errors);
+			// Has.
+			TEST_ASSERT_TRUE(hasError());
 			// Get.
 			TEST_ASSERT_TRUE(getError(error));
 			// Clear.
@@ -47,6 +49,8 @@ namespace suite_util_errors {
 			// Set.
 			setError(error);
 			TEST_ASSERT_BITS(mask, expected, errors);
+			// Has.
+			TEST_ASSERT_TRUE(hasError());
 			// Get.
 			TEST_ASSERT_TRUE(getError(error));
 			// NOT cleared.

@@ -21,7 +21,7 @@ namespace Util {
 	bool checkHumidity(float humidity) {
 		// Validate the value.
 		if (isnan(humidity) || humidity < 0 || humidity > 100) {
-			setStatus(Sys::Status::Error);
+			setError(Sys::Error::Sensor);
 			return false;
 		}
 
@@ -37,7 +37,7 @@ namespace Util {
 	bool checkTemperature(float temperature) {
 		// Validate the value.
 		if (isnan(temperature) || temperature < 0 || temperature > 100) {
-			setStatus(Sys::Status::Error);
+			setError(Sys::Error::Sensor);
 			return false;
 		}
 
@@ -53,7 +53,7 @@ namespace Util {
 	bool checkTherm(int8_t temperature) {
 		// Validate the value.
 		if (temperature < 0 || temperature > 100) {
-			setStatus(Sys::Status::Error);
+			setError(Sys::Error::Thermistor);
 			return false;
 		}
 
@@ -113,6 +113,10 @@ namespace Util {
 
 	bool getError(Error error) {
 		return bitRead(errors, static_cast<uint8_t>(error));
+	}
+
+	bool hasError() {
+		return errors > 0;
 	}
 
 	bool terminalError() {

@@ -17,8 +17,7 @@ namespace Control {
 
 			if (checkTimer(activeTimeout)) {
 				// Maybe desiccant needs replacing.
-				// TODO set error state.
-				setStatus(Status::Error);
+				setError(Error::ActiveTimeout);
 				heaterOff();
 				fanLow();
 				clearStatus(Status::Heating);
@@ -65,7 +64,7 @@ namespace Control {
 	}
 
 	void idle() {
-		if (getStatus(Status::Error) || !checkTimer(activeCooldown)) {
+		if (hasError() || !checkTimer(activeCooldown)) {
 			// Get out.
 			return;
 		}
@@ -83,10 +82,10 @@ namespace Control {
 		if (getTimer(heatDutyTimeout)) {
 			// Element should not be on that long.
 			// Either the element is broken or the thermistor has failed. Terminal error.
-			if (!getStatus(Status::Error)) {
+			if (!getError(Error::HeatDutyTimeout)) {
 				Serial.println(F("Heater duty timeout."));
 				// TODO set error state.
-				setStatus(Status::Error);
+				setError(Error::HeatDutyTimeout);
 			}
 			heaterOff();
 			return;
