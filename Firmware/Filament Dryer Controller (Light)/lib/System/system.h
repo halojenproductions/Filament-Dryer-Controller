@@ -9,13 +9,14 @@
 
 namespace Sys {
 	enum class Status : uint16_t {
-		Ok,
 		ScreenAwake,
+		Moist,
+		Active,
 		Heating,
 		HeatDuty,
+		Full,
 		ButtonDown,
 		Select,
-		Active,
 		_Last
 	};
 

@@ -106,14 +106,15 @@ namespace UI {
 		drawRealtimeTemp(Sys::sensTemp);
 		drawRealtimeHumidity(Sys::sensHumid);
 
-		if (Util::getStatus(Sys::Status::Active)) {
+		if (Util::getStatus(Sys::Status::Moist)) {
 			drawSymbolMoist();
 		}
 		if (Util::getStatus(Sys::Status::Heating)) {
 			drawSymbolHeat();
 		}
-		// TODO: Moist status, distint from Active status.
-		drawSymbolFull();
+		if (Util::getStatus(Sys::Status::Full)) {
+			drawSymbolFull();
+		}
 	}
 
 	void drawBorderTop() {

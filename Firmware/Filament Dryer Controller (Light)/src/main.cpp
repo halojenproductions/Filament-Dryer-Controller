@@ -53,8 +53,7 @@ void setup() {
 	Serial.println(F("Setting initial values"));
 	Util::clearCommand(Sys::Command::HandleButtonHold);
 	Util::setCommand(Sys::Command::WakeUp);
-	Util::setStatus(Sys::Status::Ok);
-	digitalWrite(Pins::pLedOk, Util::getStatus(Sys::Status::Ok));
+	digitalWrite(Pins::pLedOk, LOW);
 	Util::setStatus(Sys::Status::Active);
 	// Control::idle();
 
@@ -126,12 +125,12 @@ void loop() {
 		Control::idle();
 	}
 
-	// Set statuses. or should that be commands?
-	if (Util::hasError()) {
-		// Serial.println(F("Status::Error"));
-
-		Util::clearStatus(Sys::Status::Ok);
-		digitalWrite(Pins::pLedOk, Util::getStatus(Sys::Status::Ok) ? HIGH : LOW);
+	// Set ok led. I'm tempted to rename it to status led.
+	if (!Util::hasError()) {
+		digitalWrite(Pins::pLedOk, HIGH);
+	} else {
+		// TODO: flash for warnings.
+		digitalWrite(Pins::pLedOk, LOW);
 	}
 
 	if (Util::getStatus(Sys::Status::Heating)) {
@@ -163,5 +162,4 @@ void loop() {
 			UI::sleep();
 		}
 	}
-	// delay(10000);
 }
