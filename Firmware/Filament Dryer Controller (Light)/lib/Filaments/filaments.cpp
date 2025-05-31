@@ -1,19 +1,25 @@
 #include "filaments.h"
 
 namespace Filaments {
-	
+
 	// Keep filament definitions together in one place
-	constexpr uint8_t FILAMENT_COUNT					= 3;
+	constexpr uint8_t FILAMENT_COUNT					= 8;
 	const FilamentDef FILAMENTS[FILAMENT_COUNT] PROGMEM = {
-		{"PLA", 40, 40}, {"PETG/TPU", 50, 35}, {"PC", 80, 30}
+		{"PVA", 30, 40},
+		{"PLA", 40, 40},
+		{"TPU/TPE", 45, 30},
+		{"PETG", 55, 30},
+		{"ABS/ASA", 60, 35},
+		{"HIPS", 65, 25},
+		{"PC", 65, 20},
+		{"PA", 70, 15}
 	};
 
 	FilamentDef activeFilament;
 	FilamentDef displayFilament;
 
-	uint8_t activeIndex  = 0;
+	uint8_t activeIndex	 = 0;
 	uint8_t displayIndex = 0;
-
 
 	void apply() {
 		activeIndex = displayIndex;
