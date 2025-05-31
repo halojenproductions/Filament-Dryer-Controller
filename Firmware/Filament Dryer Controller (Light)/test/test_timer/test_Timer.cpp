@@ -19,6 +19,22 @@ void test_Timer_Check(void) {
 	TEST_ASSERT_FALSE(sut.check(millis()));
 }
 
+void test_Timer_MillisOverflow(void) {
+	Timer sut(100UL);
+	uint32_t currentTime = 0UL - 10;	// 10 ms before overflow.
+	sut.reset(currentTime);
+
+	// Simulate millis overflow 10ms after overflow.
+	currentTime = 0UL + 10;
+
+	// Within interval.
+	TEST_ASSERT_FALSE(sut.get(currentTime));
+
+	// Beyond interval.
+	currentTime += 100;
+	TEST_ASSERT_TRUE(sut.get(currentTime));
+}
+
 void setup() {
 	// NOTE!!! Wait for >2 secs
 	// if board doesn't support software reset via Serial.DTR/RTS
@@ -26,6 +42,7 @@ void setup() {
 	UNITY_BEGIN();
 
 	RUN_TEST(test_Timer_Check);
+	RUN_TEST(test_Timer_MillisOverflow);
 
 	UNITY_END();
 }
