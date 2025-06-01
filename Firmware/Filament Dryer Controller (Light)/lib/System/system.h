@@ -67,7 +67,7 @@ namespace Sys {
 	extern uint32_t currentTime;
 
 	// Exhaust temperature delta.
-	extern const uint8_t tempDelta;
+	extern const uint8_t TEMP_DELTA;
 
 	// Fan speeds.
 	extern const uint8_t FAN_SPEED_LOW;

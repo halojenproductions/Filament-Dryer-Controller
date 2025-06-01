@@ -9,7 +9,7 @@ namespace Sys {
 	uint32_t currentTime = millis();
 
 	// Exhaust temperature delta.
-	constexpr uint8_t tempDelta = 5;	// Degrees Celsius.
+	constexpr uint8_t TEMP_DELTA = 5;	 // Degrees Celsius.
 
 	// Fan speeds.
 	constexpr uint8_t FAN_SPEED_LOW	 = 10 * (255 / 100);	// 10% duty cycle.

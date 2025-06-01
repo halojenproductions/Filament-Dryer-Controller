@@ -43,7 +43,7 @@ namespace suite_util_errors {
 			clearError(error);
 			TEST_ASSERT_BITS_LOW(mask, errors);
 			// Terminal error check.
-			TEST_ASSERT_FALSE(terminalError());
+			TEST_ASSERT_FALSE(hasTerminalError());
 		} else {
 			// Terminal errors.
 			// Set.
@@ -57,7 +57,7 @@ namespace suite_util_errors {
 			clearError(error);
 			TEST_ASSERT_BITS(mask, expected, errors);
 			// Terminal error check.
-			TEST_ASSERT_TRUE(terminalError());
+			TEST_ASSERT_TRUE(hasTerminalError());
 		}
 	}
 }

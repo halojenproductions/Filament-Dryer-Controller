@@ -26,7 +26,7 @@ namespace Util {
 		}
 
 		int8_t humidValue = static_cast<int8_t>(humidity);
-		// If the value is different from ops, set ops and return true.
+		// If the value is different from sys, set sys and return true.
 		if (humidValue != sensHumid) {
 			sensHumid = humidValue;
 			return true;
@@ -119,7 +119,7 @@ namespace Util {
 		return errors > 0;
 	}
 
-	bool terminalError() {
+	bool hasTerminalError() {
 		// Create a copy of the errors byte
 		byte errorMask = errors;
 

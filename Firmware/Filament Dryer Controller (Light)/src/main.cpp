@@ -118,6 +118,12 @@ void loop() {
 		}
 	}
 
+	if (Sys::sensHumid > Filaments::activeFilament.humidity) {
+		Util::setStatus(Sys::Status::Moist);
+	} else {
+		Util::clearStatus(Sys::Status::Moist);
+	}
+
 	// Control loop.
 	if (Util::getStatus(Sys::Status::Active)) {
 		Control::active();

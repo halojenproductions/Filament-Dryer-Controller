@@ -8,7 +8,7 @@ void setup() {
 	delay(200);
 	UNITY_BEGIN();
 
-	// suite_control_dry::suite_Dry();
+	suite_control_active::suite_Active();
 	// suite_control_humid::suite_Humid();
 	// suite_control_error::suite_Error();
 

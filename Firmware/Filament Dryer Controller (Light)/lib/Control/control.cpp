@@ -11,8 +11,7 @@ namespace Control {
 	Timer heatDutyTimeout(HEAT_DUTY_TIMEOUT_INTERVAL);
 
 	void active() {
-		// Serial.println("Active");
-		if (sensHumid > Filaments::activeFilament.humidity) {
+		if (getStatus(Status::Moist)) {
 			/// Moist.
 
 			if (checkTimer(activeTimeout)) {
@@ -83,9 +82,8 @@ namespace Control {
 			// Element should not be on that long.
 			// Either the element is broken or the thermistor has failed. Terminal error.
 			if (!getError(Error::HeatDutyTimeout)) {
-				Serial.println(F("Heater duty timeout."));
-				// TODO set error state.
 				setError(Error::HeatDutyTimeout);
+				Serial.println(F("Heater duty timeout."));
 			}
 			heaterOff();
 			return;
@@ -94,20 +92,22 @@ namespace Control {
 		if (!getStatus(Status::Heating)) {
 			// Not sure why we'd get here, but if we do.. well.. turn the heater off.
 			heaterOff();
+			return;
 		}
 
 		if (getStatus(Status::Heating)
-			&& getStatus(Status::HeatDuty)
-			&& thermTemp >= Filaments::activeFilament.temperature + tempDelta) {
-			// If thermistor temp is more than [delta] degrees above the sensor temperature,
-			// cycle it off.
-			heaterOff();
-		} else if (getStatus(Status::Heating)
-				   && thermTemp < Filaments::activeFilament.temperature + tempDelta
-				   && !getStatus(Status::HeatDuty)) {
-
+			&& thermTemp < Filaments::activeFilament.temperature + TEMP_DELTA
+			&& !getStatus(Status::HeatDuty)) {
+			// On duty.
 			resetTimer(heatDutyTimeout);
 			heaterOn();
+		} else if (getStatus(Status::Heating)
+				   && getStatus(Status::HeatDuty)
+				   && thermTemp >= Filaments::activeFilament.temperature + TEMP_DELTA) {
+			// If thermistor temp is more than [delta] degrees above the sensor temperature,
+			// cycle it off.
+			// Off duty.
+			heaterOff();
 		}
 	}
 
