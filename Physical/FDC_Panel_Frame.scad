@@ -103,6 +103,8 @@ module FrameMain(){
 }
 
 module FrameButtonAnchor(){
+	wid = pcb_screw_pos[3].x - pcb_screw_pos[2].x - pcb_screw_post_dia;
+
 	translate([
 		0, 
 		- screen_board_dims.y/2 - screen_shroud_offset,
@@ -110,26 +112,14 @@ module FrameButtonAnchor(){
 	])
 	mirror([0, 1, 0])
 	mirror([0, 0, 1])
-	intersection(){
-		translate([0, -screen_shroud_offset, 0])
-		cuber(
-			[
-				button_anchor_dims.x + screen_shroud_offset*2,
-				button_anchor_dims.y + screen_shroud_offset*2,
-				frame_dims.z + (screen_shroud_dims.z - button_anchor_dims.z),
-			],
-			[1, 0, 0],
-			screen_shroud_offset
-		);
-		cuber(
-			[
-				button_anchor_dims.x + screen_shroud_offset*2,
-				button_anchor_dims.y + screen_shroud_offset,
-				frame_dims.z + (screen_shroud_dims.z - button_anchor_dims.z),
-			],
-			[1, 0, 0],
-		);
-	}
+	cuber(
+		[
+			wid,
+			button_anchor_dims.y + screen_shroud_offset,
+			frame_dims.z + (screen_shroud_dims.z - button_anchor_dims.z),
+		],
+		[1, 0, 0],
+	);
 }
 
 module FrameScrewHoles_(){
