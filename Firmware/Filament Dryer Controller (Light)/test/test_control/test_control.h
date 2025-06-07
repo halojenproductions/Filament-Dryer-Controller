@@ -13,9 +13,9 @@ namespace suite_control_active {
 	void suite_Active();
 }
 
-// namespace suite_control_humid {
-// 	void suite_Humid();
-// }
+namespace suite_control_errors {
+	void suite_Errors();
+}
 
 // namespace suite_control_error {
 // 	void suite_Error();

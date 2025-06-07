@@ -9,7 +9,7 @@ void setup() {
 	UNITY_BEGIN();
 
 	suite_control_active::suite_Active();
-	// suite_control_humid::suite_Humid();
+	suite_control_errors::suite_Errors();
 	// suite_control_error::suite_Error();
 
 	UNITY_END();

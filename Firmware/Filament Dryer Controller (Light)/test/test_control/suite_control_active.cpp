@@ -71,7 +71,7 @@ namespace suite_control_active {
 
 		// Alter.
 		thermTemp += TEMP_DELTA + 1;	// Simulate thermistor temperature above threshold.
-		// Suck it, rules. I envented a new term that allows me to do multiple acts and assertions
+		// Suck it, rules. I invented a new term that allows me to do multiple acts and assertions
 		// in one block and still look like i know what i'm doing.
 
 		// Act.

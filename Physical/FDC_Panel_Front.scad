@@ -114,11 +114,11 @@ module Face(){
 	translate([0, button_pos.y, face_thick])
 	ButtonAnchorShroud();
 
-	// Frame screw posts (position relative to frame).
-	translate([0, screen_pos.y, face_thick])
+	// Frame screw posts.
+	translate([0, 0, face_thick])
 	FrameScrewPosts();
 
-	// Pcb screw posts (position not relative to frame).
+	// Pcb screw posts.
 	translate([0, 0, face_thick])
 	PcbScrewPosts();
 

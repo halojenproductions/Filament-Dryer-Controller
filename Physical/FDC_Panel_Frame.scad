@@ -134,8 +134,8 @@ module FrameButtonAnchor(){
 
 module FrameScrewHoles_(){
 	// Screwholes.
-	Screwhole(pcb_screw_pos[0]);
-	Screwhole(pcb_screw_pos[1]);
+	Screwhole(frame_screw_pos[0]);
+	Screwhole(frame_screw_pos[1]);
 
 	module Screwhole(pos){
 		translate(pos)

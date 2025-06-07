@@ -7,8 +7,13 @@ ex = [1,1,1,0];
 /* [Hidden] */
 $fn = $preview ? 50 : q;
 
+Mocks();
+
 module Mocks(){
 	translate(pcb_pos)
+	PcbRender();
+
+	*translate(pcb_pos)
 	render(convexity = 50)
 	color("#999999", .5)
 	Pcb();
@@ -45,16 +50,9 @@ module BackScrews(){
 }
 
 module FrameScrews(){
-	translate([0, screen_pos.y]){
-		// Top left.
-		Screw(pcb_screw_pos[0]);
-		// Top right.
-		Screw(pcb_screw_pos[1]);
-		// Bottom left.
+	for(pos = pcb_screw_pos){
+		Screw(pos);
 	}
-	Screw(pcb_screw_pos[2]);
-	// Bottom right.
-	Screw(pcb_screw_pos[3]);
 
 	module Screw(pos){
 		screw_caphead(
@@ -81,10 +79,20 @@ module Pcb(){
 
 	translate([
 		0, 
-		screen_board_dims.y/2 + screen_pos.y - pcb_header_dims.y/2 - header_pitch/2, 
+		pcb_header_pos_y, 
 		pcb_dims.z
 	])
 	cuber(pcb_header_dims, [1, 1, 0]);
+}
+
+module PcbRender(){
+	translate([-pcb_dims.x/2, pcb_dims.y/2])
+	import(
+		"FDC_Panel_PCB.stl", 
+		center = false,
+		convexity = 50, 
+		scale = 1
+	);
 }
 
 module Screen(){

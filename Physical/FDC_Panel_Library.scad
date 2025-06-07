@@ -50,6 +50,9 @@ led_pitch = 20.5;
 	header_dia = 2.5;
 	header_hei = 2.5;
 
+switch_hei = 3.1;
+conn_hei = 6;
+
 frame_dims = [
 	screen_shroud_dims.x,
 	screen_shroud_dims.y,
@@ -79,11 +82,11 @@ button_anchor_dims = [
 ];
 
 pcb_dims = [
-	frame_dims.x, 
+	38, 
 	58, 
 	1.6
 ];
-pcb_header_dims = [10.5, 5, 9];
+pcb_header_dims = [10.5, 5, 3.66];
 pcb_screw_post_len = screen_shroud_dims.z + frame_dims.z;
 
 back_shell_thick = 3;
@@ -142,7 +145,7 @@ pcb_pos = [
 	frame_pos.z + frame_dims.z
 ];
 
-pcb_screw_pos = [
+frame_screw_pos = [
 	[ // Relative to frame position.
 		-frame_screw_pitch_x/2, 
 		screen_board_dims.y/2 + pcb_screw_post_dia/2,
@@ -150,6 +153,27 @@ pcb_screw_pos = [
 	[ // Relative to frame position.
 		frame_screw_pitch_x/2, 
 		screen_board_dims.y/2 + frame_top_dims.y/2,
+	],
+	[
+		-frame_screw_pitch_x/2, 
+		button_pos.y - button_dims.y/2 
+		- button_flange_offset + pcb_screw_post_dia/2
+	],
+	[ 
+		frame_screw_pitch_x/2, 
+		button_pos.y - button_dims.y/2 
+		- button_flange_offset + pcb_screw_post_dia/2
+	],
+];
+
+pcb_screw_pos = [
+	[
+		-frame_screw_pitch_x/2, 
+		screen_board_dims.y/2 + pcb_screw_post_dia/2  + screen_pos.y,
+	],
+	[
+		frame_screw_pitch_x/2, 
+		screen_board_dims.y/2 + frame_top_dims.y/2 + screen_pos.y,
 	],
 	[
 		-frame_screw_pitch_x/2, 
@@ -187,20 +211,23 @@ pcb_insert_pos = [
 	],
 ];
 
+pcb_header_pos_y = screen_board_dims.y/2 + screen_pos.y 
+	- pcb_header_dims.y/2 - header_pitch/2;
+
 assert(
 	(screen_shroud_dims.z - pcb_inserts[1])
 	>= 0,
 	"Insert would be in the face."
 );
 
-led_pos = [
+led_pos = [ // Relative to screen position.
 	[
 		-led_pitch/2, 
-		pcb_screw_pos[0].y,
+		frame_screw_pos[0].y,
 	],
 	[
 		led_pitch/2, 
-		pcb_screw_pos[1].y,
+		frame_screw_pos[1].y,
 	],
 ];
 
@@ -208,25 +235,25 @@ led_pos = [
 back_screw_pos = [
 	[
 		-frame_dims.x/2 - 1, 
-		1 + frame_pos.y + pcb_screw_pos[0].y + 
+		1 + pcb_screw_pos[0].y + 
 			(frame_top_dims.y + screen_shroud_offset)/2 + 
 			back_screw_post_dia/2 + back_screw_post_shroud_thick,
 	],
 	[
 		frame_dims.x/2 + 1, 
-		1 + frame_pos.y + pcb_screw_pos[0].y + 
+		1 + pcb_screw_pos[0].y + 
 			(frame_top_dims.y + screen_shroud_offset)/2 + 
 			back_screw_post_dia/2 + back_screw_post_shroud_thick,
 	],
 	[
 		-frame_dims.x/2 - 1, 
-		-1 - frame_pos.y - pcb_screw_pos[0].y - 
+		-1 - pcb_screw_pos[0].y - 
 			(frame_top_dims.y + screen_shroud_offset)/2 - 
 			back_screw_post_dia/2 - back_screw_post_shroud_thick,
 	],
 	[
 		frame_dims.x/2 + 1, 
-		-1 - frame_pos.y - pcb_screw_pos[0].y - 
+		-1 - pcb_screw_pos[0].y - 
 			(frame_top_dims.y + screen_shroud_offset)/2 - 
 			back_screw_post_dia/2 - back_screw_post_shroud_thick,
 	],
@@ -254,5 +281,6 @@ back_dims = [
 	pcb_pos.z + pcb_dims.z + pcb_header_dims.z + 
 		back_shell_thick - face_thick,
 ];
+
 
 
