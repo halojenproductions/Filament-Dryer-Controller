@@ -40,7 +40,7 @@ if(ex[3]){
 }
 
 if(ex[4]){
-	*%translate([0, 0, face_dims.z + back_dims.z])
+	*translate([0, 0, face_dims.z + back_dims.z])
 	mirror([0, 0, 1])
 	// color("SaddleBrown")
 	Back();

@@ -51,7 +51,6 @@ led_pitch = 20.5;
 	header_hei = 2.5;
 
 switch_hei = 3.1;
-conn_hei = 6;
 
 frame_dims = [
 	screen_shroud_dims.x,
@@ -87,6 +86,7 @@ pcb_dims = [
 	1.6
 ];
 pcb_header_dims = [10.5, 5, 3.66];
+conn_hei = 6;
 pcb_screw_post_len = screen_shroud_dims.z + frame_dims.z;
 
 back_shell_thick = 3;
@@ -278,7 +278,7 @@ face_dims = [
 back_dims = [
 	face_dims.x, 
 	face_dims.y, 
-	pcb_pos.z + pcb_dims.z + pcb_header_dims.z + 
+	pcb_pos.z + pcb_dims.z + max(pcb_header_dims.z, conn_hei) + 
 		back_shell_thick - face_thick,
 ];
 

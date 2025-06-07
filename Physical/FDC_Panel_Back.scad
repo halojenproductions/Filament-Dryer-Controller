@@ -71,9 +71,9 @@ module Solid(){
 
 
 module ShellOutside(){
-	*Bottom();
+	Bottom();
 
-	*translate([0, 0, back_screw_post_dia])
+	translate([0, 0, back_screw_post_dia])
 	Sides();
 
 	translate([0, 0, back_dims.z - back_perim_thick])
