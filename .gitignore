@@ -4,3 +4,4 @@ fp-info-cache
 # Only the repo root .vscode dir. The firmware has its own vscode dir & gitignore.
 /.vscode
 *.lck
+*#auto_saved_files#
