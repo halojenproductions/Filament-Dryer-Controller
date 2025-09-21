@@ -1,5 +1,5 @@
-use <..\..\3D Printing\Library.scad>
-use <..\..\3D Printing\Hardware.scad>
+use <..\..\3D Printing\_Shared\Library.scad>
+use <..\..\3D Printing\_Shared\Hardware.scad>
 
 /**
  * Dimensions.

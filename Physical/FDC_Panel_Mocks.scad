@@ -1,4 +1,3 @@
-use <..\..\3D Printing\Hardware.scad>
 include <FDC_Panel_Library.scad>
 
 q = 100;

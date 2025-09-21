@@ -1,5 +1,3 @@
-use <..\..\3D Printing\Library.scad>
-use <..\..\3D Printing\Hardware.scad>
 include <FDC_Panel_Library.scad>
 use <FDC_Panel_Mocks.scad>
 use <FDC_Panel_Front.scad>
