@@ -2278,7 +2278,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "257781c7-8295-463e-808e-88ca07f3e05d")
-		(property "Reference" "#FLG01"
+		(property "Reference" "#FLG?"
 			(at 67.31 69.215 0)
 			(effects
 				(font
@@ -2326,6 +2326,12 @@
 			(uuid "9c006a72-24a7-47a4-a7aa-5ff45d1dfe91")
 		)
 		(instances
+			(project "FilamentDryerController"
+				(path "/aa35fc54-c042-44c0-931e-4bef950e8494/bb48b34f-e499-49be-8ddd-62ec4a8d0495"
+					(reference "#FLG?")
+					(unit 1)
+				)
+			)
 			(project "FDC_Panel"
 				(path "/ca11f4e8-dd1b-450f-82d2-0145ea9b47ab"
 					(reference "#FLG01")
@@ -2416,7 +2422,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "34d528f6-ea2c-4e6c-9b72-e560001e412b")
-		(property "Reference" "H4"
+		(property "Reference" "H?"
 			(at 87.63 106.6799 0)
 			(effects
 				(font
@@ -2462,6 +2468,12 @@
 			)
 		)
 		(instances
+			(project "FilamentDryerController"
+				(path "/aa35fc54-c042-44c0-931e-4bef950e8494/bb48b34f-e499-49be-8ddd-62ec4a8d0495"
+					(reference "H?")
+					(unit 1)
+				)
+			)
 			(project "FDC_Panel"
 				(path "/ca11f4e8-dd1b-450f-82d2-0145ea9b47ab"
 					(reference "H4")
@@ -2480,7 +2492,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "373c9a88-fdb6-40bc-94e5-36e009244f05")
-		(property "Reference" "#PWR04"
+		(property "Reference" "#PWR?"
 			(at 71.12 113.03 0)
 			(effects
 				(font
@@ -2528,6 +2540,12 @@
 			(uuid "73a4214e-e5c0-4dc2-a5cf-90e08dd41548")
 		)
 		(instances
+			(project "FilamentDryerController"
+				(path "/aa35fc54-c042-44c0-931e-4bef950e8494/bb48b34f-e499-49be-8ddd-62ec4a8d0495"
+					(reference "#PWR?")
+					(unit 1)
+				)
+			)
 			(project "FDC_Panel"
 				(path "/ca11f4e8-dd1b-450f-82d2-0145ea9b47ab"
 					(reference "#PWR04")
@@ -2546,7 +2564,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3eaa3ba3-3549-4071-9039-6904f21576ee")
-		(property "Reference" "H1"
+		(property "Reference" "H?"
 			(at 87.63 87.6299 0)
 			(effects
 				(font
@@ -2592,6 +2610,12 @@
 			)
 		)
 		(instances
+			(project "FilamentDryerController"
+				(path "/aa35fc54-c042-44c0-931e-4bef950e8494/bb48b34f-e499-49be-8ddd-62ec4a8d0495"
+					(reference "H?")
+					(unit 1)
+				)
+			)
 			(project ""
 				(path "/ca11f4e8-dd1b-450f-82d2-0145ea9b47ab"
 					(reference "H1")
@@ -2830,7 +2854,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b13bbd9a-b8b9-48d0-8a33-34fc019c3eea")
-		(property "Reference" "H3"
+		(property "Reference" "H?"
 			(at 87.63 100.3299 0)
 			(effects
 				(font
@@ -2876,6 +2900,12 @@
 			)
 		)
 		(instances
+			(project "FilamentDryerController"
+				(path "/aa35fc54-c042-44c0-931e-4bef950e8494/bb48b34f-e499-49be-8ddd-62ec4a8d0495"
+					(reference "H?")
+					(unit 1)
+				)
+			)
 			(project "FDC_Panel"
 				(path "/ca11f4e8-dd1b-450f-82d2-0145ea9b47ab"
 					(reference "H3")
@@ -2894,7 +2924,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bb82044d-3931-42bd-b388-c6dcb72b6678")
-		(property "Reference" "H2"
+		(property "Reference" "H?"
 			(at 87.63 93.9799 0)
 			(effects
 				(font
@@ -2940,6 +2970,12 @@
 			)
 		)
 		(instances
+			(project "FilamentDryerController"
+				(path "/aa35fc54-c042-44c0-931e-4bef950e8494/bb48b34f-e499-49be-8ddd-62ec4a8d0495"
+					(reference "H?")
+					(unit 1)
+				)
+			)
 			(project "FDC_Panel"
 				(path "/ca11f4e8-dd1b-450f-82d2-0145ea9b47ab"
 					(reference "H2")
@@ -3216,7 +3252,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e656764a-c2f6-46e2-a2b0-8689fec2f958")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR?"
 			(at 71.12 100.33 0)
 			(effects
 				(font
@@ -3264,6 +3300,12 @@
 			(uuid "f7b9c71d-62eb-4eae-8740-38eaa63dcb52")
 		)
 		(instances
+			(project "FilamentDryerController"
+				(path "/aa35fc54-c042-44c0-931e-4bef950e8494/bb48b34f-e499-49be-8ddd-62ec4a8d0495"
+					(reference "#PWR?")
+					(unit 1)
+				)
+			)
 			(project "FDC_Panel"
 				(path "/ca11f4e8-dd1b-450f-82d2-0145ea9b47ab"
 					(reference "#PWR03")
@@ -3439,7 +3481,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ff729087-092c-4dac-a7e3-74a7c35d8e2f")
-		(property "Reference" "#FLG02"
+		(property "Reference" "#FLG?"
 			(at 73.025 73.66 0)
 			(effects
 				(font
@@ -3488,6 +3530,12 @@
 			(uuid "a8b14e4d-87ef-4cf7-90a1-6a55ab823fb1")
 		)
 		(instances
+			(project "FilamentDryerController"
+				(path "/aa35fc54-c042-44c0-931e-4bef950e8494/bb48b34f-e499-49be-8ddd-62ec4a8d0495"
+					(reference "#FLG?")
+					(unit 1)
+				)
+			)
 			(project "FDC_Panel"
 				(path "/ca11f4e8-dd1b-450f-82d2-0145ea9b47ab"
 					(reference "#FLG02")

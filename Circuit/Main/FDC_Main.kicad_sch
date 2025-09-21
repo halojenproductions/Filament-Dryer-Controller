@@ -5462,6 +5462,16 @@
 		)
 		(uuid "460f2026-ef4d-44ea-b6be-a12ea31c5a85")
 	)
+	(text "Add snubber!"
+		(exclude_from_sim no)
+		(at 281.178 131.572 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "4cb27c41-efa3-4f68-baab-657e3f3e6ed1")
+	)
 	(text "Fan"
 		(exclude_from_sim no)
 		(at 131.572 104.648 0)
