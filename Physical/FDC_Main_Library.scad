@@ -2,10 +2,14 @@ use <..\..\3D Printing\_Shared\Library.scad>
 use <..\..\3D Printing\_Shared\Hardware.scad>
 use <..\..\3D Printing\_Shared\UltraCuber2.scad>
 
+// Min crosssectional air flow area 2124 mm²
+
 /**
  * Dimensions.
  * 
  */
+parting_line_relief = .4;
+
 base_side_rad = 2;
 base_dims = object(
 	w = 85,
@@ -51,12 +55,12 @@ heater_dims = object(
 );
 
 heater_sleeve_dims = object(
-	l = heater_dims.h + base_dims.thick.s,
+	l = heater_dims.h + base_dims.thick.s*2,
 );
 
 box_dims = object(
 	w = 75,
-	l = 35,
+	l = 55,
 );
 
 sensor_dims = object(
@@ -65,16 +69,22 @@ sensor_dims = object(
 	h = 53.5,
 );
 
-chamber_dims = object(
-	l = 25,
+intake_dims = object(
+	w = 75,
+	l = 35,
+);
+
+channel_dims = object(
+	w = intake_dims.w,
+	l = box_dims.l + base_dims.thick.s + intake_dims.l + base_dims.thick.s,
+	h = base_dims.h,
 );
 
 top_dims = object(
 	w = base_dims.w,
-	l = heater_sleeve_dims.l + box_dims.l + chamber_dims.l,
+	l = base_dims.thick.s + heater_sleeve_dims.l + base_dims.thick.s + channel_dims.l,
 	h = (heater_dims.fan_pos - base_dims.h) + heater_dims.fan_dia,
 );
-
 
 
  /**
@@ -82,3 +92,6 @@ top_dims = object(
  * 
  */
  box_pos_y = base_dims.l - heater_sleeve_dims.l;
+ channel_pos_y = box_pos_y;
+
+
