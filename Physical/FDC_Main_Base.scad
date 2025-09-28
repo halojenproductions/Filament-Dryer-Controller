@@ -26,6 +26,9 @@ module BodyTop(){
 
 		trany(box_pos_y)
 		DessiccantBox_();
+
+		trany(box_pos_y)
+		Fan_();
 	}
 
 	module Top(){
@@ -46,6 +49,16 @@ module BodyTop(){
 				[0, 0, 0],
 			);
 		}
+	}
+
+	module Fan_(){
+		teardrop(
+			object(d=heater_dims.fan_dia, l=base_dims.thick.s),
+			object(b=.4, f=.4),
+			[0, 1, -1],
+			[0, 0, heater_dims.fan_pos],
+			[0, 180, 0]
+		);
 	}
 }
 
