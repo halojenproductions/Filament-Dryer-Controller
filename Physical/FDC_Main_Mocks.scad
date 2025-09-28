@@ -13,9 +13,20 @@ module Mocks(){
 	rotate([90, 0, 0])
 	Heater();
 
+	trany(sensor_pos.y)
+	Sensor();
 
 	module Sensor(){
-
+		ultracuber(
+			[
+				sensor_dims.w,
+				sensor_dims.l,
+				sensor_dims.h,
+			],
+			[0, 0, 0],
+			[0, -1, 1],
+			[0, 0, 0],
+		);
 	}
 
 	module Heater(){

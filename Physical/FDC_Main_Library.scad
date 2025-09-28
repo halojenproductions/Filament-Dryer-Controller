@@ -4,17 +4,16 @@ use <..\..\3D Printing\_Shared\UltraCuber2.scad>
 
 // Min crosssectional air flow area 2124 mm²
 
-/**
- * Dimensions.
- * 
- */
+/*
+	Dimensions.
+*/
 parting_line_relief = .4;
 
 base_side_rad = 2;
 base_dims = object(
 	w = 85,
 	l = 210,
-	h = 35,
+	h = 40,
 	thick = object(
 		b = nearest_layer(1),
 		s = 4,
@@ -65,12 +64,12 @@ box_dims = object(
 
 sensor_dims = object(
 	w = 26.5,
-	l = 13.5,
-	h = 53.5,
+	l = 53.5,
+	h = 13.5,
 );
 
 intake_dims = object(
-	w = 75,
+	w = 70,
 	l = 35,
 );
 
@@ -87,11 +86,14 @@ top_dims = object(
 );
 
 
- /**
- * Positions.
- * 
- */
- box_pos_y = base_dims.l - heater_sleeve_dims.l;
- channel_pos_y = box_pos_y;
+/*
+	Positions.
+*/
+box_pos_y = base_dims.l - heater_sleeve_dims.l;
+channel_pos_y = box_pos_y;
+sensor_pos = object(
+	y = box_pos_y - box_dims.l,
+);
+
 
 

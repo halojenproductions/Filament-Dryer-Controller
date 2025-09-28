@@ -8,7 +8,7 @@ $fn = $preview ? 50 : q;
 
 
 if(ex[0]){
-	BodyTop();
+	*BodyTop();
 }
 
 if(ex[1]){
@@ -32,13 +32,13 @@ module BodyTop(){
 	}
 
 	module Top(){
-		trany(base_dims.l)
+		translate([0, base_dims.l, base_dims.h])
 		difference(){
 			ultracuber(
 				[
 					base_dims.w,
 					top_dims.l,
-					base_dims.h + top_dims.h,
+					top_dims.h,
 				],
 				[
 					0,
@@ -75,7 +75,7 @@ module BodyBase(){
 		*trany(box_pos_y)
 		DessiccantBox_();
 
-	#	Channel_();
+		Channel_();
 	}
 
 	module Base(){
@@ -160,8 +160,8 @@ module DessiccantBox_(){
 	ultracuber(
 		[
 			hole(box_dims.w),
-			hole(box_dims.l - base_dims.thick.s*2),
-			top_dims.h + nonzero(),
+			hole(box_dims.l),
+			top_dims.h + nonzero()*2,
 		],
 		[
 			0,
@@ -169,7 +169,7 @@ module DessiccantBox_(){
 			0,
 		],
 		[0, -1, 1],
-		[0, 0, base_dims.h],
+		[0, 0, base_dims.h - nonzero()],
 	);
 	
 	module Taper(){

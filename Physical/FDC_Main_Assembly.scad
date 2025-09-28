@@ -12,7 +12,7 @@ $fn = $preview ? 50 : q;
 
 
 if(ex[0]){
-	#color("SeaGreen")
+	*#color("SeaGreen")
 	BodyTop();
 }
 
