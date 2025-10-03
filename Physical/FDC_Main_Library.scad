@@ -9,6 +9,17 @@ use <..\..\3D Printing\_Shared\UltraCuber2.scad>
 */
 parting_line_relief = .4;
 
+global_dims = object(
+	radii = object(
+		in = object(
+			b = .4,
+			s = [1, true],
+			t = .5,
+		),
+	),
+	divs = 4,
+);
+
 base_side_rad = 2;
 base_dims = object(
 	w = 85,
@@ -53,8 +64,19 @@ heater_dims = object(
 	fan_dia = 58,
 );
 
+cover_dims = object(
+	w = base_dims.w - 5,
+	l = base_dims.l - base_dims.thick.s*2,
+	h = nearest_layer(2),
+	radii = object(
+		b = .2,
+		s = 4,
+		t = parting_line_relief,
+	),
+);
+
 heater_sleeve_dims = object(
-	l = heater_dims.h + base_dims.thick.s*2,
+	l = heater_dims.h + base_dims.thick.s + global_dims.divs,
 );
 
 box_dims = object(
@@ -75,13 +97,13 @@ intake_dims = object(
 
 channel_dims = object(
 	w = intake_dims.w,
-	l = box_dims.l + base_dims.thick.s + intake_dims.l + base_dims.thick.s,
+	l = box_dims.l + global_dims.divs + intake_dims.l,
 	h = base_dims.h,
 );
 
 top_dims = object(
 	w = base_dims.w,
-	l = heater_sleeve_dims.l + base_dims.thick.s + box_dims.l,
+	l = heater_sleeve_dims.l + box_dims.l + global_dims.divs,
 	h = (heater_dims.fan_pos - base_dims.h) + heater_dims.fan_dia + 2,
 	thick = object(
 		t = nearest_layer(1),
@@ -90,7 +112,7 @@ top_dims = object(
 
 electronics_dims = object(
 	w = 70,
-	l = base_dims.l - top_dims.l - intake_dims.l,
+	l = base_dims.l - base_dims.thick.s - top_dims.l - intake_dims.l - base_dims.thick.s,
 );
 
 
@@ -100,7 +122,7 @@ electronics_dims = object(
 box_pos_y = base_dims.l - heater_sleeve_dims.l;
 channel_pos_y = box_pos_y;
 sensor_pos = object(
-	y = electronics_dims.l + intake_dims.l/2,
+	y = base_dims.thick.s + electronics_dims.l + global_dims.divs + intake_dims.l/2,
 );
 
 

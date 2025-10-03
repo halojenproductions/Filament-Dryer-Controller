@@ -53,7 +53,7 @@ module BodyTop(){
 
 	module Fan_(){
 		teardrop(
-			object(d=heater_dims.fan_dia, l=base_dims.thick.s),
+			object(d=heater_dims.fan_dia, l=global_dims.divs),
 			object(b=.4, f=.4),
 			[0, 1, -1],
 			[0, 0, heater_dims.fan_pos],
@@ -79,6 +79,8 @@ module BodyBase(){
 
 		trany(box_pos_y)
 		Fan_();
+
+		Electranics_();
 	}
 
 	module Base(){
@@ -143,7 +145,7 @@ module BodyBase(){
 			],
 			[
 				0,
-				[base_dims.radii.in.s, true],
+				global_dims.radii.in.s,
 				0,
 			],
 			[0, -1, 1],
@@ -155,16 +157,28 @@ module BodyBase(){
 		tranz(heater_dims.fan_pos)
 		align([
 			heater_dims.fan_dia, 
-			base_dims.thick.s, 
+			global_dims.divs, 
 			heater_dims.fan_dia
 		], [0, 1, 1])
 		rotate([90, 0, 0])
 		cylr(
 			heater_dims.fan_dia, 
-			base_dims.thick.s,
+			global_dims.divs,
 			[1, 1, 1],
 			-.4,
 			true,
+		);
+	}
+	module Electranics_(){
+		ultracuber(
+			[
+				electronics_dims.w,
+				electronics_dims.l,
+				base_dims.h + nonzero(),
+			],
+			[0, global_dims.radii.in.s, 0],
+			[0, 1, 1],
+			[0, base_dims.thick.s, 0],
 		);
 	}
 }
@@ -185,7 +199,7 @@ module DessiccantBox_(){
 		],
 		[
 			0,
-			base_dims.thick.s,
+			global_dims.divs,
 			0,
 		],
 		[0, -1, 1],
@@ -196,8 +210,8 @@ module DessiccantBox_(){
 		hull(){
 			ultracuber(
 				[
-					hole(box_dims.w - base_dims.thick.s*2),
-					base_dims.thick.s,
+					hole(box_dims.w - global_dims.divs*2),
+					global_dims.divs,
 					top_dims.h + nonzero(),
 				],
 				[
@@ -248,6 +262,5 @@ module Heater_(){
 		[90, 0, 0],
 	);
 }
-
 
 
