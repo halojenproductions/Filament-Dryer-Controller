@@ -1,6 +1,7 @@
-include <FDC_Main_Library.scad>
-use <FDC_Main_Mocks.scad>
+include <FDC_Main_Shared/FDC_Main_Library.scad>
+use <FDC_Main_Shared/FDC_Main_Mocks.scad>
 use <FDC_Main_Base.scad>
+use <FDC_Main_Top.scad>
 
 
 
