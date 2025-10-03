@@ -13,7 +13,7 @@ base_side_rad = 2;
 base_dims = object(
 	w = 85,
 	l = 210,
-	h = 40,
+	h = 45,
 	thick = object(
 		b = nearest_layer(1),
 		s = 4,
@@ -58,19 +58,19 @@ heater_sleeve_dims = object(
 );
 
 box_dims = object(
-	w = 75,
+	w = 70,
 	l = 55,
 );
 
 sensor_dims = object(
 	w = 26.5,
-	l = 53.5,
+	l = 59,
 	h = 13.5,
 );
 
 intake_dims = object(
 	w = 70,
-	l = 35,
+	l = 40,
 );
 
 channel_dims = object(
@@ -81,8 +81,16 @@ channel_dims = object(
 
 top_dims = object(
 	w = base_dims.w,
-	l = base_dims.thick.s + heater_sleeve_dims.l + base_dims.thick.s + channel_dims.l,
-	h = (heater_dims.fan_pos - base_dims.h) + heater_dims.fan_dia,
+	l = heater_sleeve_dims.l + base_dims.thick.s + box_dims.l,
+	h = (heater_dims.fan_pos - base_dims.h) + heater_dims.fan_dia + 2,
+	thick = object(
+		t = nearest_layer(1),
+	),
+);
+
+electronics_dims = object(
+	w = 70,
+	l = base_dims.l - top_dims.l - intake_dims.l,
 );
 
 
@@ -92,7 +100,7 @@ top_dims = object(
 box_pos_y = base_dims.l - heater_sleeve_dims.l;
 channel_pos_y = box_pos_y;
 sensor_pos = object(
-	y = box_pos_y - box_dims.l,
+	y = electronics_dims.l + intake_dims.l/2,
 );
 
 

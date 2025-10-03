@@ -8,7 +8,7 @@ $fn = $preview ? 50 : q;
 
 
 if(ex[0]){
-	*BodyTop();
+	BodyTop();
 }
 
 if(ex[1]){
@@ -76,6 +76,9 @@ module BodyBase(){
 		DessiccantBox_();
 
 		Channel_();
+
+		trany(box_pos_y)
+		Fan_();
 	}
 
 	module Base(){
@@ -145,6 +148,23 @@ module BodyBase(){
 			],
 			[0, -1, 1],
 			[0, 0, 0],
+		);
+	}
+
+	module Fan_(){
+		tranz(heater_dims.fan_pos)
+		align([
+			heater_dims.fan_dia, 
+			base_dims.thick.s, 
+			heater_dims.fan_dia
+		], [0, 1, 1])
+		rotate([90, 0, 0])
+		cylr(
+			heater_dims.fan_dia, 
+			base_dims.thick.s,
+			[1, 1, 1],
+			-.4,
+			true,
 		);
 	}
 }
