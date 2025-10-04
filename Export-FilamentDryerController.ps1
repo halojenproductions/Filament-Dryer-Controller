@@ -26,13 +26,9 @@ $outDir = "Physical\FDC_Main_Models"
 # MAIN model definitions
 $models = @(
 	@{ ScadFile = "FDC_Main_Base"; Suffix = ""; Ex = 1; Q = 100 },
-	@{ ScadFile = "FDC_Main_Top"; Suffix = ""; Ex = 2; Q = 100 },
-	@{ ScadFile = "FDC_Panel_Front"; Suffix = "Castle1"; Ex = 3; Q = 100 },
-	@{ ScadFile = "FDC_Panel_Front"; Suffix = "Castle2"; Ex = 4; Q = 100 },
-	@{ ScadFile = "FDC_Panel_Frame"; Suffix = ""; Ex = 1; Q = 100 },
-	@{ ScadFile = "FDC_Panel_Button"; Suffix = ""; Ex = 1; Q = 100 },
-	@{ ScadFile = "FDC_Panel_Back"; Suffix = ""; Ex = 1; Q = 100 },
-	@{ ScadFile = "FDC_Panel_Back"; Suffix = "Solid"; Ex = 2; Q = 100 }
+	@{ ScadFile = "FDC_Main_Top"; Suffix = ""; Ex = 1; Q = 100 },
+	@{ ScadFile = "FDC_Main_Cover"; Suffix = ""; Ex = 1; Q = 100 },
+	@{ ScadFile = "FDC_Main_Box"; Suffix = ""; Ex = 1; Q = 100 }
 )
 
 # Call the shared export script

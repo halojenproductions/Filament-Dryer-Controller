@@ -2,7 +2,7 @@ include <FDC_Main_Shared/FDC_Main_Library.scad>
 use <FDC_Main_Shared/FDC_Main_Mocks.scad>
 use <FDC_Main_Base.scad>
 use <FDC_Main_Top.scad>
-
+use <FDC_Main_Cover.scad>
 
 
 q = 100;
@@ -13,19 +13,34 @@ $fn = $preview ? 50 : q;
 
 
 if(ex[0]){
-	#color("SeaGreen")
+	color("MediumSeaGreen")
 	BodyTop();
 }
 
 if(ex[1]){
-	color("LightCyan")
+	color("Turquoise")
 	BodyBase();
+}
+
+if(ex[2]){
+	color("PaleVioletRed")
+	Cover();
 }
 
 
 // Ghosts.
 %Mocks();
 
+
+echo(str(
+	"\n\t Dimensions ",
+	"\n\t Width: ", base_dims.w,
+	"\n\t Height: ", base_dims.h + top_dims.h,
+	"\n\t Length: ", base_dims.l,
+	"\n\t Base height: ", base_dims.h,
+	"\n\t Top length: ", top_dims.l,
+	"\n\t Top height: ", top_dims.h,
+"\n"));
 
 crosssections = object(
 	heater_fan = PI * pow(heater_dims.fan_dia/2, 2),

@@ -8,6 +8,7 @@ $fn = $preview ? 50 : q;
 
 
 module Heater_(){
+	trany(base_dims.l)
 	ultracuber(
 		[
 			hole(heater_dims.bot.w),

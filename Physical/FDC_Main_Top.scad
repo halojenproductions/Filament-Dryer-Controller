@@ -22,10 +22,8 @@ module BodyTop(){
 			Top();
 		}
 
-		trany(base_dims.l)
 		Heater_();
 
-		trany(box_pos_y)
 		DessiccantBox_();
 
 		trany(box_pos_y)
@@ -34,22 +32,22 @@ module BodyTop(){
 
 	module Top(){
 		translate([0, base_dims.l, base_dims.h])
-		difference(){
-			ultracuber(
-				[
-					base_dims.w,
-					top_dims.l,
-					top_dims.h,
-				],
-				[
-					0,
-					[base_dims.radii.out.s, true],
-					base_dims.radii.out.t,
-				],
-				[0, -1, 1],
-				[0, 0, 0],
-			);
-		}
+		ultracuber(
+			[
+				base_dims.w,
+				top_dims.l,
+				top_dims.h - interface_dims.h,
+			],
+			[
+				parting_line_relief,
+				[base_dims.radii.out.s, true],
+				base_dims.radii.out.t,
+			],
+			[0, -1, 1],
+			[0, 0, interface_dims.h],
+		);
+
+		Interface();
 	}
 
 	module Fan_(){
@@ -63,27 +61,29 @@ module BodyTop(){
 	}
 
 	module DessiccantBox_(){
-		// Front.
-		*#trany(-box_dims.l)
-		Taper();
-		// Back.
-		*#mirror([0, 1, 0])
-		Taper();
+		trany(box_pos_y){
+			// Front.
+			*#trany(-box_dims.l)
+			Taper();
+			// Back.
+			*#mirror([0, 1, 0])
+			Taper();
 
-		ultracuber(
-			[
-				hole(box_dims.w),
-				hole(box_dims.l),
-				top_dims.h + nonzero()*2,
-			],
-			[
-				0,
-				global_dims.divs,
-				0,
-			],
-			[0, -1, 1],
-			[0, 0, base_dims.h - nonzero()],
-		);
+			ultracuber(
+				[
+					hole(box_dims.w),
+					hole(box_dims.l),
+					top_dims.h + interface_dims.h + nonzero()*2,
+				],
+				[
+					0,
+					global_dims.divs,
+					0,
+				],
+				[0, -1, -1],
+				[0, 0, base_dims.h + top_dims.h + nonzero()],
+			);
+		}
 		
 		module Taper(){
 			hull(){
@@ -117,6 +117,53 @@ module BodyTop(){
 					[0, 0, base_dims.h],
 				);
 			}
+		}
+	}
+
+	module Interface(){
+		translate([0, base_dims.l - top_dims.l/2, base_dims.h])
+		difference(){
+			ultracuber(
+				[
+					interface_dims.w,
+					interface_dims.l,
+					interface_dims.h,
+				],
+				[
+					parting_line_relief,
+					[interface_dims.radii.s*1.5, true],
+					0,
+				],
+				[0, 0, 1],
+				[0, 0, 0],
+			);
+
+			*ultracuber(
+				[
+					interface_dims.w,
+					interface_dims.l,
+					interface_dims.h + nonzero(),
+				],
+				[
+					-parting_line_relief,
+					[interface_dims.radii.s, true],
+					0,
+				],
+				[0, 0, 1],
+				[0, 0, -nonzero()],
+			);
+
+			// Channel.
+			*ultracuber(
+				[
+					hole(channel_dims.w),
+					interface_inset,
+					interface_dims.h + cover_dims.h,
+				],
+				[0, 0, 0],
+				[0, 1, 1],
+				[0, -top_dims.l/2 - nonzero(), -cover_dims.h - nonzero()],
+			);
 		}
 	}
 }

@@ -19,10 +19,8 @@ module BodyBase(){
 	difference(){
 		union(){
 			Base();
-			Interface();
 		}
 
-		trany(base_dims.l)
 		Heater_();
 
 		Channel_();
@@ -31,7 +29,12 @@ module BodyBase(){
 		Fan_();
 
 		Electranics_();
+
+		Cover_();
 	}
+
+	Interface();
+	
 
 	module Base(){
 		ultracuber(
@@ -51,13 +54,13 @@ module BodyBase(){
 	}
 
 	module Interface(){
-		trany(base_dims.l - top_dims.l/2)
+		translate([0, base_dims.l - top_dims.l/2, base_dims.h])
 		difference(){
 			ultracuber(
 				[
 					base_dims.w,
 					top_dims.l,
-					base_dims.h + 2,
+					interface_dims.h + cover_dims.h - nonzero(),
 				],
 				[
 					0,
@@ -65,22 +68,34 @@ module BodyBase(){
 					parting_line_relief,
 				],
 				[0, 0, 1],
-				[0, 0, 0],
+				[0, 0, -cover_dims.h],
 			);
 
 			ultracuber(
 				[
-					hole(base_dims.w - base_dims.thick.s),
-					hole(top_dims.l - base_dims.thick.s),
-					base_dims.h + 2 + nonzero(),
+					hole(interface_dims.w),
+					hole(interface_dims.l),
+					interface_dims.h + cover_dims.h + nonzero(),
 				],
 				[
 					0,
-					[base_dims.radii.out.s, true],
+					[interface_dims.radii.s, true],
 					-parting_line_relief,
 				],
 				[0, 0, 1],
+				[0, 0, -cover_dims.h - nonzero()],
+			);
+
+			// Channel.
+			ultracuber(
+				[
+					hole(channel_dims.w),
+					interface_inset,
+					interface_dims.h + cover_dims.h + nonzero(),
+				],
 				[0, 0, 0],
+				[0, 1, 1],
+				[0, -top_dims.l/2 - nonzero(), -cover_dims.h - nonzero()],
 			);
 		}
 	}
@@ -89,8 +104,8 @@ module BodyBase(){
 		trany(channel_pos_y)
 		ultracuber(
 			[
-				channel_dims.w,
-				channel_dims.l,
+				hole(channel_dims.w),
+				hole(channel_dims.l),
 				channel_dims.h + nonzero(),
 			],
 			[
@@ -119,16 +134,35 @@ module BodyBase(){
 			true,
 		);
 	}
+
 	module Electranics_(){
 		ultracuber(
 			[
-				electronics_dims.w,
-				electronics_dims.l,
+				hole(electronics_dims.w),
+				hole(electronics_dims.l),
 				base_dims.h + nonzero(),
 			],
 			[0, global_dims.radii.in.s, 0],
 			[0, 1, 1],
 			[0, base_dims.thick.s, 0],
+		);
+	}
+
+	module Cover_(){
+		translate([0, cover_dims_inset, base_dims.h + nonzero()])
+		ultracuber(
+			[
+				hole(cover_dims.w),
+				hole(cover_dims.l),
+				cover_dims.h + nonzero(),
+			],
+			[
+				rad_neg(cover_dims.radii.b),
+				[cover_dims.radii.s, true],
+				-parting_line_relief,
+			],
+			[0, 1, -1],
+			[0, 0, 0],
 		);
 	}
 }
