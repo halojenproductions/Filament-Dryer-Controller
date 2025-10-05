@@ -118,8 +118,8 @@ electronics_dims = object(
 cover_dims_inset = base_dims.radii.out.t*2;
 cover_dims = object(
 	w = base_dims.w - cover_dims_inset*2,
-	l = base_dims.thick.s - cover_dims_inset + electronics_dims.l + 
-		global_dims.divs + intake_dims.l - parting_line_relief,
+	l = base_dims.thick.s - cover_dims_inset + electronics_dims.l 
+	+ global_dims.divs + intake_dims.l - parting_line_relief,
 	h = nearest_layer(2),
 	radii = object(
 		b = .2,
@@ -127,6 +127,32 @@ cover_dims = object(
 		t = parting_line_relief,
 	),
 );
+
+top_fastener_dims = object(
+	screw = object(
+		thread_dia = 2.6, // M2.6 self tapping machine screw.
+		length = 10,
+		head_dia = 4.1,
+		pen = 6, // Penetration below the position.
+		//dep = 4, // Depth from position to top surface.
+		flat = true,
+	),
+	boss_thick = line_wid(0)*3,
+	clear_rad = 7.5,
+	shroud = object(
+		dia = 8,
+		h = 6,
+		getRise = function()(
+			top_fastener_dims.shroud.h 
+			+ top_fastener_dims.clear_rad 
+			+ top_fastener_dims.shroud.dia
+		),
+	),
+);
+
+//fx = function(x)x+2;
+xxx=object(this="this", that=12, func=function()xxx.this);
+echo(xxx, xxx.func() );
 
 /*
 	Positions.

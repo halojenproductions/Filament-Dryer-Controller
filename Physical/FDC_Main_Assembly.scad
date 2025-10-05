@@ -23,7 +23,7 @@ if(ex[1]){
 }
 
 if(ex[2]){
-	color("PaleVioletRed")
+	*color("PaleVioletRed")
 	Cover();
 }
 

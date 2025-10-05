@@ -30,7 +30,9 @@ module BodyBase(){
 
 		Electranics_();
 
-		Cover_();
+		*Cover_();
+
+		#TopScrews();
 	}
 
 	Interface();
@@ -51,53 +53,6 @@ module BodyBase(){
 			[0, 1, 1],
 			[0, 0, -base_dims.thick.b],
 		);
-	}
-
-	module Interface(){
-		translate([0, base_dims.l - top_dims.l/2, base_dims.h])
-		difference(){
-			ultracuber(
-				[
-					base_dims.w,
-					top_dims.l,
-					interface_dims.h + cover_dims.h - nonzero(),
-				],
-				[
-					0,
-					[base_dims.radii.out.s, true],
-					parting_line_relief,
-				],
-				[0, 0, 1],
-				[0, 0, -cover_dims.h],
-			);
-
-			ultracuber(
-				[
-					hole(interface_dims.w),
-					hole(interface_dims.l),
-					interface_dims.h + cover_dims.h + nonzero(),
-				],
-				[
-					0,
-					[interface_dims.radii.s, true],
-					-parting_line_relief,
-				],
-				[0, 0, 1],
-				[0, 0, -cover_dims.h - nonzero()],
-			);
-
-			// Channel.
-			ultracuber(
-				[
-					hole(channel_dims.w),
-					interface_inset,
-					interface_dims.h + cover_dims.h + nonzero(),
-				],
-				[0, 0, 0],
-				[0, 1, 1],
-				[0, -top_dims.l/2 - nonzero(), -cover_dims.h - nonzero()],
-			);
-		}
 	}
 
 	module Channel_(){
@@ -166,5 +121,4 @@ module BodyBase(){
 		);
 	}
 }
-
 

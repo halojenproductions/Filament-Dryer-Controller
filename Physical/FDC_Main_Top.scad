@@ -20,6 +20,7 @@ module BodyTop(){
 	difference(){
 		union(){
 			Top();
+			TopScrewShrouds();
 		}
 
 		Heater_();
@@ -28,6 +29,8 @@ module BodyTop(){
 
 		trany(box_pos_y)
 		Fan_();
+
+		TopScrews(top_fastener_dims.shroud.getRise(), true);
 	}
 
 	module Top(){
@@ -47,7 +50,7 @@ module BodyTop(){
 			[0, 0, interface_dims.h],
 		);
 
-		Interface();
+		TopInterface();
 	}
 
 	module Fan_(){
@@ -120,9 +123,8 @@ module BodyTop(){
 		}
 	}
 
-	module Interface(){
-		translate([0, base_dims.l - top_dims.l/2, base_dims.h])
-		difference(){
+	module TopInterface(){
+		translate([0, base_dims.l - top_dims.l/2, base_dims.h]){
 			ultracuber(
 				[
 					interface_dims.w,
@@ -138,32 +140,59 @@ module BodyTop(){
 				[0, 0, 0],
 			);
 
-			*ultracuber(
-				[
-					interface_dims.w,
-					interface_dims.l,
-					interface_dims.h + nonzero(),
-				],
-				[
-					-parting_line_relief,
-					[interface_dims.radii.s, true],
-					0,
-				],
-				[0, 0, 1],
-				[0, 0, -nonzero()],
-			);
-
 			// Channel.
-			*ultracuber(
+			ultracuber(
 				[
-					hole(channel_dims.w),
+					channel_dims.w,
 					interface_inset,
-					interface_dims.h + cover_dims.h,
+					interface_dims.h + cover_dims.h + parting_line_relief,
 				],
 				[0, 0, 0],
 				[0, 1, 1],
 				[0, -top_dims.l/2 - nonzero(), -cover_dims.h - nonzero()],
 			);
+		}
+	}
+
+	module TopScrewShrouds(){
+		difference(){
+			union(){
+				mover(-base_dims.w, -top_fastener_dims.shroud.dia/2)
+				TopScrewShroud();
+				mover(base_dims.w, -top_fastener_dims.shroud.dia/2)
+				TopScrewShroud();
+			}
+
+			// tranz(-(interface_dims.h + parting_line_relief))
+			// Top();
+
+			Interface(true);
+		}
+
+
+		module TopScrewShroud(){
+			translate([0, base_dims.l - top_dims.l, base_dims.h])
+			hull(){
+				trany(top_fastener_dims.shroud.dia/2)
+				coner(
+					top_fastener_dims.shroud.dia,
+					top_fastener_dims.shroud.dia,
+					top_fastener_dims.shroud.getRise(),
+					[1, 1, 0],
+					0, .5,
+					true, false,
+				);
+
+				trany(-top_fastener_dims.clear_rad)
+				coner(
+					top_fastener_dims.shroud.dia,
+					top_fastener_dims.shroud.dia,
+					top_fastener_dims.shroud.h,
+					[1, 1, 0],
+					0, .5,
+					true, false,
+				);
+			}
 		}
 	}
 }

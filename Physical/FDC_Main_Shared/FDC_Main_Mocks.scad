@@ -1,4 +1,5 @@
 include <FDC_Main_Library.scad>
+use <FDC_Main_Objects.scad>
 
 q = 100;
 ex = [1,1,1,0];
@@ -13,10 +14,12 @@ module Mocks(){
 	rotate([90, 0, 0])
 	Heater();
 
-	trany(sensor_pos.y)
 	Sensor();
 
+	Screws();
+
 	module Sensor(){
+		trany(sensor_pos.y)
 		ultracuber(
 			[
 				sensor_dims.w,
@@ -56,5 +59,9 @@ module Mocks(){
 				[1, 0, 1],
 			);
 		}
+	}
+
+	module Screws(){
+		TopScrews();
 	}
 }
