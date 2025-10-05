@@ -10,8 +10,8 @@ $fn = $preview ? 50 : q;
 Mocks();
 
 module Mocks(){
-	translate([0, base_dims.l - base_dims.thick.s, 0])
-	rotate([90, 0, 0])
+	translate([0, heater_pos.y, heater_pos.z])
+	rotate([0, 0, 180])
 	Heater();
 
 	Sensor();
@@ -34,6 +34,7 @@ module Mocks(){
 	}
 
 	module Heater(){
+		rotate([90, 0, 0])
 		difference(){
 			ultracuber(
 				[

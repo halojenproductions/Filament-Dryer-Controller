@@ -34,7 +34,7 @@ module BodyTop(){
 	}
 
 	module Top(){
-		translate([0, base_dims.l, base_dims.h])
+		translate([0, 0, base_dims.h])
 		ultracuber(
 			[
 				base_dims.w,
@@ -46,7 +46,7 @@ module BodyTop(){
 				[base_dims.radii.out.s, true],
 				base_dims.radii.out.t,
 			],
-			[0, -1, 1],
+			[0, 1, 1],
 			[0, 0, interface_dims.h],
 		);
 
@@ -124,7 +124,7 @@ module BodyTop(){
 	}
 
 	module TopInterface(){
-		translate([0, base_dims.l - top_dims.l/2, base_dims.h]){
+		translate([0, top_dims.l/2, base_dims.h]){
 			ultracuber(
 				[
 					interface_dims.w,
@@ -149,7 +149,7 @@ module BodyTop(){
 				],
 				[0, 0, 0],
 				[0, 1, 1],
-				[0, -top_dims.l/2 - nonzero(), -cover_dims.h - nonzero()],
+				[0, top_dims.l/2 + nonzero(), -cover_dims.h - nonzero()],
 			);
 		}
 	}

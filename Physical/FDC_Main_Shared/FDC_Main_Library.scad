@@ -68,6 +68,12 @@ heater_sleeve_dims = object(
 	l = heater_dims.h + base_dims.thick.s + global_dims.divs,
 );
 
+electronics_dims = object(
+	w = 70,
+	l = 80,
+	ribbon_connector_l = 10,
+);
+
 box_dims = object(
 	w = 70,
 	l = 55,
@@ -75,11 +81,16 @@ box_dims = object(
 
 top_dims = object(
 	w = base_dims.w,
-	l = heater_sleeve_dims.l + box_dims.l + global_dims.divs,
+	l = base_dims.thick.s + electronics_dims.l + box_dims.l + global_dims.divs,
 	h = (heater_dims.fan_pos - base_dims.h) + heater_dims.fan_dia + 2,
 	thick = object(
 		t = nearest_layer(1),
 	),
+);
+
+intake_dims = object(
+	w = 70,
+	l = base_dims.l - top_dims.l - base_dims.thick.s,
 );
 
 sensor_dims = object(
@@ -88,14 +99,10 @@ sensor_dims = object(
 	h = 13.5,
 );
 
-intake_dims = object(
-	w = 70,
-	l = 40,
-);
 
 channel_dims = object(
 	w = intake_dims.w,
-	l = box_dims.l + global_dims.divs + intake_dims.l,
+	l = base_dims.l - electronics_dims.l - base_dims.thick.s*2 - global_dims.divs,
 	h = base_dims.h,
 );
 
@@ -108,11 +115,6 @@ interface_dims = object(
 		s = base_dims.radii.out.s - interface_inset,
 		t = parting_line_relief,
 	),
-);
-
-electronics_dims = object(
-	w = 70,
-	l = base_dims.l - base_dims.thick.s - top_dims.l - intake_dims.l - global_dims.divs,
 );
 
 cover_dims_inset = base_dims.radii.out.t*2;
@@ -157,8 +159,12 @@ echo(xxx, xxx.func() );
 /*
 	Positions.
 */
+heater_pos = object(
+	y = base_dims.thick.s + electronics_dims.ribbon_connector_l,
+	z = 22,
+);
 box_pos_y = base_dims.l - heater_sleeve_dims.l;
-channel_pos_y = box_pos_y;
+channel_pos_y = base_dims.thick.s + electronics_dims.l + global_dims.divs;
 sensor_pos = object(
 	y = base_dims.thick.s + electronics_dims.l + global_dims.divs + intake_dims.l/2,
 );

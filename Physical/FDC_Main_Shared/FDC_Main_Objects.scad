@@ -8,7 +8,8 @@ $fn = $preview ? 50 : q;
 
 
 module Heater_(){
-	trany(base_dims.l)
+	translate([0, heater_pos.y, heater_pos.z])
+	rotate([0, 0, 180])
 	ultracuber(
 		[
 			hole(heater_dims.bot.w),
@@ -23,7 +24,7 @@ module Heater_(){
 			[rad_neg(heater_dims.radii.t), true],
 		],
 		[0, 1, 1],
-		[0, - base_dims.thick.s, 0],
+		[0, 0, 0],
 		[90, 0, 0],
 	);
 }
@@ -55,7 +56,7 @@ module TopScrews(dep=0, neg=false){
 
 
 module Interface(neg=false){
-	translate([0, base_dims.l - top_dims.l/2, base_dims.h])
+	translate([0, top_dims.l/2, base_dims.h])
 	difference(){
 		ultracuber(
 			[
@@ -95,8 +96,8 @@ module Interface(neg=false){
 				interface_dims.h + cover_dims.h + nonzero(),
 			],
 			[0, 0, 0],
-			[0, 1, 1],
-			[0, -top_dims.l/2 - nonzero(), -cover_dims.h - nonzero()],
+			[0, -1, 1],
+			[0, top_dims.l/2 + nonzero(), -cover_dims.h - nonzero()],
 		);
 	}
 }

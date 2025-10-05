@@ -21,18 +21,18 @@ module BodyBase(){
 			Base();
 		}
 
+		Electranics_();
+
 		Heater_();
 
 		Channel_();
 
-		trany(box_pos_y)
+		*trany(box_pos_y)
 		Fan_();
-
-		Electranics_();
 
 		*Cover_();
 
-		#TopScrews();
+		*TopScrews();
 	}
 
 	Interface();
@@ -68,7 +68,7 @@ module BodyBase(){
 				global_dims.radii.in.s,
 				0,
 			],
-			[0, -1, 1],
+			[0, 1, 1],
 			[0, 0, 0],
 		);
 	}
