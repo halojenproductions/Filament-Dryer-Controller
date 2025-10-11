@@ -56,21 +56,79 @@ module BodyBase(){
 	}
 
 	module Channel_(){
-		trany(channel_pos_y)
-		ultracuber(
-			[
-				hole(channel_dims.w),
-				hole(channel_dims.l),
-				channel_dims.h + nonzero(),
-			],
-			[
-				0,
-				global_dims.radii.in.s,
-				0,
-			],
-			[0, 1, 1],
-			[0, 0, 0],
-		);
+		trany(channel_pos_y){
+			// Fillet.
+			ultracuber(
+				[
+					hole(channel_dims.w),
+					hole(channel_dims.l),
+					global_dims.radii.in.t,
+				],
+				[
+					0,
+					global_dims.radii.in.s,
+					-global_dims.radii.in.t,
+				],
+				[0, 1, 1],
+				[0, 0, channel_dims.h - global_dims.radii.in.t + nonzero()],
+			);
+
+			hull(){
+				// Full height, upside down.
+				ultracuber(
+					[
+						hole(channel_dims.w),
+						hole(channel_dims.l),
+						channel_dims.h + nonzero(),
+						hole(channel_dims.w),
+						hole(channel_dims.l - channel_dims.h*2),
+					],
+					[
+						0,
+						global_dims.radii.in.s,
+						global_dims.radii.in.b,
+					],
+					[0, -1, -1],
+					[0, 0, nonzero()],
+					[180, 0, 0]
+				);
+
+				// Half height, also upside down.
+				ultracuber(
+					[
+						hole(channel_dims.w),
+						hole(channel_dims.l),
+						channel_dims.slope,
+						hole(channel_dims.w),
+						hole(channel_dims.l - channel_dims.slope*2),
+					],
+					[
+						0,
+						global_dims.radii.in.s,
+						global_dims.radii.in.b,
+					],
+					[0, -1, -1],
+					[0, 0, nonzero()],
+					[180, 0, 0]
+				);
+
+
+
+				trany(channel_dims.l)
+				align(
+					[channel_dims.w, channel_dims.slope*2, channel_dims.slope*2],
+					[0, -1, 1],
+				)
+				rotate([0, 90, 0])
+				cylr(
+					channel_dims.slope*2, 
+					hole(channel_dims.w),
+					[1, 1, 1],
+					global_dims.radii.in.s[0],
+					false,
+				);
+			}
+		}
 	}
 
 	module Fan_(){

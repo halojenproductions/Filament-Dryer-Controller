@@ -27,8 +27,7 @@ module BodyTop(){
 
 		DessiccantBox_();
 
-		trany(box_pos_y)
-		Fan_();
+		FanDuct_();
 
 		TopScrews(top_fastener_dims.shroud.getRise(), true);
 	}
@@ -53,12 +52,16 @@ module BodyTop(){
 		TopInterface();
 	}
 
-	module Fan_(){
+	module FanDuct_(){
+		trany(heater_pos.y + heater_dims.h)
 		teardrop(
-			object(d=heater_dims.fan_dia, l=global_dims.divs),
+			object(
+				d=heater_dims.fan_dia, 
+				l=channel_pos_y - (heater_pos.y + heater_dims.h),
+			),
 			object(b=.4, f=.4),
 			[0, 1, -1],
-			[0, 0, heater_dims.fan_pos],
+			[0, 0, heater_pos.z + heater_dims.fan_pos],
 			[0, 180, 0]
 		);
 	}
@@ -83,7 +86,7 @@ module BodyTop(){
 					global_dims.divs,
 					0,
 				],
-				[0, -1, -1],
+				[0, 1, -1],
 				[0, 0, base_dims.h + top_dims.h + nonzero()],
 			);
 		}
@@ -101,7 +104,7 @@ module BodyTop(){
 						0,
 						0,
 					],
-					[0, -1, 1],
+					[0, 1, 1],
 					[0, 0, base_dims.h],
 				);
 
@@ -116,7 +119,7 @@ module BodyTop(){
 						0,
 						0,
 					],
-					[0, -1, 1],
+					[0, 1, 1],
 					[0, 0, base_dims.h],
 				);
 			}
