@@ -10,18 +10,21 @@ $fn = $preview ? 50 : q;
 
 if(ex[0]){
 	BodyTop();
+	BodyTop(lower=false);
 }
 
 if(ex[1]){
 
 }
 
-module BodyTop(){
+module BodyTop(lower=true){
 	difference(){
 		union(){
-			Top();
-			TopScrewShrouds();
+			Top(lower);
+			// TopScrewShrouds();
 		}
+
+		TopInterface_();
 
 		Heater_();
 
@@ -29,40 +32,70 @@ module BodyTop(){
 
 		FanDuct_();
 
-		TopScrews(top_fastener_dims.shroud.getRise(), true);
+		// TopScrews(top_fastener_dims.shroud.getRise(), true);
 	}
 
-	module Top(){
-		translate([0, 0, base_dims.h])
-		ultracuber(
-			[
-				base_dims.w,
-				top_dims.l,
-				top_dims.h - interface_dims.h,
-			],
-			[
-				parting_line_relief,
-				[base_dims.radii.out.s, true],
-				base_dims.radii.out.t,
-			],
-			[0, 1, 1],
-			[0, 0, interface_dims.h],
-		);
+	module Top(lower){
+		lower_hei = fan_abs_pos_z - base_dims.h;
+		if(lower){
+			translate([0, 0, base_dims.h])
+			ultracuber(
+				[
+					base_dims.w,
+					top_dims.l,
+					lower_hei /*- interface_dims.h*/,
+				],
+				[
+					parting_line_relief,
+					[base_dims.radii.out.s, true],
+					parting_line_relief,
+				],
+				[0, 1, 1],
+				[0, 0, /*interface_dims.h*/ 0],
+			);
 
-		TopInterface();
+			*TopInterface();
+		}else{
+			translate([0, 0, base_dims.h])
+			ultracuber(
+				[
+					base_dims.w,
+					top_dims.upper_l,
+					top_dims.h - lower_hei,
+				],
+				[
+					parting_line_relief,
+					[base_dims.radii.out.s, true],
+					base_dims.radii.out.t,
+				],
+				[0, 1, 1],
+				[0, 0, lower_hei],
+			);
+		}
 	}
 
 	module FanDuct_(){
+		// trany(heater_pos.y + heater_dims.h)
+		// teardrop(
+		// 	object(
+		// 		d=heater_dims.fan_dia, 
+		// 		l=channel_pos_y - (heater_pos.y + heater_dims.h),
+		// 	),
+		// 	object(b=.4, f=.4),
+		// 	[0, 1, -1],
+		// 	[0, 0, heater_pos.z + heater_dims.fan_pos],
+		// 	[0, 180, 0]
+		// );
+
 		trany(heater_pos.y + heater_dims.h)
-		teardrop(
-			object(
-				d=heater_dims.fan_dia, 
-				l=channel_pos_y - (heater_pos.y + heater_dims.h),
-			),
-			object(b=.4, f=.4),
-			[0, 1, -1],
-			[0, 0, heater_pos.z + heater_dims.fan_pos],
-			[0, 180, 0]
+		tranz(fan_abs_pos_z)
+		rotate([-90, 0, 0])
+		cylr(
+			heater_dims.fan_dia, 
+			channel_pos_y - (heater_pos.y + heater_dims.h) + nonzero(),
+			[1, 1, 0],
+			-.4,
+			true,
 		);
 	}
 
@@ -121,6 +154,57 @@ module BodyTop(){
 					],
 					[0, 1, 1],
 					[0, 0, base_dims.h],
+				);
+			}
+		}
+	}
+
+	module TopInterface_(){
+		translate([0, top_dims.l/2, base_dims.h]){
+			difference(){
+				union(){
+					// Cap.
+					ultracuber(
+						[
+							interface_dims.w,
+							interface_dims.l,
+							interface_dims.h - interface_dims.elev - nonzero(),
+						],
+						[
+							interface_dims.overhang,
+							[interface_dims.radii.s*1.5, true],
+							interface_dims.radii.t,
+						],
+						[0, 0, 1],
+						[0, 0, interface_dims.elev-nonzero()],
+					);
+
+					// Stalk.
+					ultracuber(
+						[
+							interface_dims.w - interface_dims.overhang*2,
+							interface_dims.l,
+							interface_dims.elev,
+						],
+						[
+							0,
+							[interface_dims.radii.s*1.5, true],
+							0,
+						],
+						[0, 0, 1],
+						[0, 0, -nonzero()],
+					);
+				}
+
+				ultracuber(
+					[
+						channel_dims.w,
+						top_dims.l - base_dims.thick.s*2,
+						interface_dims.h + nonzero(1),
+					],
+					[0, 0, 0],
+					[0, 0, 1],
+					[0, 0, -nonzero(1)],
 				);
 			}
 		}

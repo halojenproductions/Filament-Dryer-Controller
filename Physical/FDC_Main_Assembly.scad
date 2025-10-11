@@ -13,16 +13,21 @@ $fn = $preview ? 50 : q;
 
 
 if(ex[0]){
-	#color("MediumSeaGreen")
+	color("Tan")
 	BodyTop();
 }
 
 if(ex[1]){
+	color("MediumSeaGreen")
+	BodyTop(false);
+}
+
+if(ex[2]){
 	color("Turquoise")
 	BodyBase();
 }
 
-if(ex[2]){
+if(ex[3]){
 	*color("PaleVioletRed")
 	Cover();
 }

@@ -35,7 +35,7 @@ module BodyBase(){
 		*TopScrews();
 	}
 
-	Interface();
+	*Interface();
 	
 
 	module Base(){
@@ -97,10 +97,10 @@ module BodyBase(){
 				ultracuber(
 					[
 						hole(channel_dims.w),
-						hole(channel_dims.l),
+						hole(channel_dims.l/2),
 						channel_dims.slope,
 						hole(channel_dims.w),
-						hole(channel_dims.l - channel_dims.slope*2),
+						hole(channel_dims.l/2 - channel_dims.slope*2),
 					],
 					[
 						0,
@@ -113,15 +113,15 @@ module BodyBase(){
 				);
 
 
-
+				// Big rounding at the end.
 				trany(channel_dims.l)
 				align(
-					[channel_dims.w, channel_dims.slope*2, channel_dims.slope*2],
+					[channel_dims.w, channel_dims.h*2, channel_dims.h*2],
 					[0, -1, 1],
 				)
 				rotate([0, 90, 0])
 				cylr(
-					channel_dims.slope*2, 
+					channel_dims.h*2, 
 					hole(channel_dims.w),
 					[1, 1, 1],
 					global_dims.radii.in.s[0],
