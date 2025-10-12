@@ -55,7 +55,7 @@ module TopScrews(dep=0, neg=false){
 }
 
 
-module Clips(neg=false){
+module Clips(pos=true){
 	ClipPair(clip_pos.a);
 	ClipPair(clip_pos.b);
 	// TODO: End slot.
@@ -67,7 +67,7 @@ module Clips(neg=false){
 				union(){
 					// Cap.
 					ultracuber(
-						dims = tern(!neg, 
+						dims = tern(pos, 
 							[
 								interface_dims.w + interface_clip_dims.overhang*2,
 								interface_clip_dims.l,
@@ -75,13 +75,13 @@ module Clips(neg=false){
 								 - nonzero(),
 							],
 							[
-								interface_dims.w + interface_clip_dims.overhang*2,
-								interface_clip_dims.l,
+								hole(interface_dims.w + interface_clip_dims.overhang*2),
+								hole(interface_clip_dims.l*2),
 								interface_dims.h - interface_clip_dims.elev
-								 + interface_outset - nonzero(),
+								 + interface_outset + .1 - nonzero(),
 							],
 						),
-						cham = tern(!neg, 
+						cham = tern(pos, 
 							[
 								interface_clip_dims.overhang,
 								[interface_outset, true],
@@ -90,58 +90,86 @@ module Clips(neg=false){
 							[
 								interface_clip_dims.overhang,
 								[interface_outset, true],
-								interface_dims.radii.t + interface_outset,
+								interface_outset + interface_clip_dims.overhang + .1,
 							],
 						),
 						[0, 0, 1],
-						[0, 0, interface_clip_dims.elev-nonzero()],
+						[
+							0, 
+							tern(pos, 0, interface_clip_dims.l/2), 
+							interface_clip_dims.elev-nonzero()
+						],
 					);
 
 					// Stalk.
 					ultracuber(
-						dims = [
-							interface_dims.w,
-							interface_clip_dims.l,
-							interface_clip_dims.elev + interface_clip_dims.overhang
-							+ base_dims.radii.in.t,
-						],
+						dims = tern(pos, 
+							[
+								interface_dims.w,
+								interface_clip_dims.l,
+								interface_clip_dims.elev + interface_clip_dims.overhang,
+							],
+							[
+								hole(interface_dims.w),
+								hole(interface_clip_dims.l*2),
+								interface_clip_dims.elev + interface_clip_dims.overhang,
+							],
+						),
 						[
 							0,
 							[interface_outset - interface_clip_dims.overhang, true],
 							0,
 						],
 						[0, 0, 1],
-						[0, 0, -base_dims.radii.in.t-nonzero()],
+						[
+							0, 
+							tern(pos, 0, interface_clip_dims.l/2), 
+							-nonzero()
+						],
 					);
 
 					// Slot.
-					*ultracuber(
-						dims = [
-							interface_dims.w,
-							interface_clip_dims.l,
-							interface_dims.h - interface_clip_dims.elev
-							 - nonzero(),
-						],
-						[
-							0,
-							[interface_outset, true],
-							0,
-						],
-						[0, 0, 1],
-						[0, interface_clip_dims.l, interface_clip_dims.elev-nonzero()],
-					);
+					if(!pos){
+						ultracuber(
+							dims = [
+								hole(interface_dims.w + interface_clip_dims.overhang*2),
+								hole(interface_clip_dims.l),
+								interface_clip_dims.elev + interface_clip_dims.overhang
+								- nonzero(),
+							],
+							[
+								0,
+								[interface_outset, true],
+								0,
+							],
+							[0, 0, 1],
+							[0, interface_clip_dims.l, -nonzero()],
+						);
+					}
 				}
 
 				ultracuber(
-					dims = [
-						clip_spec.inner_w,
-						interface_clip_dims.l + nonzero(1),
-						interface_dims.h + base_dims.radii.in.t
-						 + interface_outset + nonzero(1),
-					],
+					dims = tern(pos, 
+						[
+							clip_spec.inner_w,
+							interface_clip_dims.l + nonzero(1),
+							interface_dims.h
+							+ interface_outset + nonzero(1),
+						],
+						[
+							clip_spec.inner_w,
+							hole(interface_clip_dims.l*2) + nonzero(1),
+							interface_dims.h + base_dims.radii.in.t
+							+ interface_outset + nonzero(1),
+						],
+					),
 					[0, 0, 0],
 					[0, 0, 1],
-					[0, 0, -base_dims.radii.in.t-nonzero(1)],
+						[
+							0, 
+							tern(pos, 0, interface_clip_dims.l/2), 
+							-nonzero(1)
+						],
 				);
 
 				// ultracuber(
@@ -204,3 +232,82 @@ module Clips(neg=false){
 	// 	}
 	// }
 }
+
+module Seal(pos=true){
+	tranz(tern(pos, 0, - nonzero()))
+	difference(){
+		intersection(){
+			ultracuber(
+				[
+					tern(pos, interface_dims.w, hole(interface_dims.w)),
+					tern(pos, top_dims.l, hole(top_dims.l)) + nonzero(),
+					tern(pos, interface_dims.h, interface_dims.h + parting_line_relief),
+					tern(pos, 
+						interface_dims.w - interface_dims.seal.size*2 + parting_line_relief*2,
+						interface_dims.w - interface_dims.seal.size*2,
+					),
+					tern(pos, 
+						top_dims.l - interface_dims.seal.size*2 + parting_line_relief*2,
+						hole(top_dims.l - interface_dims.seal.size*2),
+					),
+				],
+				[
+					0,
+					[
+						base_dims.radii.in.s + interface_outset, 
+						true, 
+						base_dims.radii.in.s + parting_line_relief
+					],
+					0,
+				],
+				[0, 0, 1],
+				[
+					0, 
+					top_dims.l/2 + (base_dims.thick.s - interface_dims.seal.size), 
+					base_dims.h
+				],
+			);
+
+			ultracuber(
+				[
+					interface_dims.w,
+					top_dims.l + nonzero(),
+					tern(pos, interface_dims.h, interface_dims.h + parting_line_relief) + nonzero(1),
+				],
+				[0, 0, 0],
+				[0, 1, 1],
+				[
+					0, 
+					0, 
+					base_dims.h - nonzero()
+				],
+			);
+		}
+
+		if(pos){
+			Heater_();
+		}
+
+		// Channel.
+		ultracuber(
+			[
+				channel_dims.w,
+				top_dims.l,
+				tern(pos, interface_dims.h, interface_dims.h + parting_line_relief) + nonzero(1),
+			],
+			[
+				tern(pos, 0, parting_line_relief), 
+				[base_dims.radii.in.s, true], 
+				0
+			],
+			[0, 0, 1],
+			[
+				0, 
+				top_dims.l/2 + (base_dims.thick.s), 
+				base_dims.h - nonzero()
+			],
+		);
+	}
+}
+
+

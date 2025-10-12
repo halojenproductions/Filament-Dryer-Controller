@@ -10,7 +10,7 @@ $fn = $preview ? 50 : q;
 
 if(ex[0]){
 	BodyTop();
-	BodyTop(lower=false);
+	*BodyTop(lower=false);
 }
 
 if(ex[1]){
@@ -24,13 +24,17 @@ module BodyTop(lower=true){
 			// TopScrewShrouds();
 		}
 
-		TopInterface_();
+		Seal(false);
+		*TopInterface_();
 
 		Heater_();
 
 		DessiccantBox_();
 
 		FanDuct_();
+
+		Clips(false);
+
 
 		// TopScrews(top_fastener_dims.shroud.getRise(), true);
 	}
@@ -168,10 +172,10 @@ module BodyTop(lower=true){
 						[
 							interface_dims.w,
 							interface_dims.l,
-							interface_dims.h - interface_dims.elev - nonzero(),
+							interface_dims.h - interface_clip_dims.elev - nonzero(),
 						],
 						[
-							interface_dims.overhang,
+							interface_clip_dims.overhang,
 							[interface_dims.radii.s*1.5, true],
 							interface_dims.radii.t,
 						],

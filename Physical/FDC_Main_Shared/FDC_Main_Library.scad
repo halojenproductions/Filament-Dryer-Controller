@@ -115,7 +115,7 @@ interface_outset = 2.5;
 interface_clip_dims = object(
 	w = interface_outset,
 	l = 15,
-	elev = layers(2),
+	elev = layers(4),
 	overhang = lines(2),
 );
 
@@ -194,7 +194,7 @@ clip_pos = object(
 	),
 	b = object(
 		y = top_dims.l - base_dims.thick.s - interface_clip_dims.l
-		- interface_clip_dims.l/2,
+		- interface_clip_dims.l,
 		inner_w = channel_dims.w,
 	),
 );
