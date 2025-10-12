@@ -19,26 +19,28 @@ module BodyBase(){
 	difference(){
 		union(){
 			Base();
+			Seal();
 		}
+
+		Electranics_();
 
 		Heater_();
 
 		Channel_();
 
-		trany(box_pos_y)
+		*trany(box_pos_y)
 		Fan_();
-
-		Electranics_();
 
 		*Cover_();
 
-		#TopScrews();
+		*TopScrews();
 	}
 
-	Interface();
+	Clips();
 	
 
 	module Base(){
+		// Main.
 		ultracuber(
 			[
 				base_dims.w,
@@ -53,24 +55,110 @@ module BodyBase(){
 			[0, 1, 1],
 			[0, 0, -base_dims.thick.b],
 		);
+		// Top interface section.
+		ultracuber(
+			[
+				base_dims.w,
+				top_dims.l,
+				base_dims.radii.out.t,
+			],
+			[
+				0,
+				[base_dims.radii.out.s, true],
+				parting_line_relief,
+			],
+			[0, 1, -1],
+			[0, 0, base_dims.h],
+		);
 	}
 
 	module Channel_(){
-		trany(channel_pos_y)
-		ultracuber(
-			[
-				hole(channel_dims.w),
-				hole(channel_dims.l),
-				channel_dims.h + nonzero(),
-			],
-			[
-				0,
-				global_dims.radii.in.s,
-				0,
-			],
-			[0, -1, 1],
-			[0, 0, 0],
-		);
+		trany(channel_pos_y){
+			// Fillet.
+			ultracuber(
+				[
+					channel_dims.w,
+					channel_dims.l,
+					global_dims.radii.in.t,
+				],
+				[
+					0,
+					global_dims.radii.in.s,
+					0,//-global_dims.radii.in.t,
+				],
+				[0, 1, 1],
+				[0, 0, channel_dims.h - global_dims.radii.in.t + nonzero()],
+			);
+
+			hull(){
+				// Full height, upside down.
+				ultracuber(
+					[
+						channel_dims.w,
+						channel_dims.l,
+						channel_dims.h + nonzero(),
+						channel_dims.w,
+						channel_dims.l - channel_dims.h*2,
+					],
+					[
+						0,
+						global_dims.radii.in.s,
+						global_dims.radii.in.b,
+					],
+					[0, -1, -1],
+					[0, 0, nonzero()],
+					[180, 0, 0]
+				);
+
+				// Half height, also upside down.
+				ultracuber(
+					[
+						channel_dims.w,
+						channel_dims.l/2,
+						channel_dims.slope,
+						channel_dims.w,
+						channel_dims.l/2 - channel_dims.slope*2,
+					],
+					[
+						0,
+						global_dims.radii.in.s,
+						global_dims.radii.in.b,
+					],
+					[0, -1, -1],
+					[0, 0, nonzero()],
+					[180, 0, 0]
+				);
+
+
+				// Big rounding at the end.
+				intersection(){
+					trany(channel_dims.l)
+					align(
+						[channel_dims.w, channel_dims.h*2, channel_dims.h*2],
+						[0, -1, 1],
+					)
+					rotate([0, 90, 0])
+					cylr(
+						channel_dims.h*2, 
+						channel_dims.w,
+						[1, 1, 1],
+						global_dims.radii.in.s[0],
+						false,
+					);
+
+					ultracuber(
+						[
+							channel_dims.w,
+							channel_dims.l,
+							channel_dims.h + nonzero(),
+						],
+						[0, 0, 0],
+						[0, 1, 1],
+						[0, 0, nonzero()],
+					);
+				}
+			}
+		}
 	}
 
 	module Fan_(){
@@ -93,11 +181,15 @@ module BodyBase(){
 	module Electranics_(){
 		ultracuber(
 			[
-				hole(electronics_dims.w),
-				hole(electronics_dims.l),
+				electronics_dims.w,
+				electronics_dims.l,
 				base_dims.h + nonzero(),
 			],
-			[0, global_dims.radii.in.s, 0],
+			[
+				global_dims.radii.in.b, 
+				global_dims.radii.in.s, 
+				0,//-global_dims.radii.in.t
+			],
 			[0, 1, 1],
 			[0, base_dims.thick.s, 0],
 		);
