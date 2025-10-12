@@ -23,7 +23,7 @@ global_dims = object(
 base_side_rad = 2;
 base_dims = object(
 	w = 85,
-	l = 210,
+	l = 165, // Original intake section = 210,
 	h = 45,
 	thick = object(
 		b = nearest_layer(1),
@@ -82,17 +82,16 @@ box_dims = object(
 
 top_dims = object(
 	w = base_dims.w,
-	l = base_dims.thick.s + electronics_dims.l + box_dims.l + global_dims.divs*2,
-	upper_l = base_dims.thick.s + electronics_dims.l + global_dims.divs,
-	h = electronics_dims.h +(heater_dims.fan_pos - base_dims.h) + heater_dims.fan_dia + 2,
+	// l = base_dims.thick.s + electronics_dims.l
+	//  + box_dims.l + global_dims.divs*2,
+	l = base_dims.l,
+	upper_l = base_dims.thick.s + electronics_dims.l
+	 + global_dims.divs,
+	h = electronics_dims.h +(heater_dims.fan_pos - base_dims.h)
+	 + heater_dims.fan_dia + 2,
 	thick = object(
 		t = nearest_layer(1),
 	),
-);
-
-intake_dims = object(
-	w = 70,
-	l = base_dims.l - top_dims.l - base_dims.thick.s,
 );
 
 sensor_dims = object(
@@ -101,14 +100,23 @@ sensor_dims = object(
 	h = 13.5,
 );
 
-
 channel_dims = object(
-	w = intake_dims.w,
+	w = 70,
 	l = base_dims.l - electronics_dims.l 
 	- base_dims.thick.s*2 - global_dims.divs,
 	h = base_dims.h,
 	slope = base_dims.h/2,
 );
+
+echo(str(
+	"\n\t channel_dims: ", channel_dims,
+"\n"));
+
+intake_dims = object(
+	w = channel_dims.w,
+	l = base_dims.l - top_dims.l - base_dims.thick.s,
+);
+
 
 interface_inset = base_dims.thick.s/2;
 interface_outset = 2.5;

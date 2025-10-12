@@ -16,7 +16,7 @@ module Mocks(){
 
 	Sensor();
 
-	Screws();
+	*Screws();
 
 	module Sensor(){
 		trany(sensor_pos.y)

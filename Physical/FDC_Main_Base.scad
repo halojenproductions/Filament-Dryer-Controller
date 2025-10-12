@@ -19,14 +19,14 @@ module BodyBase(){
 	difference(){
 		union(){
 			Base();
-			Seal();
+			*Seal();
 		}
 
 		Electranics_();
 
 		Heater_();
 
-		Channel_();
+		Channel2_();
 
 		*trany(box_pos_y)
 		Fan_();
@@ -72,6 +72,66 @@ module BodyBase(){
 		);
 	}
 
+	// Not needed when eliminating the intake section.
+	module Channel2_(){
+		trany(channel_pos_y){
+			// Fillet.
+			ultracuber(
+				[
+					channel_dims.w,
+					channel_dims.l,
+					global_dims.radii.in.t,
+				],
+				[
+					0,
+					global_dims.radii.in.s,
+					0,//-global_dims.radii.in.t,
+				],
+				[0, 1, 1],
+				[0, 0, channel_dims.h - global_dims.radii.in.t + nonzero()],
+			);
+
+			hull(){
+				// 
+				ultracuber(
+					[
+						channel_dims.w,
+						channel_dims.l,
+						channel_dims.h - channel_dims.slope + nonzero(),
+					],
+					[
+						global_dims.radii.in.b,
+						global_dims.radii.in.s,
+						0,
+					],
+					[0, 1, 1],
+					[0, 0, channel_dims.slope + nonzero()],
+					[0, 0, 0]
+				);
+
+				// 
+				ultracuber(
+					[
+						channel_dims.w,
+						channel_dims.l - channel_dims.slope,
+						channel_dims.slope,
+					],
+					[
+						global_dims.radii.in.b,
+						global_dims.radii.in.s,
+						0,
+					],
+					[0, -1, 1],
+					[0, channel_dims.l, nonzero()],
+					[0, 0, 0]
+				);
+
+
+			}
+		}
+	}
+
+	// Not needed when eliminating the intake section.
 	module Channel_(){
 		trany(channel_pos_y){
 			// Fillet.

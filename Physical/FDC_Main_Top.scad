@@ -24,7 +24,7 @@ module BodyTop(lower=true){
 			// TopScrewShrouds();
 		}
 
-		Seal(false);
+		*Seal(false);
 		*TopInterface_();
 
 		Heater_();

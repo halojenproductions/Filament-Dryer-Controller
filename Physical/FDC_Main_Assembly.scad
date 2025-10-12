@@ -70,7 +70,7 @@ assert(
 	crosssections.heater_fan < crosssections.channel, 
 	"Channel area is too small"
 );
-assert(
+*assert(
 	crosssections.heater_fan < crosssections.intake, 
 	"Intake area is too small"
 );
