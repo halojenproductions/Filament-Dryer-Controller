@@ -27,7 +27,7 @@ base_dims = object(
 	h = 45,
 	thick = object(
 		b = nearest_layer(1),
-		s = 4,
+		s = 6,
 		t = nearest_layer(1),
 	),
 	radii = object(
@@ -104,23 +104,33 @@ sensor_dims = object(
 
 channel_dims = object(
 	w = intake_dims.w,
-	l = base_dims.l - electronics_dims.l - base_dims.thick.s*2 - global_dims.divs,
+	l = base_dims.l - electronics_dims.l 
+	- base_dims.thick.s*2 - global_dims.divs,
 	h = base_dims.h,
 	slope = base_dims.h/2,
 );
 
 interface_inset = base_dims.thick.s/2;
-interface_outset = line_wid(0)*4 + line_wid(1)*2;
+interface_outset = 2.5;
+interface_clip_dims = object(
+	w = interface_outset,
+	l = 15,
+	elev = layers(2),
+	overhang = lines(2),
+);
+
 interface_dims = object(
 	w = channel_dims.w + interface_outset*2,
 	l = top_dims.l - interface_outset*2,
-	h = nearest_layer(4),
+	h = interface_clip_dims.elev + interface_clip_dims.overhang*2
+	 + layers(2),
 	radii = object(
 		s = base_dims.radii.out.s,
 		t = interface_outset,
 	),
-	elev = layers(2),
-	overhang = line_wid(0)*2,
+	seal = object(
+		size = interface_outset,
+	),
 );
 
 cover_dims_inset = base_dims.radii.out.t*2;
@@ -145,7 +155,7 @@ top_fastener_dims = object(
 		//dep = 4, // Depth from position to top surface.
 		flat = true,
 	),
-	boss_thick = line_wid(0)*3,
+	boss_thick = line_wid(0)*2 + line_wid(1),
 	clear_rad = 7.5,
 	shroud = object(
 		dia = 8,
@@ -176,6 +186,19 @@ sensor_pos = object(
 	// y = base_dims.l - (base_dims.thick.s + intake_dims.l/2),
 	y = channel_pos_y + channel_dims.slope + sensor_dims.w/2,
 );
+clip_pos = object(
+	a = object(
+		y = heater_pos.y + heater_dims.h 
+		+ global_dims.divs + interface_clip_dims.l/2,
+		inner_w = electronics_dims.w,
+	),
+	b = object(
+		y = top_dims.l - base_dims.thick.s - interface_clip_dims.l
+		- interface_clip_dims.l/2,
+		inner_w = channel_dims.w,
+	),
+);
+
 
 
 

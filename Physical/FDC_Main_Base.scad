@@ -19,6 +19,7 @@ module BodyBase(){
 	difference(){
 		union(){
 			Base();
+			Seal();
 		}
 
 		Electranics_();
@@ -35,10 +36,11 @@ module BodyBase(){
 		*TopScrews();
 	}
 
-	*Interface();
+	Clips();
 	
 
 	module Base(){
+		// Main.
 		ultracuber(
 			[
 				base_dims.w,
@@ -53,6 +55,85 @@ module BodyBase(){
 			[0, 1, 1],
 			[0, 0, -base_dims.thick.b],
 		);
+		// Top interface section.
+		ultracuber(
+			[
+				base_dims.w,
+				top_dims.l,
+				base_dims.radii.out.t,
+			],
+			[
+				0,
+				[base_dims.radii.out.s, true],
+				parting_line_relief,
+			],
+			[0, 1, -1],
+			[0, 0, base_dims.h],
+		);
+	}
+
+	module Seal(neg=false){
+		difference(){
+			intersection(){
+				ultracuber(
+					[
+						interface_dims.w,
+						top_dims.l,
+						interface_dims.h,
+						interface_dims.w - interface_dims.seal.size*2 + parting_line_relief*2,
+						top_dims.l - interface_dims.seal.size*2 + parting_line_relief*2,
+					],
+					[
+						0,
+						[
+							base_dims.radii.in.s + interface_outset, 
+							true, 
+							base_dims.radii.in.s + parting_line_relief
+						],
+						0,
+					],
+					[0, 0, 1],
+					[
+						0, 
+						top_dims.l/2 + (base_dims.thick.s - interface_dims.seal.size), 
+						base_dims.h
+					],
+				);
+
+				ultracuber(
+					[
+						interface_dims.w,
+						top_dims.l,
+						interface_dims.h + nonzero(1),
+					],
+					[0, 0, 0],
+					[0, 1, 1],
+					[
+						0, 
+						0, 
+						base_dims.h - nonzero()
+					],
+				);
+			}
+
+			Heater_();
+
+			// Channel.
+			ultracuber(
+				[
+					channel_dims.w,
+					top_dims.l,
+					interface_dims.h + nonzero(1),
+				],
+				[0, [base_dims.radii.in.s, true], 0],
+				[0, 0, 1],
+				[
+					0, 
+					top_dims.l/2 + (base_dims.thick.s), 
+					base_dims.h - nonzero()
+				],
+			);
+		}
 	}
 
 	module Channel_(){
@@ -60,14 +141,14 @@ module BodyBase(){
 			// Fillet.
 			ultracuber(
 				[
-					hole(channel_dims.w),
-					hole(channel_dims.l),
+					channel_dims.w,
+					channel_dims.l,
 					global_dims.radii.in.t,
 				],
 				[
 					0,
 					global_dims.radii.in.s,
-					-global_dims.radii.in.t,
+					0,//-global_dims.radii.in.t,
 				],
 				[0, 1, 1],
 				[0, 0, channel_dims.h - global_dims.radii.in.t + nonzero()],
@@ -77,11 +158,11 @@ module BodyBase(){
 				// Full height, upside down.
 				ultracuber(
 					[
-						hole(channel_dims.w),
-						hole(channel_dims.l),
+						channel_dims.w,
+						channel_dims.l,
 						channel_dims.h + nonzero(),
-						hole(channel_dims.w),
-						hole(channel_dims.l - channel_dims.h*2),
+						channel_dims.w,
+						channel_dims.l - channel_dims.h*2,
 					],
 					[
 						0,
@@ -96,11 +177,11 @@ module BodyBase(){
 				// Half height, also upside down.
 				ultracuber(
 					[
-						hole(channel_dims.w),
-						hole(channel_dims.l/2),
+						channel_dims.w,
+						channel_dims.l/2,
 						channel_dims.slope,
-						hole(channel_dims.w),
-						hole(channel_dims.l/2 - channel_dims.slope*2),
+						channel_dims.w,
+						channel_dims.l/2 - channel_dims.slope*2,
 					],
 					[
 						0,
@@ -114,19 +195,32 @@ module BodyBase(){
 
 
 				// Big rounding at the end.
-				trany(channel_dims.l)
-				align(
-					[channel_dims.w, channel_dims.h*2, channel_dims.h*2],
-					[0, -1, 1],
-				)
-				rotate([0, 90, 0])
-				cylr(
-					channel_dims.h*2, 
-					hole(channel_dims.w),
-					[1, 1, 1],
-					global_dims.radii.in.s[0],
-					false,
-				);
+				intersection(){
+					trany(channel_dims.l)
+					align(
+						[channel_dims.w, channel_dims.h*2, channel_dims.h*2],
+						[0, -1, 1],
+					)
+					rotate([0, 90, 0])
+					cylr(
+						channel_dims.h*2, 
+						channel_dims.w,
+						[1, 1, 1],
+						global_dims.radii.in.s[0],
+						false,
+					);
+
+					ultracuber(
+						[
+							channel_dims.w,
+							channel_dims.l,
+							channel_dims.h + nonzero(),
+						],
+						[0, 0, 0],
+						[0, 1, 1],
+						[0, 0, nonzero()],
+					);
+				}
 			}
 		}
 	}
@@ -151,11 +245,15 @@ module BodyBase(){
 	module Electranics_(){
 		ultracuber(
 			[
-				hole(electronics_dims.w),
-				hole(electronics_dims.l),
+				electronics_dims.w,
+				electronics_dims.l,
 				base_dims.h + nonzero(),
 			],
-			[0, global_dims.radii.in.s, 0],
+			[
+				global_dims.radii.in.b, 
+				global_dims.radii.in.s, 
+				0,//-global_dims.radii.in.t
+			],
 			[0, 1, 1],
 			[0, base_dims.thick.s, 0],
 		);
