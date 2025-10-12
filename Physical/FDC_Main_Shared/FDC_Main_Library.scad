@@ -115,9 +115,11 @@ intake_dims = object(
 	l = base_dims.thick.s,
 	h = channel_dims.h,
 	ridge = base_dims.thick.s/4,
+	border = lines(4),
 	louvres = object(
 		thick = lines(2),
 		count = 6,
+		angle = 50,
 	),
 );
 

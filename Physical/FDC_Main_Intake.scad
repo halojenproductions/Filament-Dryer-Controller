@@ -16,13 +16,28 @@ if(ex[1]){
 	
 }
 
-module Intake(){
-	translate([0, base_dims.l - intake_dims.l/2, intake_dims.h/2 + nonzero()]){
-		Main();
+module Intake(ispos=true){
+	translate([
+		0, 
+		base_dims.l - intake_dims.l/2, 
+		intake_dims.h/2 + nonzero()
+	]){
+		difference(){
+			union(){
+				Main();
 
-		Ridge();
+				Ridge();
 
-		Top();
+				Top();
+			}
+			if(ispos){
+				LouvreSection_();
+			}
+		}
+
+		if(ispos){
+			Louvres();
+		}
 	}
 
 	module Top(){
@@ -115,24 +130,111 @@ module Intake(){
 			);
 		}
 	}
-}
+
+	module LouvreSection_(){
+			ultracuber(
+				[
+					intake_dims.w - intake_dims.border*2,
+					intake_dims.h - intake_dims.border*2,
+					intake_dims.l + nonzero(),
+				],
+				[
+					0,
+					[base_dims.radii.in.s, true],
+					0,
+				],
+				[0, 0, 0],
+				[0, 0, 0],
+				[90, 0, 0],
+			);
+	}
+
+	module Louvres(){
+		hypotenuse = hyp(intake_dims.w/2, intake_dims.h);
+		pitch = (intake_dims.h - intake_dims.border*2 - intake_dims.louvres.thick) / intake_dims.louvres.count;
+
+		intersection(){
+			rotate([90, 0, 0])
+			union(){
+				render(5)
+				for(i = [1 : intake_dims.louvres.count*2 - 1]){
+					trany(i * pitch)
+					Louvre(i);
+
+					mirror([1,0,0])
+					trany(i * pitch)
+					Louvre(i);
+				}
+
+				ultracuber(
+					[
+						intake_dims.louvres.thick,
+						intake_dims.h - intake_dims.border*2,
+						intake_dims.l + nonzero(),
+					],
+					[0, 0, 0],
+					[0, 0, 0],
+					[0, 0, 0],
+				);
+
+				AngledSupport();
+				mirror([1,0,0])
+				AngledSupport();
+
+			}
 
 
+			LouvreSection_();
+		}
+		
+		module Louvre(i){
+			trany(-intake_dims.h/2 - intake_dims.w/2)
+			tranz(-intake_dims.l/2)
+			hull(){
+				// Bottom
+				ultracuber(
+					[
+						hypotenuse,
+						intake_dims.louvres.thick,
 
-module Intake_(){
-	translate([0, cover_dims_inset, base_dims.h + nonzero()])
-	ultracuber(
-		[
-			hole(cover_dims.w),
-			hole(cover_dims.l),
-			cover_dims.h + nonzero(),
-		],
-		[
-			rad_neg(cover_dims.radii.b),
-			[cover_dims.radii.s, true],
-			-parting_line_relief,
-		],
-		[0, 1, -1],
-		[0, 0, 0],
-	);
+					],
+					[0, 0, 0],
+					[1, 1, 0],
+					[0, 0, 0],
+					[0, 0, 45],
+				);
+
+				// Top
+				ultracuber(
+					[
+						hypotenuse,
+						intake_dims.louvres.thick,
+
+					],
+					[0, 0, 0],
+					[1, 1, 0],
+					[
+						0, 
+						intake_dims.l / tan(intake_dims.louvres.angle), 
+						intake_dims.l, 
+					],
+					[0, 0, 45],
+				);
+			}
+		}
+
+		module AngledSupport(){
+			ultracuber(
+				[
+					intake_dims.louvres.thick,
+					hypotenuse,
+					intake_dims.l + nonzero(),
+				],
+				[0, 0, 0],
+				[0, -1, 0],
+				[0, intake_dims.h/2 - intake_dims.border, 0],
+				[0, 0, 45],
+			);
+		}
+	}
 }

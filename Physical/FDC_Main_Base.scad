@@ -32,7 +32,7 @@ module BodyBase(){
 		*trany(box_pos_y)
 		Fan_();
 
-		Intake();
+		Intake(false);
 		*Cover_();
 
 		*TopScrews();
