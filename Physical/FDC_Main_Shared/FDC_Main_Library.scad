@@ -82,8 +82,6 @@ box_dims = object(
 
 top_dims = object(
 	w = base_dims.w,
-	// l = base_dims.thick.s + electronics_dims.l
-	//  + box_dims.l + global_dims.divs*2,
 	l = base_dims.l,
 	upper_l = base_dims.thick.s + electronics_dims.l
 	 + global_dims.divs,
@@ -114,7 +112,13 @@ echo(str(
 
 intake_dims = object(
 	w = channel_dims.w,
-	l = base_dims.l - top_dims.l - base_dims.thick.s,
+	l = base_dims.thick.s,
+	h = channel_dims.h,
+	ridge = base_dims.thick.s/4,
+	louvres = object(
+		thick = lines(2),
+		count = 6,
+	),
 );
 
 
@@ -138,19 +142,6 @@ interface_dims = object(
 	),
 	seal = object(
 		size = interface_outset,
-	),
-);
-
-cover_dims_inset = base_dims.radii.out.t*2;
-cover_dims = object(
-	w = base_dims.w - cover_dims_inset*2,
-	l = base_dims.thick.s - cover_dims_inset + electronics_dims.l 
-	+ global_dims.divs + intake_dims.l - parting_line_relief,
-	h = nearest_layer(2.5),
-	radii = object(
-		b = .2,
-		s = base_dims.radii.out.s - cover_dims_inset,
-		t = parting_line_relief,
 	),
 );
 
@@ -191,7 +182,6 @@ fan_abs_pos_z = heater_pos.z + heater_dims.fan_pos + heater_dims.fan_dia/2;
 channel_pos_y = base_dims.thick.s + electronics_dims.l + global_dims.divs;
 box_pos_y = channel_pos_y;
 sensor_pos = object(
-	// y = base_dims.l - (base_dims.thick.s + intake_dims.l/2),
 	y = channel_pos_y + channel_dims.slope + sensor_dims.w/2,
 );
 clip_pos = object(

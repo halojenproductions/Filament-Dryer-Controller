@@ -2,7 +2,7 @@ include <FDC_Main_Shared/FDC_Main_Library.scad>
 use <FDC_Main_Shared/FDC_Main_Mocks.scad>
 use <FDC_Main_Base.scad>
 use <FDC_Main_Top.scad>
-use <FDC_Main_Cover.scad>
+use <FDC_Main_Intake.scad>
 
 
 q = 100;
@@ -13,12 +13,12 @@ $fn = $preview ? 50 : q;
 
 
 if(ex[0]){
-	color("Tan")
+	*color("Tan")
 	BodyTop();
 }
 
 if(ex[1]){
-	color("MediumSeaGreen")
+	*color("MediumSeaGreen")
 	BodyTop(false);
 }
 
@@ -28,8 +28,8 @@ if(ex[2]){
 }
 
 if(ex[3]){
-	*color("PaleVioletRed")
-	Cover();
+	color("PaleVioletRed")
+	Intake();
 }
 
 

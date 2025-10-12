@@ -25,7 +25,6 @@ module BodyTop(lower=true){
 		}
 
 		*Seal(false);
-		*TopInterface_();
 
 		Heater_();
 
@@ -58,7 +57,6 @@ module BodyTop(lower=true){
 				[0, 0, /*interface_dims.h*/ 0],
 			);
 
-			*TopInterface();
 		}else{
 			translate([0, 0, base_dims.h])
 			ultracuber(
@@ -160,88 +158,6 @@ module BodyTop(lower=true){
 					[0, 0, base_dims.h],
 				);
 			}
-		}
-	}
-
-	module TopInterface_(){
-		translate([0, top_dims.l/2, base_dims.h]){
-			difference(){
-				union(){
-					// Cap.
-					ultracuber(
-						[
-							interface_dims.w,
-							interface_dims.l,
-							interface_dims.h - interface_clip_dims.elev - nonzero(),
-						],
-						[
-							interface_clip_dims.overhang,
-							[interface_dims.radii.s*1.5, true],
-							interface_dims.radii.t,
-						],
-						[0, 0, 1],
-						[0, 0, interface_dims.elev-nonzero()],
-					);
-
-					// Stalk.
-					ultracuber(
-						[
-							interface_dims.w - interface_dims.overhang*2,
-							interface_dims.l,
-							interface_dims.elev,
-						],
-						[
-							0,
-							[interface_dims.radii.s*1.5, true],
-							0,
-						],
-						[0, 0, 1],
-						[0, 0, -nonzero()],
-					);
-				}
-
-				ultracuber(
-					[
-						channel_dims.w,
-						top_dims.l - base_dims.thick.s*2,
-						interface_dims.h + nonzero(1),
-					],
-					[0, 0, 0],
-					[0, 0, 1],
-					[0, 0, -nonzero(1)],
-				);
-			}
-		}
-	}
-
-	module TopInterface(){
-		translate([0, top_dims.l/2, base_dims.h]){
-			ultracuber(
-				[
-					interface_dims.w,
-					interface_dims.l,
-					interface_dims.h,
-				],
-				[
-					parting_line_relief,
-					[interface_dims.radii.s*1.5, true],
-					0,
-				],
-				[0, 0, 1],
-				[0, 0, 0],
-			);
-
-			// Channel.
-			ultracuber(
-				[
-					channel_dims.w,
-					interface_inset,
-					interface_dims.h + cover_dims.h + parting_line_relief,
-				],
-				[0, 0, 0],
-				[0, 1, 1],
-				[0, top_dims.l/2 + nonzero(), -cover_dims.h - nonzero()],
-			);
 		}
 	}
 

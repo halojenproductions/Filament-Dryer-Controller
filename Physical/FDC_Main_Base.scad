@@ -1,5 +1,6 @@
 include <FDC_Main_Shared/FDC_Main_Library.scad>
 use <FDC_Main_Shared/FDC_Main_Objects.scad>
+use <FDC_Main_Intake.scad>
 
 q = 100;
 ex = [1,1,1,1];
@@ -31,6 +32,7 @@ module BodyBase(){
 		*trany(box_pos_y)
 		Fan_();
 
+		Intake();
 		*Cover_();
 
 		*TopScrews();
@@ -50,13 +52,14 @@ module BodyBase(){
 			[
 				base_dims.radii.out.b,
 				[base_dims.radii.out.s, true],
-				base_dims.radii.out.t,
+				// base_dims.radii.out.t,
+				parting_line_relief,
 			],
 			[0, 1, 1],
 			[0, 0, -base_dims.thick.b],
 		);
 		// Top interface section.
-		ultracuber(
+		*ultracuber(
 			[
 				base_dims.w,
 				top_dims.l,
@@ -252,24 +255,6 @@ module BodyBase(){
 			],
 			[0, 1, 1],
 			[0, base_dims.thick.s, 0],
-		);
-	}
-
-	module Cover_(){
-		translate([0, cover_dims_inset, base_dims.h + nonzero()])
-		ultracuber(
-			[
-				hole(cover_dims.w),
-				hole(cover_dims.l),
-				cover_dims.h + nonzero(),
-			],
-			[
-				rad_neg(cover_dims.radii.b),
-				[cover_dims.radii.s, true],
-				-parting_line_relief,
-			],
-			[0, 1, -1],
-			[0, 0, 0],
 		);
 	}
 }
