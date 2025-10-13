@@ -22,7 +22,7 @@ global_dims = object(
 
 base_side_rad = 2;
 base_dims = object(
-	w = 85,
+	w = 90,
 	l = 165, // Original intake section = 210,
 	h = 45,
 	thick = object(
@@ -99,7 +99,7 @@ sensor_dims = object(
 );
 
 channel_dims = object(
-	w = 70,
+	w = 75,
 	l = base_dims.l - electronics_dims.l 
 	- base_dims.thick.s*2 - global_dims.divs,
 	h = base_dims.h,
@@ -123,6 +123,10 @@ intake_dims = object(
 	),
 );
 
+intake_vent_dims = object(
+	w = intake_dims.w - intake_dims.border*2,
+	h = intake_dims.h - intake_dims.border*2,
+);
 
 interface_inset = base_dims.thick.s/2;
 interface_outset = 2.5;

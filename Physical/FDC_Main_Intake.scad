@@ -157,8 +157,8 @@ module Intake(ispos=true){
 	module LouvreSection_(){
 			ultracuber(
 				[
-					intake_dims.w - intake_dims.border*2,
-					intake_dims.h - intake_dims.border*2,
+					intake_vent_dims.w,
+					intake_vent_dims.h,
 					intake_dims.l + nonzero(),
 				],
 				[

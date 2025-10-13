@@ -13,7 +13,7 @@ $fn = $preview ? 50 : q;
 
 
 if(ex[0]){
-	*color("Tan")
+	color("Tan")
 	BodyTop();
 }
 
@@ -51,7 +51,7 @@ crosssections = object(
 	heater_fan = PI * pow(heater_dims.fan_dia/2, 2),
 	box_bottom = box_dims.w * box_dims.l,
 	channel = channel_dims.w * channel_dims.h,
-	intake = intake_dims.w * intake_dims.l,
+	intake = intake_vent_dims.w * intake_vent_dims.h,
 );
 
 echo(str(
@@ -70,7 +70,7 @@ assert(
 	crosssections.heater_fan < crosssections.channel, 
 	"Channel area is too small"
 );
-*assert(
+assert(
 	crosssections.heater_fan < crosssections.intake, 
 	"Intake area is too small"
 );
