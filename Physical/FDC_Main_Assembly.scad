@@ -18,7 +18,7 @@ if(ex[0]){
 }
 
 if(ex[1]){
-	*color("MediumSeaGreen")
+	color("MediumSeaGreen")
 	BodyTop(false);
 }
 

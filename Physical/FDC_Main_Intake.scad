@@ -40,34 +40,21 @@ module Intake(ispos=true){
 		}
 	}
 
-	module Top(){
-		ultracuber(
-			[
-				intake_dims.w - intake_dims.ridge*2,
-				intake_dims.ridge + parting_line_relief*2,
-				intake_dims.l,
-			],
-			[
-				parting_line_relief,
-				0,
-				0,
-			],
-			[0, -1, 0],
-			[0, 0, intake_dims.h/2],
-			[90, 0, 0],
-		);
-	}	
-
 	module Main(){
-		// Smaller.
 		ultracuber(
 			[
-				intake_dims.w - intake_dims.ridge*2,
-				intake_dims.h - intake_dims.ridge*2,
-				intake_dims.l,
+				tern(ispos,
+					intake_dims.w - intake_dims.ridge*2,
+					hole(intake_dims.w - intake_dims.ridge*2),
+				),
+				tern(ispos,
+					intake_dims.h - intake_dims.ridge*2,
+					hole(intake_dims.h - intake_dims.ridge*2),
+				),
+				intake_dims.l + tern(ispos, 0, nonzero()),
 			],
 			[
-				parting_line_relief,
+				tern(ispos, parting_line_relief, -parting_line_relief),
 				[parting_line_relief],
 				0,
 			],
@@ -82,8 +69,14 @@ module Intake(ispos=true){
 			hull(){
 				ultracuber(
 					[
-						intake_dims.w - intake_dims.ridge*2,
-						intake_dims.h + parting_line_relief - intake_dims.ridge,
+						tern(ispos,
+							intake_dims.w - intake_dims.ridge*2,
+							hole(intake_dims.w - intake_dims.ridge*2),
+						),
+						tern(ispos,
+							intake_dims.h + parting_line_relief - intake_dims.ridge,
+							hole(intake_dims.h + parting_line_relief - intake_dims.ridge),
+						),
 						intake_dims.ridge*2,
 					],
 					[
@@ -98,8 +91,8 @@ module Intake(ispos=true){
 
 				ultracuber(
 					[
-						intake_dims.w,
-						intake_dims.h + parting_line_relief + intake_dims.ridge,
+						hole(intake_dims.w, when=!ispos),
+						hole(intake_dims.h + parting_line_relief + intake_dims.ridge, when=!ispos),
 						layers(2),
 					],
 					[
@@ -119,8 +112,14 @@ module Intake(ispos=true){
 
 			ultracuber(
 				[
-					intake_dims.w,
-					intake_dims.h,
+					tern(ispos,
+						intake_dims.w,
+						hole(intake_dims.w),
+					),
+					tern(ispos,
+						intake_dims.h,
+						hole(intake_dims.h),
+					),
 					intake_dims.ridge*2,
 				],
 				[0, 0, 0],
@@ -130,6 +129,30 @@ module Intake(ispos=true){
 			);
 		}
 	}
+
+	module Top(){
+		ultracuber(
+			[
+				tern(ispos,
+					intake_dims.w - intake_dims.ridge*2,
+					hole(intake_dims.w - intake_dims.ridge*2),
+				),
+				tern(ispos,
+					intake_dims.ridge + parting_line_relief*2,
+					hole(intake_dims.ridge + parting_line_relief*2),
+				),
+				intake_dims.l + tern(ispos, 0, nonzero()),
+			],
+			[
+				tern(ispos, parting_line_relief, -parting_line_relief),
+				0,
+				0,
+			],
+			[0, -1, 0],
+			[0, 0, intake_dims.h/2 + tern(ispos, 0, nonzero())],
+			[90, 0, 0],
+		);
+	}	
 
 	module LouvreSection_(){
 			ultracuber(
