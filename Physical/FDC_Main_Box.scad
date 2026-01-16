@@ -2,7 +2,7 @@ include <FDC_Main_Shared/FDC_Main_Library.scad>
 use <FDC_Main_Shared/FDC_Main_Objects.scad>
 
 q = 100;
-ex = [1,0,1,1];
+ex = [1,1,1,1];
 
 /* [Hidden] */
 $fn = $preview ? 50 : q;
@@ -24,6 +24,7 @@ module DessiccantBox(){
 		}
 
 		Main_();
+		Duct_();
 		BottomMesh_();
 		BottomSideMesh_();
 		DoveRelief_();
@@ -100,6 +101,27 @@ module DessiccantBox(){
 				[0, box_dims.l/2, nonzero()],
 			);
 		}
+	}
+
+	module Duct_(){
+		// Duct.
+		trany(box_pos_y - nonzero())
+		tranz(fan_low_side_pos_z)
+		rotate([-90, 0, 0])
+		ultracuber(
+			[
+				box_dims.inner().w,
+				duct_dims.h,
+				box_dims.inner().l + box_dims.thi().s,
+			],
+			[
+				-parting_line_relief,
+				0,
+				0,
+			],
+			[0, 0, 1],
+			[0, -nonzero(), -nonzero()],
+		);
 	}
 
 	module BottomMesh_(){
@@ -186,45 +208,70 @@ module DessiccantBoxLid(){
 	difference(){
 		Main();
 
+		Main_();
 		FrontChampher_();
+		LidInterface_();
 
 	}
 
 	module Main(){
 		tranz(box_dims.pos().z)
 		trany(box_pos_y){
-			difference(){
-				ultracuber(
-					[
-						base_dims.w,
-						top_dims.l - top_dims.upper_l,
-						top_dims.h - top_dims.lower().h,
-					],
-					[
-						parting_line_relief,
-						[base_dims.radii.out.s, true],
-						base_dims.radii.out.t,
-					],
-					[0, 1, -1],
-					[0, 0, 0],
-				);
-
-				ultracuber(
-					[
-						hole(box_dims.w, box_dims.lid().clear),
-						hole(box_dims.l, box_dims.lid().clear),
-						top_dims.h - top_dims.lower().h - box_dims.lid().h,
-					],
-					[
-						-parting_line_relief,
-						0,
-						0,
-					],
-					[0, 0, -1],
-					[0, box_dims.l/2 - nonzero(), -box_dims.lid().h - nonzero()],
-				);
-			}
+			ultracuber(
+				[
+					base_dims.w,
+					top_dims.l - top_dims.upper_l,
+					top_dims.h - top_dims.lower().h,
+				],
+				[
+					parting_line_relief,
+					[base_dims.radii.out.s, true],
+					base_dims.radii.out.t,
+				],
+				[0, 1, -1],
+				[0, 0, 0],
+			);
 		}
+	}
+
+	module Main_(){
+		//fan_low_side_pos_z
+		tranz(box_dims.pos().z)
+		trany(box_pos_y){
+			ultracuber(
+				[
+					hole(box_dims.w, box_dims.lid().clear),
+					hole(box_dims.l, box_dims.lid().clear),
+					top_dims.h - top_dims.lower().h - box_dims.lid().h,
+				],
+				[
+					-parting_line_relief,
+					0,
+					0,
+				],
+				[0, 0, -1],
+				[0, box_dims.l/2 - nonzero(), -box_dims.lid().h - nonzero()],
+			);
+		}
+
+		// Duct.
+		trany(box_pos_y - nonzero())
+		tranz(fan_low_side_pos_z)
+		rotate([-90, 0, 0])
+		ultracuber(
+			[
+				box_dims.inner().w,
+				duct_dims.h,
+				box_dims.inner().l + box_dims.thi().s,
+			],
+			[
+				-parting_line_relief,
+				0,
+				0,
+			],
+			[0, 0, 1],
+			[0, -nonzero(), -nonzero()],
+		);
 	}
 
 	module FrontChampher_(){
@@ -245,6 +292,42 @@ module DessiccantBoxLid(){
 			[0, 0, -nonzero()],
 			[90, 0, 0],
 		);
+
+		trany(box_pos_y - nonzero())
+		rotx(-90)
+		hull(){
+			extrude(parting_line_relief, 1)
+			projection()
+			rotx(90)
+			LidInterface_();
+
+			extrude(0, 1)
+			offset(parting_line_relief)
+			projection()
+			rotx(90)
+			LidInterface_();
+		}
+	}
+
+	module LidInterface_(){
+		tranz(box_dims.pos().z - box_dims.lid().h)
+		trany(box_pos_y)
+		intersection(){
+			ultracuber(
+				[
+					hole(box_dims.w, box_dims.lid().clear),
+					box_dims.l,
+					box_dims.interface().h,
+				],
+				[
+					0,
+					[0, true],
+					-box_dims.interface().h,
+				],
+				[0, 1, -1],
+				[0, 0, 0],
+			);
+		}
 	}
 }
 
