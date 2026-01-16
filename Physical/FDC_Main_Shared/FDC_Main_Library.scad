@@ -85,6 +85,9 @@ top_dims = object(
 	thick = object(
 		t = nearest_layer(1),
 	),
+	lower = function() object(
+		h = fan_abs_pos_z - base_dims.h,
+	)
 );
 
 sensor_dims = object(
@@ -146,6 +149,13 @@ box_dims = object(
 		w = box_dims.w - box_dims.thi().s*2,
 		l = box_dims.l - box_dims.thi().s*2,
 		h = box_dims.h,
+	),
+	lid = function() object(
+		h = 15,
+		clear = .4,
+	),
+	interface = function() object(
+		h = 4,
 	),
 	pos = function() object(
 		z = base_dims.h + top_dims.h,

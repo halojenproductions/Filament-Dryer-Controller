@@ -18,7 +18,7 @@ if(ex[1]){
 }
 
 module BodyTop(lower=true){
-	lower_hei = fan_abs_pos_z - base_dims.h;
+	lower_hei = top_dims.lower().h;
 	difference(){
 		union(){
 			Top(lower);

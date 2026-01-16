@@ -13,6 +13,7 @@ ex = [
 	1, // Body base.
 	1, // Intake.
 	1, // Dessiccant box.
+	1, // Dessiccant box lid.
 ];
 
 /* [Hidden] */
@@ -47,6 +48,12 @@ if(ex[4]){
 	// color("PaleVioletRed")
 	render(10)
 	DessiccantBox();
+}
+
+if(ex[5]){
+	// color("PaleVioletRed")
+	render(10)
+	DessiccantBoxLid();
 }
 
 
