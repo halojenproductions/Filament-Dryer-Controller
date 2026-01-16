@@ -2,7 +2,12 @@ include <FDC_Main_Shared/FDC_Main_Library.scad>
 use <FDC_Main_Shared/FDC_Main_Objects.scad>
 
 q = 100;
-ex = [1,1,1,1];
+ex = [
+	1, // Box.
+	0, // Lid.
+	1, // Lid mod.
+	1, // Support.
+];
 
 /* [Hidden] */
 $fn = $preview ? 50 : q;
@@ -16,6 +21,10 @@ if(ex[1]){
 	DessiccantBoxLid();
 }
 
+if(ex[3]){
+	DessiccantBoxSupport();
+}
+
 module DessiccantBox(){
 	difference(){
 		union(){
@@ -27,7 +36,8 @@ module DessiccantBox(){
 		Duct_();
 		BottomMesh_();
 		BottomSideMesh_();
-		DoveRelief_();
+		TopSideMesh_();
+		BottomDoveRelief_();
 	}
 
 	module Main(){
@@ -95,7 +105,7 @@ module DessiccantBox(){
 				[
 					box_dims.thi().b,
 					[0, true],
-					0,
+					-parting_line_relief,
 				],
 				[0, 0, -1],
 				[0, box_dims.l/2, nonzero()],
@@ -105,7 +115,7 @@ module DessiccantBox(){
 
 	module Duct_(){
 		// Duct.
-		trany(box_pos_y - nonzero())
+		*trany(box_pos_y - nonzero())
 		tranz(fan_low_side_pos_z)
 		rotate([-90, 0, 0])
 		ultracuber(
@@ -184,7 +194,45 @@ module DessiccantBox(){
 		}
 	}
 
-	module DoveRelief_(){
+	module TopSideMesh_(){
+		trany(box_pos_y + nonzero())
+		tranz(fan_low_side_pos_z)
+		{
+			ultracuber(
+				[
+					box_dims.inner().w,
+					duct_dims.h,
+					box_dims.thi().mesh + nonzero()*2,
+				],
+				[
+					0,
+					[0, true],
+					box_dims.thi().b,
+				],
+				[0, 0, -1],
+				[0, 0, -nonzero()],
+				[90, 0, 0],
+			);
+
+			// Dove relief.
+			ultracuber(
+				[
+					box_dims.inner().w - box_dims.thi().b*2 + parting_line_relief*2,
+					box_dims.thi().s + nonzero()*2,
+					duct_dims.h - box_dims.thi().b*2 + parting_line_relief*2,
+				],
+				[
+					0,
+					[0, true],
+					0,
+				],
+				[0, 1, 0],
+				[0, -nonzero()*2, -nonzero()],
+			);
+		}
+	}
+
+	module BottomDoveRelief_(){
 		trany(box_pos_y + box_dims.thi().b + box_dims.thi().s - parting_line_relief)
 		tranz(box_dims.pos().z - box_dims.h)
 		ultracuber(
@@ -200,6 +248,46 @@ module DessiccantBox(){
 			],
 			[0, 1, 1],
 			[0, 0, -nonzero()],
+		);
+	}
+}
+
+module DessiccantBoxSupport(){
+	height = duct_dims.h - box_dims.lid().h + parting_line_relief - layers(2);
+
+	trany(box_pos_y + nonzero())
+	tranz(box_dims.pos().z - box_dims.lid().h)
+	{
+		ultracuber(
+			[
+				box_dims.inner().w - box_dims.thi().b*2 + parting_line_relief*2 - 1,
+				box_dims.thi().s,
+				// duct_dims.h - box_dims.thi().b*2 + parting_line_relief*2,
+				height,
+			],
+			[
+				0,
+				[0, true],
+				0,
+			],
+			[0, 1, -1],
+			[0, -nonzero()*2, 0],
+		);
+
+		ultracuber(
+			[
+				box_dims.inner().w - box_dims.thi().b*2 + parting_line_relief*2 - 1,
+				box_dims.thi().s - 1,
+				// duct_dims.h - box_dims.thi().b*2 + parting_line_relief*2,
+				height/2,
+			],
+			[
+				-.5,
+				[0, true],
+				-.5,
+			],
+			[0, 1, -1],
+			[0, .5-nonzero()*2, 0],
 		);
 	}
 }
@@ -235,7 +323,6 @@ module DessiccantBoxLid(){
 	}
 
 	module Main_(){
-		//fan_low_side_pos_z
 		tranz(box_dims.pos().z)
 		trany(box_pos_y){
 			ultracuber(

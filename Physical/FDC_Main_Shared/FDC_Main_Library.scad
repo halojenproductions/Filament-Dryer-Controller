@@ -141,7 +141,7 @@ box_dims = object(
 	h = channel_dims.h - channel_dims.slope + top_dims.h,
 	thi = function() object(
 		b = nearest_layer(2),
-		s = 2.5,
+		s = 2.8,
 		t = nearest_layer(2),
 		mesh = nearest_layer(2),
 	),
