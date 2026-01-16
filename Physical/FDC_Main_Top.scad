@@ -10,7 +10,7 @@ $fn = $preview ? 50 : q;
 
 if(ex[0]){
 	BodyTop();
-	*BodyTop(lower=false);
+	BodyTop(lower=false);
 }
 
 if(ex[1]){
@@ -18,6 +18,7 @@ if(ex[1]){
 }
 
 module BodyTop(lower=true){
+	lower_hei = fan_abs_pos_z - base_dims.h;
 	difference(){
 		union(){
 			Top(lower);
@@ -39,7 +40,6 @@ module BodyTop(lower=true){
 	}
 
 	module Top(lower){
-		lower_hei = fan_abs_pos_z - base_dims.h;
 		if(lower){
 			translate([0, 0, base_dims.h])
 			ultracuber(
@@ -92,12 +92,68 @@ module BodyTop(lower=true){
 		trany(heater_pos.y + heater_dims.h)
 		tranz(fan_abs_pos_z)
 		rotate([-90, 0, 0])
-		cylr(
+		coner(
 			heater_dims.fan_dia, 
-			channel_pos_y - (heater_pos.y + heater_dims.h) + nonzero(),
+			heater_dims.fan_dia, 
+			parting_line_relief,
 			[1, 1, 0],
-			-.4,
-			true,
+			-parting_line_relief, 0,
+			true, true,
+		);
+
+		hull(){
+			trany(heater_pos.y + heater_dims.h + parting_line_relief - nonzero())
+			tranz(fan_abs_pos_z)
+			rotate([-90, 0, 0])
+			cylr(
+				heater_dims.fan_dia, 
+				nonzero(),
+				[1, 1, 0],
+				0,
+				true,
+			);
+
+			trany(channel_pos_y - parting_line_relief + nonzero())
+			tranz(fan_low_side_pos_z)
+			rotate([-90, 0, 0])
+			// cylr(
+			// 	heater_dims.fan_dia, 
+			// 	nonzero(),
+			// 	[1, 1, 0],
+			// 	0,
+			// 	true,
+			// );
+			ultracuber(
+				[
+					duct_dims.w,
+					duct_dims.h,
+				],
+				[0, 0, 0],
+				[0, 0, 1],
+				[0, 0, 0],
+			);
+		}
+
+		trany(channel_pos_y + nonzero())
+		tranz(fan_low_side_pos_z)
+		rotate([90, 0, 0])
+		// coner(
+		// 	heater_dims.fan_dia, 
+		// 	heater_dims.fan_dia, 
+		// 	parting_line_relief,
+		// 	[1, 1, 0],
+		// 	-parting_line_relief, 0,
+		// 	true, true,
+		// );
+		ultracuber(
+			[
+				duct_dims.w,
+				duct_dims.h,
+				parting_line_relief,
+			],
+			[-parting_line_relief, 0, 0],
+			[0, 0, 1],
+			[0, 0, 0],
 		);
 	}
 
@@ -114,15 +170,17 @@ module BodyTop(lower=true){
 				[
 					hole(box_dims.w),
 					hole(box_dims.l),
-					top_dims.h + interface_dims.h + nonzero()*2,
+					// top_dims.h + interface_dims.h + nonzero()*2,
+					lower_hei + nonzero()*2,
 				],
 				[
 					0,
-					global_dims.divs,
-					0,
+					[box_dims.thi().s, true],
+					-parting_line_relief,
 				],
 				[0, 1, -1],
-				[0, 0, base_dims.h + top_dims.h + nonzero()],
+				// [0, 0, base_dims.h + top_dims.h + nonzero()],
+				[0, 0, base_dims.h + lower_hei + nonzero()],
 			);
 		}
 		

@@ -75,11 +75,6 @@ electronics_dims = object(
 	ribbon_connector_l = 10,
 );
 
-box_dims = object(
-	w = 70,
-	l = 65,
-);
-
 top_dims = object(
 	w = base_dims.w,
 	l = base_dims.l,
@@ -110,6 +105,15 @@ echo(str(
 	"\n\t channel_dims: ", channel_dims,
 "\n"));
 
+duct_dims = object(
+	w = heater_dims.fan_dia,
+	// Same area as fan.
+	h = let(
+		area = PI * pow(heater_dims.fan_dia/2 + nonzero(), 2),
+	) area / heater_dims.fan_dia,
+	// PI * pow(heater_dims.fan_dia/2, 2)
+);
+
 intake_dims = object(
 	w = channel_dims.w,
 	l = base_dims.thick.s,
@@ -126,6 +130,26 @@ intake_dims = object(
 intake_vent_dims = object(
 	w = intake_dims.w - intake_dims.border*2,
 	h = intake_dims.h - intake_dims.border*2,
+);
+
+box_dims = object(
+	w = 70,
+	l = 65,
+	h = channel_dims.h - channel_dims.slope + top_dims.h,
+	thi = function() object(
+		b = nearest_layer(2),
+		s = 2.5,
+		t = nearest_layer(2),
+		mesh = nearest_layer(2),
+	),
+	inner = function() object(
+		w = box_dims.w - box_dims.thi().s*2,
+		l = box_dims.l - box_dims.thi().s*2,
+		h = box_dims.h,
+	),
+	pos = function() object(
+		z = base_dims.h + top_dims.h,
+	),
 );
 
 interface_inset = base_dims.thick.s/2;
@@ -184,7 +208,12 @@ heater_pos = object(
 	y = base_dims.thick.s + electronics_dims.ribbon_connector_l,
 	z = electronics_dims.h,
 );
+
 fan_abs_pos_z = heater_pos.z + heater_dims.fan_pos + heater_dims.fan_dia/2;
+fan_low_side_pos_z = fan_abs_pos_z + heater_dims.fan_dia/2 - duct_dims.h/2;
+// fan_low_side_pos_z = base_dims.h + duct_dims.h/2 + parting_line_relief*2;
+// fan_low_side_pos_z = fan_abs_pos_z;
+
 channel_pos_y = base_dims.thick.s + electronics_dims.l + global_dims.divs;
 box_pos_y = channel_pos_y;
 sensor_pos = object(

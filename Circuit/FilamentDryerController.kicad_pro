@@ -452,7 +452,7 @@
   },
   "meta": {
     "filename": "FilamentDryerController.kicad_pro",
-    "version": 3
+    "version": 1
   },
   "net_settings": {
     "classes": [
@@ -467,7 +467,6 @@
         "microvia_drill": 0.1,
         "name": "Default",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.2,
         "via_diameter": 0.6,
@@ -478,13 +477,13 @@
         "bus_width": 12,
         "clearance": 0.8,
         "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Mains",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 0,
         "schematic_color": "rgb(255, 171, 60)",
         "track_width": 2.0,
         "via_diameter": 2.5,
@@ -495,13 +494,13 @@
         "bus_width": 12,
         "clearance": 0.2,
         "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Power",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 1,
         "schematic_color": "rgb(255, 76, 229)",
         "track_width": 0.2,
         "via_diameter": 0.6,
@@ -512,13 +511,13 @@
         "bus_width": 12,
         "clearance": 0.2,
         "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Signal",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2,
         "schematic_color": "rgb(82, 100, 255)",
         "track_width": 0.2,
         "via_diameter": 0.6,
@@ -527,44 +526,10 @@
       }
     ],
     "meta": {
-      "version": 4
+      "version": 3
     },
     "net_colors": null,
-    "netclass_assignments": {
-      "+AC": [
-        "Mains"
-      ],
-      "-AC": [
-        "Mains"
-      ],
-      "/FDC_Main/Red": [
-        "Power"
-      ],
-      "/FDC_Main/Ylw": [
-        "Power"
-      ],
-      "Heater": [
-        "Mains"
-      ],
-      "Net-(J6-Pin_2)": [
-        "Power"
-      ],
-      "Net-(NT1-Pad1)": [
-        "Power"
-      ],
-      "Net-(NT2-Pad1)": [
-        "Power"
-      ],
-      "Net-(Q2-G)": [
-        "Power"
-      ],
-      "Net-(R5-Pad2)": [
-        "Signal"
-      ],
-      "Net-(R7-Pad1)": [
-        "Power"
-      ]
-    },
+    "netclass_assignments": null,
     "netclass_patterns": [
       {
         "netclass": "Power",
