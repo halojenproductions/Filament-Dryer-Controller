@@ -4,7 +4,7 @@ use <FDC_Main_Shared/FDC_Main_Objects.scad>
 q = 100;
 ex = [
 	1, // Box.
-	0, // Lid.
+	1, // Lid.
 	1, // Lid mod.
 	1, // Support.
 ];

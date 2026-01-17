@@ -20,6 +20,32 @@ global_dims = object(
 	divs = 4,
 );
 
+sensor_dims = object(
+	w = 26.5,
+	l = 59,
+	h = 13.5,
+);
+
+heater_dims = object(
+	bot = object(
+		w = 74,
+		l = 127,
+	),
+	// Fan side is considered top.
+	top = object(
+		w = 73,
+		l = 126,
+	),
+	h = 36,
+	radii = object(
+		b = 1,
+		s = 8,
+		t = 1.5,
+	),
+	fan_pos = 35, // End to bottom of fan.
+	fan_dia = 58,
+);
+
 base_side_rad = 2;
 base_dims = object(
 	w = 90,
@@ -42,26 +68,6 @@ base_dims = object(
 			t = .5,
 		),
 	),
-);
-
-heater_dims = object(
-	bot = object(
-		w = 74,
-		l = 127,
-	),
-	// Fan side is considered top.
-	top = object(
-		w = 73,
-		l = 126,
-	),
-	h = 36,
-	radii = object(
-		b = 1,
-		s = 8,
-		t = 1.5,
-	),
-	fan_pos = 35, // End to bottom of fan.
-	fan_dia = 58,
 );
 
 heater_sleeve_dims = object(
@@ -88,12 +94,6 @@ top_dims = object(
 	lower = function() object(
 		h = fan_abs_pos_z - base_dims.h,
 	)
-);
-
-sensor_dims = object(
-	w = 26.5,
-	l = 59,
-	h = 13.5,
 );
 
 channel_dims = object(
@@ -159,6 +159,25 @@ box_dims = object(
 	),
 	pos = function() object(
 		z = base_dims.h + top_dims.h,
+	),
+);
+
+window_dims = function() object(
+	glass = function() object(
+		w = 76,
+		l = 25,
+		h = nearest_layer(1, up=true),
+		clear = 0.1,
+	),
+	frame = 1,
+	pos = function() [
+		0,
+		0,
+		nearest_layer(.5),
+	],
+	window = function() object(
+		w = glass_dims.w - window_dims.frame,
+		l = glass_dims.l - window_dims.frame,
 	),
 );
 
